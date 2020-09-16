@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Integer registerUser(User newUser) {
-        //stub method for now
+        userDAO.saveOrUpdate(newUser);
         return null;
     }
 }
