@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/department")
 public class DepartmentController {
+    //controller matches URL and triggers service function
 
     @Autowired
     DepartmentService departmentService;
