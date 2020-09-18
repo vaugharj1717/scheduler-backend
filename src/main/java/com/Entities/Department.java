@@ -11,13 +11,12 @@ public class Department {
 
     public String name;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     public List<Position> positionList;
 
     public List<Position> getPositionList() {
         return positionList;
     }
-
 
     public void setPositionList(List<Position> positionList) {
         this.positionList = positionList;
