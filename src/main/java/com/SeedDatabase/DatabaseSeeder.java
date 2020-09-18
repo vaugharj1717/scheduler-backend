@@ -1,5 +1,8 @@
 package com.SeedDatabase;
 
+import com.DAOs.DepartmentDAO;
+import com.Entities.Department;
+import com.Entities.Position;
 import com.Entities.User;
 import com.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +19,12 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
     @Autowired
     UserService userService;
 
+    @Autowired
+    DepartmentDAO departmentDAO;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        loadDepartments();
         loadUsers();
     }
 
@@ -29,5 +36,15 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
             userService.registerUser(newUser);
         }
 
+    }
+
+    private void loadDepartments(){
+        Department newDepartment = new Department();
+        Position newPosition = new Position();
+        List<Position> positionList = new ArrayList<Position>();
+        positionList.add(newPosition);
+        newDepartment.setName("testName");
+        newDepartment.setPositionList(positionList);
+        departmentDAO.saveDepartment(newDepartment);
     }
 }

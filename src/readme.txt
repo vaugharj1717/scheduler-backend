@@ -188,4 +188,14 @@ Eventually we will have these files configured to use a MySQL database during ru
 During testing, we can use the H2 database (an in-memory database) that we can fill with preconfigured data each
 time tests are run so we have predictable data sets to run our tests against.
 
+MANUAL TESTING
+---------------
+Download and use Postman (or I think there is browser-version too) to send HTTP requests
+(or if you're just testing a GET endpoint you can just type the URL into a browser)
+Currently we are just using H2 database for development. So go to localhost:8444/h2 and log into the database
+to query and see if data is altered correctly.
+Seed database information using DatabaseSeeder class
+
+AUTOMATIC TESTING
+-----------------
 More coming soon...
