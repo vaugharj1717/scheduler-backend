@@ -19,6 +19,7 @@ public class UserController {
         return "Hello World";
     }
 
+    @CrossOrigin
     @RequestMapping("/participant")
     public List<User> getAllPaticipants(){
         return userService.getAllPaticipants();
