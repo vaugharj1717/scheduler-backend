@@ -1,5 +1,7 @@
 package com.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
@@ -27,15 +29,16 @@ public class Position implements DataObject{
     }
 
     @ManyToOne
+    @JsonIgnoreProperties("positions")
     Department department;
 
     @Override
     public Integer getId() {
-        return null;
+        return id;
     }
 
     @Override
     public void setId(Integer id) {
-
+        this.id = id;
     }
 }

@@ -1,5 +1,7 @@
 package com.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -12,6 +14,7 @@ public class Department {
     public String name;
 
     @OneToMany(cascade = CascadeType.PERSIST)
+    @JsonIgnoreProperties("department")
     public List<Position> positionList;
 
     public List<Position> getPositionList() {
