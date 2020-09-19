@@ -37,7 +37,7 @@ public class UserDAOImpl extends AbstractDAO implements UserDAO {
     }
 
     @Override
-    public List<User> getAllPaticipants() {
+    public List<User> getAllParticipants() {
         EntityManager em = emf.createEntityManager();
         Query q = em.createQuery("select i from User i where i.role = ?1 or i.role = ?2");
         q.setParameter(1, Role.CANDIDATE);

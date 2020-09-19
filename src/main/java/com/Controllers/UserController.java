@@ -21,7 +21,7 @@ public class UserController {
 
     @CrossOrigin
     @RequestMapping("/participant")
-    public List<User> getAllPaticipants(){
-        return userService.getAllPaticipants();
+    public List<User> getAllParticipants(){
+        return userService.getAllParticipants();
     }
 }
