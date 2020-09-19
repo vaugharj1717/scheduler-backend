@@ -12,5 +12,5 @@ public interface UserService {
 
     public Integer registerUser(User newUser);
 
-    public List<User> getAllPaticipants();
+    public List<User> getAllParticipants();
 }
