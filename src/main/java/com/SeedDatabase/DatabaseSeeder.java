@@ -40,11 +40,10 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
     private void loadDepartments(){
         Department newDepartment = new Department();
+        newDepartment.setDepartmentName("testDepartmentName");
         Position newPosition = new Position();
-        List<Position> positionList = new ArrayList<Position>();
-        positionList.add(newPosition);
-        newDepartment.setName("testName");
-        newDepartment.setPositionList(positionList);
+        newPosition.setPositionName("testPositionName");
+        newDepartment.addPosition(newPosition);
         departmentDAO.saveDepartment(newDepartment);
     }
 }
