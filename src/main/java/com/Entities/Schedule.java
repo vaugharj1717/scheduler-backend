@@ -17,7 +17,7 @@ public class Schedule implements DataObject{
     private Integer id;
 
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
     private Set<Meeting> meetings;
 
 

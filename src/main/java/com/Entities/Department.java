@@ -22,7 +22,6 @@ public class Department {
     public Set<Position> positions;
 
     public Set<Position> getPositions() {
-        System.out.println("Function was called");
         return positions;
     }
 

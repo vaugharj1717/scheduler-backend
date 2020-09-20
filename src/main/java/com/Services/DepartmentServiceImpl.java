@@ -8,10 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+
 //Service layer responsibilities
 //  1) Take care of any business logic
 //  2) Use DAO classes to access any data necessary
+@Service
 public class DepartmentServiceImpl implements DepartmentService {
 
     @Autowired

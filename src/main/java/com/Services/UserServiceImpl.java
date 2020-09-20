@@ -16,20 +16,4 @@ public class UserServiceImpl implements UserService{
     }
 
 
-    @Override
-    public User getUserById(Integer id) {
-        //stub method for now
-        return null;
-    }
-
-    @Override
-    public void deleteUserById(Integer id) {
-        //stub method for now
-    }
-
-    @Override
-    public Integer registerUser(User newUser) {
-        userDAO.saveOrUpdate(newUser);
-        return null;
-    }
 }

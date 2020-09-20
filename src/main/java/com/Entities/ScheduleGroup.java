@@ -14,9 +14,9 @@ public class ScheduleGroup implements DataObject{
     private Integer id;
 
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
     Set<Schedule> schedules;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     Position position;
 
     public void addSchedule(Schedule schedule){
