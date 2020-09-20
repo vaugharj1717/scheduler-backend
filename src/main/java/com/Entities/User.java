@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -25,6 +27,21 @@ public class User implements DataObject {
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Participation> participations;
+
+    public void addParticipation(Participation participation){
+        if(this.participations == null){
+            this.participations = new HashSet<Participation>();
+        }
+        this.participations.add(participation);
+        participation.setUser(this);
+    }
+
+    public void removeParticipation(Participation participation){
+        if(this.participations != null){
+            this.participations.remove(participation);
+            participation.setUser(null);
+        }
+    }
 
     @Override
     public Integer getId() {
@@ -108,17 +125,16 @@ public class User implements DataObject {
         this.department = department;
     }
 
-    public Set<Department> getDepartments() {
-        return departments;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
     }
 
-    public void setDepartments(Set<Department> departments) {
-        this.departments = departments;
-    }
-
-    @OneToMany
-    private Set<Department> departments;
-
-    public User() {
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

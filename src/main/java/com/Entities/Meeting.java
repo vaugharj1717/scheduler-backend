@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -24,6 +26,22 @@ public class Meeting implements DataObject{
     private Set<Participation> participations;
     private Date startTime;
     private Date endTime;
+    private String meetingType;
+
+    public void addParticipation(Participation participation){
+        if(this.participations == null){
+            this.participations = new HashSet<Participation>();
+        }
+        this.participations.add(participation);
+        participation.setMeeting(this);
+    }
+
+    public void removeParticipation(Participation participation){
+        if(this.participations != null){
+            this.participations.remove(participation);
+            participation.setMeeting(null);
+        }
+    }
 
     public Location getLocation() {
         return location;
@@ -31,6 +49,9 @@ public class Meeting implements DataObject{
 
     public void setLocation(Location location) {
         this.location = location;
+        if(location != null){
+            location.getMeetings().add(this);
+        }
     }
 
     public Schedule getSchedule() {
@@ -39,6 +60,9 @@ public class Meeting implements DataObject{
 
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
+        if(schedule != null){
+            schedule.getMeetings().add(this);
+        }
     }
 
     public Set<Participation> getParticipations() {
@@ -73,7 +97,6 @@ public class Meeting implements DataObject{
         this.meetingType = meetingType;
     }
 
-    private String meetingType;
 
 
 
@@ -88,4 +111,16 @@ public class Meeting implements DataObject{
         this.id = id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Meeting meeting = (Meeting) o;
+        return Objects.equals(id, meeting.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

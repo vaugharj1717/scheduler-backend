@@ -3,6 +3,7 @@ package com.Entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Participation implements DataObject{
@@ -38,6 +39,9 @@ public class Participation implements DataObject{
 
     public void setUser(User user) {
         this.user = user;
+        if(user != null){
+            user.getParticipations().add(this);
+        }
     }
 
     public Meeting getMeeting() {
@@ -46,6 +50,9 @@ public class Participation implements DataObject{
 
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;
+        if(meeting != null){
+            meeting.getParticipations().add(this);
+        }
     }
 
     public boolean isAlert() {
@@ -88,5 +95,16 @@ public class Participation implements DataObject{
         this.canMakeDecision = canMakeDecision;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Participation that = (Participation) o;
+        return Objects.equals(id, that.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
