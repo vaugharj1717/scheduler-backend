@@ -81,6 +81,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
         //create Meeting
         Meeting meeting = new Meeting();
+        meeting = meetingDAO.saveOrUpdate(meeting);
         meeting.setMeetingType("testingMeetingType");
         meeting.setLocation(locationDAO.getById(savedLocation.getId()));
         meeting.setSchedule(scheduleDAO.getById(savedSchedule.getId()));
