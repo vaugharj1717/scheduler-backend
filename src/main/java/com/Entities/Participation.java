@@ -1,6 +1,7 @@
 package com.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -11,10 +12,10 @@ public class Participation implements DataObject{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    @JsonBackReference
+    @JsonIgnoreProperties("participations")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private User user;
-    @JsonBackReference
+    @JsonIgnoreProperties("participations")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Meeting meeting;
 

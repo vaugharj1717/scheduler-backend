@@ -1,5 +1,6 @@
 package com.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ public class Location implements DataObject{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @JsonManagedReference
+    @JsonIgnoreProperties("location")
     @OneToMany(cascade = CascadeType.MERGE)
     private Set<Meeting> meetings;
     private String buildingName;

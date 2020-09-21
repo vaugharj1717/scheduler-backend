@@ -1,5 +1,6 @@
 package com.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ public class ScheduleGroup implements DataObject{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @JsonManagedReference
+    @JsonIgnoreProperties("scheduleGroup")
     @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     Set<Schedule> schedules;
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)

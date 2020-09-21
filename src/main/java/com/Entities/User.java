@@ -1,6 +1,8 @@
 package com.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.scheduling.annotation.Schedules;
 
@@ -22,13 +24,11 @@ public class User implements DataObject {
     private String firstName;
     private String lastName;
     private String role;
-    @JsonBackReference
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Department department;
-    @JsonManagedReference
+    @JsonIgnoreProperties("user")
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Participation> participations;
-    @JsonManagedReference
 
     public void addParticipation(Participation participation){
         if(this.participations == null){

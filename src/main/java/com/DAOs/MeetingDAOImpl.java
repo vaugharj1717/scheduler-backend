@@ -22,7 +22,9 @@ public class MeetingDAOImpl implements MeetingDAO{
 
     public Meeting getById(Integer id){
         Meeting meeting = em.createQuery(
-                "SELECT m from Meeting m WHERE m.id = :id", Meeting.class)
+                "SELECT m from Meeting m LEFT JOIN FETCH m.location LEFT JOIN FETCH m.participations p " +
+                        "LEFT JOIN FETCH p.user WHERE m.id = :id"
+                , Meeting.class)
                 .setParameter("id", id)
                 .getSingleResult();
         return meeting;
