@@ -24,7 +24,7 @@ public class Schedule implements DataObject{
     @ManyToOne(cascade = CascadeType.MERGE)
     private User candidate;
 
-    @JsonBackReference
+    @JsonIgnoreProperties("schedules")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private ScheduleGroup scheduleGroup;
 
