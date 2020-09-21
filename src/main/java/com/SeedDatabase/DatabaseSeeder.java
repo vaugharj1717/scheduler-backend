@@ -1,6 +1,8 @@
 package com.SeedDatabase;
 
 import com.DAOs.DepartmentDAO;
+import com.DAOs.ScheduleDAO;
+import com.Entities.*;
 import com.Entities.Department;
 import com.Entities.Position;
 import com.Entities.User;
@@ -23,6 +25,9 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
     @Autowired
     DepartmentDAO departmentDAO;
 
+    @Autowired
+    ScheduleDAO scheduleDAO;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         loadDepartments();
@@ -42,6 +47,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
     private void loadDepartments(){
         Department newDepartment = new Department();
+        newDepartment.setDepartmentName("testDepartmentName");
         Position newPosition = new Position();
         newPosition.setPositionName("position1");
         List<Position> positionList = new ArrayList<Position>();
