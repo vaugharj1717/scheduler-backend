@@ -16,7 +16,12 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public List<User> getAllCandidates(){
         //no business logic
-        List<User> userList = userDAO.getAll();
+        List<User> userList = userDAO.getAllCandidates();
         return userList;
+    }
+
+    @Transactional
+    public List<User> getAllParticipants() {
+        return userDAO.getAllParticipants();
     }
 }

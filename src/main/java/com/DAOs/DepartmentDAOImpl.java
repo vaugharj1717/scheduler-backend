@@ -1,10 +1,12 @@
 package com.DAOs;
 
 import com.Entities.Department;
+import com.Entities.Position;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 
@@ -35,5 +37,13 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 
     public void remove(Department department){
         em.remove(department);
+    }
+
+    public List<Position> getPositionsByDepartment(Integer id) {
+        Query q = em.createQuery("select i from Position i where i.department.id=?1");
+        q.setParameter(1, id);
+        List<Position> positionList = q.getResultList();
+        return positionList;
+
     }
 }

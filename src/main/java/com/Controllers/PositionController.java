@@ -15,9 +15,9 @@ public class PositionController {
     @Autowired
     PositionService positionService;
     @CrossOrigin
-    @RequestMapping(value = "/department/{id}/position", method = RequestMethod.GET)
-    public List<Position> getPositionsByDepartement(@PathVariable("id") Integer id){
-        return positionService.getPositionsByDepartement(id);
+    @RequestMapping(value = "/department/{id}", method = RequestMethod.GET)
+    public List<Position> getPositionsByDepartment(@PathVariable("id") Integer id){
+        return positionService.getPositionsByDepartment(id);
     }
 }
 

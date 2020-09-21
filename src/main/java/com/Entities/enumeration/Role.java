@@ -2,7 +2,7 @@ package com.Entities.enumeration;
 
 public enum  Role {
     CANDIDATE,
-    DEPRATEMENT_ADMIN,
+    DEPARTMENT_ADMIN,
     NOTSET;
 
     public static Role getFromName(String name) {

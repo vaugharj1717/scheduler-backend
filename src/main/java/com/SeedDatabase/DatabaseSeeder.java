@@ -34,6 +34,8 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
     LocationDAO locationDAO;
     @Autowired
     ParticipationDAO participationDAO;
+    @Autowired
+    DepartmentDAO departmentDAO;
 
     @Override
     @Transactional
@@ -43,10 +45,16 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
     public void loadData(){
 
+        //create Department
+        Department department = new Department();
+        department.setDepartmentName("testDepartmentName");
+        Department savedDepartment = departmentDAO.saveOrUpdate(department);
         //create Position
         Position position = new Position();
         position.setPositionName("testPositionName");
+        position.setDepartment(departmentDAO.getById(savedDepartment.getId()));
         Position savedPosition = positionDAO.saveOrUpdate(position);
+
 
         //create Candidate
         User candidate = new User();
@@ -93,7 +101,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         User participant = new User();
         participant.setUsername("testUsername");
         participant.setPassword("testPassword");
-        participant.setRole(Role.DEPRATEMENT_ADMIN);
+        participant.setRole(Role.DEPARTMENT_ADMIN);
         participant.setFirstName("testFirstName");
         participant.setLastName("testLastName");
         participant.setEmail("testEmail");
@@ -114,7 +122,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         Participation savedParticipation = participationDAO.saveOrUpdate(participation);
 
         //manual testing
-        List<Meeting> meetingListByLocation = meetingDAO.getByLocation(locationDAO.getById(5));
+        List<Meeting> meetingListByLocation = meetingDAO.getByLocation(locationDAO.getById(savedLocation.getId()));
         List<User> userList = new ArrayList<User>();
         userList.add(userDAO.getById(savedCandidate.getId()));
         userList.add(userDAO.getById(savedParticipant.getId()));

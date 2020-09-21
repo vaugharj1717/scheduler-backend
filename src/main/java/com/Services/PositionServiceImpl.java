@@ -14,9 +14,9 @@ public class PositionServiceImpl implements PositionService{
     PositionDAO positionDao;
 
     @Override
-    public List<Position> getPositionsByDepartement(Integer id) {
+    public List<Position> getPositionsByDepartment(Integer id) {
 
-        List<Position> positionList = positionDao.getPositionsByDepartement(id);
+        List<Position> positionList = positionDao.getPositionsByDepartment(id);
         return positionList;
     }
 }
