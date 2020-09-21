@@ -15,7 +15,7 @@ public class PositionDAOImpl implements PositionDAO{
     EntityManager em;
 
     public List<Position> getAll(){
-        List<Position> positionList = em.createQuery("from Position", Position.class)
+        List<Position> positionList = em.createQuery("SELECT p from Position p", Position.class)
                 .getResultList();
         return positionList;
     }

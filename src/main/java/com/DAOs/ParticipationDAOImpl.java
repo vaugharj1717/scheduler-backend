@@ -14,7 +14,7 @@ public class ParticipationDAOImpl implements ParticipationDAO{
     EntityManager em;
 
     public List<Participation> getAll(){
-        List<Participation> participationList = em.createQuery("from Participation", Participation.class)
+        List<Participation> participationList = em.createQuery("SELECT p from Participation p", Participation.class)
                 .getResultList();
         return participationList;
     }

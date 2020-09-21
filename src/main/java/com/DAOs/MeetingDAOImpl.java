@@ -14,7 +14,7 @@ public class MeetingDAOImpl implements MeetingDAO{
     EntityManager em;
 
     public List<Meeting> getAll(){
-        List<Meeting> meetingList = em.createQuery("from Meeting", Meeting.class)
+        List<Meeting> meetingList = em.createQuery("SELECT m from Meeting m", Meeting.class)
                 .getResultList();
         return meetingList;
     }

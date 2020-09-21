@@ -1,9 +1,9 @@
-package com.DAOs;
+package com.Services;
 
 import com.Entities.User;
 
 import java.util.List;
 
-public interface UserDAO extends DAO<User>{
+public interface UserService {
     public List<User> getAllCandidates();
 }

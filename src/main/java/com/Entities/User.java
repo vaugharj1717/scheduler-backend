@@ -18,6 +18,7 @@ public class User implements DataObject {
     private Integer id;
 
     private String username;
+    @JsonIgnore
     private String password;
     private String email;
     private String phone;

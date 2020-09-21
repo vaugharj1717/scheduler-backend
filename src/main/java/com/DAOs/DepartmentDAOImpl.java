@@ -16,7 +16,7 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 
     public List<Department> getAll(){
         //Selecting all Departments, also populating the department's "position" field in-memory
-        List<Department> departmentList = em.createQuery("from Department", Department.class)
+        List<Department> departmentList = em.createQuery("SELECT d from Department d", Department.class)
                 .getResultList();
         return departmentList;
     }

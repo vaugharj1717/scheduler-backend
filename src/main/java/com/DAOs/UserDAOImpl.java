@@ -17,7 +17,13 @@ public class UserDAOImpl implements UserDAO {
     EntityManager em;
 
     public List<User> getAll(){
-        List<User> userList = em.createQuery("from User", User.class)
+        List<User> userList = em.createQuery("SELECT u from User u", User.class)
+                .getResultList();
+        return userList;
+    }
+
+    public List<User> getAllCandidates(){
+        List<User> userList = em.createQuery("SELECT u from User u WHERE u.role = \'candidate\'", User.class)
                 .getResultList();
         return userList;
     }

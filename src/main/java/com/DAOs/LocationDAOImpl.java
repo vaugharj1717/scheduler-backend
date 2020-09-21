@@ -13,7 +13,7 @@ public class LocationDAOImpl implements LocationDAO{
     EntityManager em;
 
     public List<Location> getAll(){
-        List<Location> locationList = em.createQuery("from Location", Location.class)
+        List<Location> locationList = em.createQuery("SELECT l from Location l", Location.class)
                 .getResultList();
         return locationList;
     }

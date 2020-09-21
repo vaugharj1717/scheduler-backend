@@ -15,7 +15,7 @@ public class ScheduleDAOImpl implements ScheduleDAO{
     EntityManager em;
 
     public List<Schedule> getAll(){
-        List<Schedule> scheduleList = em.createQuery("from Schedule", Schedule.class)
+        List<Schedule> scheduleList = em.createQuery("SELECT s from Schedule s", Schedule.class)
                 .getResultList();
         return scheduleList;
     }
