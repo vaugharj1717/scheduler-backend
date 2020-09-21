@@ -15,6 +15,15 @@ public class PositionDAOImpl implements PositionDAO{
     @PersistenceContext
     EntityManager em;
 
+    @Override
+    public List<Position> getPositionsByDepartement(Integer id) {
+        Query q = em.createQuery("select i from Position i where i.department.id=?1");
+        q.setParameter(1, id);
+        List<Position> positionList = q.getResultList();
+        return positionList;
+
+    }
+
     public List<Position> getAll(){
         List<Position> positionList = em.createQuery("from Position", Position.class)
                 .getResultList();
@@ -35,14 +44,5 @@ public class PositionDAOImpl implements PositionDAO{
 
     public void remove(Position position){
         em.remove(position);
-    }
-
-    @Override
-    public List<Position> getPositionsByDepartement(Integer id) {
-        Query q = em.createQuery("select i from Position i where i.department.id=?1");
-        q.setParameter(1, id);
-        List<Position> positionList = q.getResultList();
-        return positionList;
-
     }
 }
