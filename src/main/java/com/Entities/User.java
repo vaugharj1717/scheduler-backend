@@ -1,5 +1,6 @@
 package com.Entities;
 
+import com.Entities.enumeration.Role;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,7 +24,7 @@ public class User implements DataObject {
     private String phone;
     private String firstName;
     private String lastName;
-    private String role;
+    private Role role;
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Department department;
     @JsonIgnoreProperties("user")
@@ -112,11 +113,11 @@ public class User implements DataObject {
         this.lastName = lastName;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
