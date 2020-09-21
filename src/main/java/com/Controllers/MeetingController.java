@@ -8,10 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//When we view a meeting box we need
-//participants (users)
-//participation of logged in user
-//location
 @RestController()
 @RequestMapping("/meeting")
 public class MeetingController {

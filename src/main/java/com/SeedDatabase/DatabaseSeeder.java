@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent>{
@@ -110,6 +112,13 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         participation.setCanViewFeedback(true);
         participation.setCanMakeDecision(true);
         Participation savedParticipation = participationDAO.saveOrUpdate(participation);
+
+        //manual testing
+        List<Meeting> meetingListByLocation = meetingDAO.getByLocation(locationDAO.getById(5));
+        List<User> userList = new ArrayList<User>();
+        userList.add(userDAO.getById(savedCandidate.getId()));
+        userList.add(userDAO.getById(savedParticipant.getId()));
+        List<Meeting> meetingListByUser = meetingDAO.getByUserList(userList);
     }
 
 
