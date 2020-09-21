@@ -1,6 +1,7 @@
 package com.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -17,8 +18,8 @@ public class Department {
 
     public String departmentName;
 
-    @JsonManagedReference
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @JsonIgnoreProperties("department")
+    @OneToMany(cascade = CascadeType.MERGE)
     public Set<Position> positions;
 
     public Set<Position> getPositions() {

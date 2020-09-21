@@ -1,8 +1,11 @@
 package com.DAOs;
 
+import com.Entities.Department;
 import com.Entities.Position;
 import com.Entities.User;
 
-public interface PositionDAO{
-    public Position getById(Integer positionId);
+import java.util.List;
+
+public interface PositionDAO extends DAO<Position>{
+
 }

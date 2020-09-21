@@ -2,10 +2,7 @@ package com.DAOs;
 
 import com.Entities.Department;
 
-import java.util.List;
 
-public interface DepartmentDAO {
-    public List<Department> getAllDepartments();
+public interface DepartmentDAO extends DAO<Department> {
 
-    public void saveDepartment(Department department);
 }

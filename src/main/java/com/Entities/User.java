@@ -1,9 +1,10 @@
 package com.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import com.Entities.enumeration.Role;
+import org.springframework.scheduling.annotation.Schedules;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -22,12 +23,11 @@ public class User implements DataObject {
     private String phone;
     private String firstName;
     private String lastName;
-    private Role role;
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    private String role;
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Department department;
-    @JsonManagedReference
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnoreProperties("user")
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Participation> participations;
 
     public void addParticipation(Participation participation){
@@ -44,6 +44,7 @@ public class User implements DataObject {
             participation.setUser(null);
         }
     }
+
 
     @Override
     public Integer getId() {
@@ -111,11 +112,11 @@ public class User implements DataObject {
         this.lastName = lastName;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

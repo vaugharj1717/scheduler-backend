@@ -3,6 +3,7 @@ package com.Entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 
 @Entity
@@ -12,7 +13,7 @@ public class Position implements DataObject{
     private Integer id;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     Department department;
 
     String positionName;
@@ -32,6 +33,9 @@ public class Position implements DataObject{
     public void setDepartment(Department department) {
         this.department = department;
         if(department != null){
+            if(department.getPositions() == null){
+                department.setPositions(new HashSet<Position>());
+            }
             department.getPositions().add(this);
         }
     }

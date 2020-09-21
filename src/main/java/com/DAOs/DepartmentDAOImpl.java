@@ -4,36 +4,36 @@ import com.Entities.Department;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 
-//DAO layer responsibilities
-//  1) Access data from database, and it will automatically be converted into Entities
-//  2) For updates/deletes/inserts, manage transactions with
-//      em.getTransaction.begin(),   em.getTransaction().commit(),   em.getTransaction().rollback()
-//          start transaction              save transaction                 undo transaction (if error)
 @Repository
-public class DepartmentDAOImpl extends AbstractDAO implements DepartmentDAO{
+public class DepartmentDAOImpl implements DepartmentDAO{
 
-    public List<Department> getAllDepartments(){
-        //instantiate EntityManager object and use to select all departments from database
-        EntityManager em = emf.createEntityManager();
+    @PersistenceContext
+    EntityManager em;
+
+    public List<Department> getAll(){
         //Selecting all Departments, also populating the department's "position" field in-memory
-        List<Department> departmentList = em.createQuery("from Department d LEFT JOIN FETCH d.positions", Department.class)
+        List<Department> departmentList = em.createQuery("from Department", Department.class)
                 .getResultList();
         return departmentList;
     }
 
-    public void saveDepartment(Department department){
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        try{
-            em.persist(department);
-            em.getTransaction().commit();
-        }
-        catch(Exception e){
-            em.getTransaction().rollback();
-        }
+    public Department getById(Integer id){
+        Department department = em.createQuery(
+                "SELECT d FROM Department d WHERE d.id = :id", Department.class)
+                .setParameter("id", id)
+                .getSingleResult();
+        return department;
+    }
+    public Department saveOrUpdate(Department department){
+            Department savedDepartment = em.merge(department);
+            return savedDepartment;
+    }
 
+    public void remove(Department department){
+        em.remove(department);
     }
 }

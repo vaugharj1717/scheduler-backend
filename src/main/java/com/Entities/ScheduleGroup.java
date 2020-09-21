@@ -1,5 +1,6 @@
 package com.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -13,10 +14,10 @@ public class ScheduleGroup implements DataObject{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @JsonManagedReference
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
+    @JsonIgnoreProperties("scheduleGroup")
+    @OneToMany(cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     Set<Schedule> schedules;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     Position position;
 
     public void addSchedule(Schedule schedule){
@@ -48,6 +49,7 @@ public class ScheduleGroup implements DataObject{
     public void setPosition(Position position) {
         this.position = position;
     }
+
 
     @Override
     public Integer getId() {
