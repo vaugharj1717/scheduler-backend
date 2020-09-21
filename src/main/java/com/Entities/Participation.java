@@ -3,6 +3,7 @@ package com.Entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 
 @Entity
@@ -11,10 +12,10 @@ public class Participation implements DataObject{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private User user;
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Meeting meeting;
 
     private boolean alert;
@@ -40,6 +41,9 @@ public class Participation implements DataObject{
     public void setUser(User user) {
         this.user = user;
         if(user != null){
+            if(user.getParticipations() == null){
+                user.setParticipations(new HashSet<Participation>());
+            }
             user.getParticipations().add(this);
         }
     }
@@ -51,6 +55,9 @@ public class Participation implements DataObject{
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;
         if(meeting != null){
+            if(meeting.getParticipations() == null){
+                meeting.setParticipations(new HashSet<Participation>());
+            }
             meeting.getParticipations().add(this);
         }
     }

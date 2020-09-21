@@ -18,7 +18,7 @@ public class Department {
     public String departmentName;
 
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.MERGE)
     public Set<Position> positions;
 
     public Set<Position> getPositions() {

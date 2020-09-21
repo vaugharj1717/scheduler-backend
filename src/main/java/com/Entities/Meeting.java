@@ -16,13 +16,13 @@ public class Meeting implements DataObject{
     private Integer id;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Location location;
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Schedule schedule;
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Participation> participations;
     private Date startTime;
     private Date endTime;
@@ -50,6 +50,9 @@ public class Meeting implements DataObject{
     public void setLocation(Location location) {
         this.location = location;
         if(location != null){
+            if(location.getMeetings() == null){
+                location.setMeetings(new HashSet<Meeting>());
+            }
             location.getMeetings().add(this);
         }
     }
@@ -61,6 +64,9 @@ public class Meeting implements DataObject{
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
         if(schedule != null){
+            if(schedule.getMeetings() == null){
+                schedule.setMeetings(new HashSet<Meeting>());
+            }
             schedule.getMeetings().add(this);
         }
     }

@@ -17,12 +17,14 @@ public class Schedule implements DataObject{
     private Integer id;
 
     @JsonManagedReference
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Meeting> meetings;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private User candidate;
 
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private ScheduleGroup scheduleGroup;
 
     public void addMeeting(Meeting meeting){
@@ -65,8 +67,19 @@ public class Schedule implements DataObject{
     public void setScheduleGroup(ScheduleGroup scheduleGroup) {
         this.scheduleGroup = scheduleGroup;
         if(scheduleGroup != null){
+            if(scheduleGroup.getSchedules() == null){
+                scheduleGroup.setSchedules(new HashSet<Schedule>());
+            }
             scheduleGroup.getSchedules().add(this);
         }
+    }
+
+    public User getCandidate() {
+        return candidate;
+    }
+
+    public void setCandidate(User candidate) {
+        this.candidate = candidate;
     }
 
     @Override

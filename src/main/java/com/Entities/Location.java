@@ -15,7 +15,7 @@ public class Location implements DataObject{
     private Integer id;
 
     @JsonManagedReference
-    @OneToMany
+    @OneToMany(cascade = CascadeType.MERGE)
     private Set<Meeting> meetings;
     private String buildingName;
     private Integer roomNumber;

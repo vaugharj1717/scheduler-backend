@@ -2,6 +2,7 @@ package com.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.scheduling.annotation.Schedules;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -22,11 +23,12 @@ public class User implements DataObject {
     private String lastName;
     private String role;
     @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Department department;
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Participation> participations;
+    @JsonManagedReference
 
     public void addParticipation(Participation participation){
         if(this.participations == null){
@@ -42,6 +44,7 @@ public class User implements DataObject {
             participation.setUser(null);
         }
     }
+
 
     @Override
     public Integer getId() {
