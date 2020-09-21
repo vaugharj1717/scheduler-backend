@@ -14,11 +14,6 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping("/helloworld")
-    public String helloWorld(){
-        return "Hello World";
-    }
-
     @CrossOrigin
     @RequestMapping("/participant")
     public List<User> getAllParticipants(){

@@ -17,26 +17,14 @@ public class UserServiceImpl implements UserService{
         this.userDAO = userDAO;
     }
 
-
     @Override
-    public User getUserById(Integer id) {
-        //stub method for now
-        return null;
-    }
-
-    @Override
-    public void deleteUserById(Integer id) {
-        //stub method for now
+    public List<User> getAllParticipants() {
+        return userDAO.getAllParticipants();
     }
 
     @Override
     public Integer registerUser(User newUser) {
         userDAO.saveOrUpdate(newUser);
         return null;
-    }
-
-    @Override
-    public List<User> getAllParticipants() {
-        return userDAO.getAllParticipants();
     }
 }

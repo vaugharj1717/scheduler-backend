@@ -22,7 +22,7 @@ public class User implements DataObject {
     private String phone;
     private String firstName;
     private String lastName;
-    private String role;
+    private Role role;
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private Department department;
@@ -111,11 +111,11 @@ public class User implements DataObject {
         this.lastName = lastName;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

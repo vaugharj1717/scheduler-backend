@@ -13,6 +13,15 @@ import java.util.List;
 public class UserDAOImpl extends AbstractDAO implements UserDAO {
 
 
+    @Override
+    public User saveOrUpdate(User user) {
+        //begin transaction
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        User savedUser = em.merge(user);
+        em.getTransaction().commit();
+        return savedUser;
+    }
 
     @Override
     public List<User> getAllParticipants() {

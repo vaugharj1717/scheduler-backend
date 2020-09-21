@@ -4,6 +4,9 @@ import com.Entities.User;
 
 import java.util.List;
 
-public interface UserDAO extends DAO<User> {
-    List<User> getAllParticipants();
+public interface UserDAO {
+
+    public User saveOrUpdate(User user);
+
+    public List<User> getAllParticipants();
 }

@@ -13,8 +13,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent>{
@@ -50,11 +49,10 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         newDepartment.setDepartmentName("testDepartmentName");
         Position newPosition = new Position();
         newPosition.setPositionName("position1");
-        List<Position> positionList = new ArrayList<Position>();
-        positionList.add(newPosition);
-        newDepartment.setName("testName");
+        Set<Position> positions = new HashSet<Position>();
+        positions.add(newPosition);
         newPosition.setDepartment(newDepartment);
-        newDepartment.setPositionList(positionList);
+        newDepartment.setPositions(positions);
         departmentDAO.saveDepartment(newDepartment);
     }
 }
