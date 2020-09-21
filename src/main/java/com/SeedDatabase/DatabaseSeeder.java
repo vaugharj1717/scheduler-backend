@@ -2,6 +2,7 @@ package com.SeedDatabase;
 
 import com.DAOs.*;
 import com.Entities.*;
+import com.Entities.enumeration.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -52,7 +52,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         User candidate = new User();
         candidate.setUsername("testUsername");
         candidate.setPassword("testPassword");
-        candidate.setRole("candidate");
+        candidate.setRole(Role.CANDIDATE);
         candidate.setFirstName("testFirstName");
         candidate.setLastName("testLastName");
         candidate.setEmail("testEmail");
@@ -93,7 +93,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         User participant = new User();
         participant.setUsername("testUsername");
         participant.setPassword("testPassword");
-        participant.setRole("participant");
+        participant.setRole(Role.DEPRATEMENT_ADMIN);
         participant.setFirstName("testFirstName");
         participant.setLastName("testLastName");
         participant.setEmail("testEmail");
