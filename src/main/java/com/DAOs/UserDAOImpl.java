@@ -25,7 +25,8 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public List<User> getAllCandidates(){
-        List<User> userList = em.createQuery("SELECT u from User u WHERE u.role = \'candidate\'", User.class)
+        List<User> userList = em.createQuery("SELECT u from User u WHERE u.role = ?1", User.class)
+                .setParameter(1, Role.CANDIDATE)
                 .getResultList();
         return userList;
     }
