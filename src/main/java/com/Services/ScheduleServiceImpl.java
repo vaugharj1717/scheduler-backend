@@ -22,4 +22,10 @@ public class ScheduleServiceImpl implements ScheduleService{
         Schedule schedule = scheduleDAO.getById(scheduleId);
         return schedule;
     }
+
+    @Transactional
+    public Schedule deleteSchedule(Integer scheduleId){
+        Schedule schedule = scheduleDAO.remove2(scheduleId);
+        return schedule;
+    }
 }

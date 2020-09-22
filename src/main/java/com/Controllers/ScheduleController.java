@@ -29,4 +29,20 @@ public class ScheduleController {
             return new ResponseEntity<Schedule>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(path = "/{scheduleId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Schedule> deleteSchedule(@PathVariable Integer scheduleId){
+        try{
+            Schedule schedule = scheduleService.deleteSchedule(scheduleId);
+            if(schedule == null){
+                return new ResponseEntity<Schedule>(HttpStatus.BAD_REQUEST);
+            }
+            else{
+                return new ResponseEntity<Schedule>(schedule, HttpStatus.OK);
+            }
+        }
+        catch(Exception e){
+            return new ResponseEntity<Schedule>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
