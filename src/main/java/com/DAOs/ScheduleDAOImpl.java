@@ -34,14 +34,8 @@ public class ScheduleDAOImpl implements ScheduleDAO{
         return savedSchedule;
     }
 
-    public void remove(Schedule schedule){}
-
-    public Schedule remove2(Integer id){
-        Schedule schedule = em.createQuery(
-                "DELETE s from Schedule s WHERE s.id = :id"
-                , Schedule.class)
-                .setParameter("id", id)
-                .getSingleResult();
-        return schedule;
+    public void remove(Schedule schedule){
+        em.remove(schedule);
     }
+
 }

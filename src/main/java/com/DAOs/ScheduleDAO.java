@@ -7,5 +7,4 @@ import com.Entities.ScheduleGroup;
 import java.util.List;
 
 public interface ScheduleDAO extends DAO<Schedule>{
-    public Schedule remove2(Integer id);
 }

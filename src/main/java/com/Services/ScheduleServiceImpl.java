@@ -24,8 +24,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Transactional
-    public Schedule deleteSchedule(Integer scheduleId){
-        Schedule schedule = scheduleDAO.remove2(scheduleId);
-        return schedule;
+    public void deleteSchedule(Integer scheduleId){
+        Schedule schedule = scheduleDAO.getById(scheduleId);
+        scheduleDAO.remove(schedule);
     }
 }
