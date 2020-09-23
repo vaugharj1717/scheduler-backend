@@ -8,4 +8,5 @@ public interface PositionDAO {
     public List<Position> getPositionsByDepartment (Integer id);
     public Position saveOrUpdate(Position position);
     public Position getById(Integer id);
+    public List<Position> getAll();
 }

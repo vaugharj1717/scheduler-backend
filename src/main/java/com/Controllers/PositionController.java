@@ -28,5 +28,17 @@ public class PositionController {
             return new ResponseEntity<List<Position>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @CrossOrigin
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<List<Position>> getAllPositions(){
+        try {
+            List<Position> positionList = positionService.getAllPositions();
+            return new ResponseEntity<List<Position>>(positionList, HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<List<Position>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
 

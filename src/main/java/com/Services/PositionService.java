@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PositionService {
     public List<Position> getPositionsByDepartment (Integer id);
+    public List<Position> getAllPositions();
 }
