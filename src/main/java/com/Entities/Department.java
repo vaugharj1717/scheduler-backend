@@ -15,35 +15,7 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
     public String departmentName;
-
-    @JsonIgnoreProperties("department")
-    @OneToMany(cascade = CascadeType.MERGE)
-    public Set<Position> positions;
-
-    public Set<Position> getPositions() {
-        return positions;
-    }
-
-    public void addPosition(Position position){
-        if(this.positions == null){
-            this.positions = new HashSet<Position>();
-        }
-        this.positions.add(position);
-        position.setDepartment(this);
-    }
-
-    public void removePosition(Position position){
-        if(this.positions != null){
-            this.positions.remove(position);
-            position.setDepartment(null);
-        }
-    }
-
-    public void setPositions(Set<Position> positionList) {
-        this.positions = positionList;
-    }
 
     public Integer getId() {
         return id;

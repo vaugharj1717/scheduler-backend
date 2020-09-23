@@ -1,10 +1,13 @@
 package com.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Position implements DataObject{
@@ -12,9 +15,13 @@ public class Position implements DataObject{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @JsonBackReference
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     Department department;
+
+    @JsonIgnoreProperties("position")
+    @JoinColumn(name="POSITION_ID")
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    Set<Candidacy> candidacies;
 
     String positionName;
 
@@ -30,13 +37,30 @@ public class Position implements DataObject{
         return department;
     }
 
+    public Set<Candidacy> getCandidacies() {
+        return candidacies;
+    }
+
+    public void setCandidacies(Set<Candidacy> candidacies) {
+        this.candidacies = candidacies;
+    }
+
     public void setDepartment(Department department) {
         this.department = department;
-        if(department != null){
-            if(department.getPositions() == null){
-                department.setPositions(new HashSet<Position>());
-            }
-            department.getPositions().add(this);
+    }
+
+    public void addCandidacy(Candidacy candidacy){
+        if(this.candidacies == null){
+            this.candidacies = new HashSet<Candidacy>();
+        }
+        this.candidacies.add(candidacy);
+        candidacy.setPosition(this);
+    }
+
+    public void removeCandidacy(Candidacy candidacy){
+        if(this.candidacies != null){
+            this.candidacies.remove(candidacy);
+            candidacy.setPosition(null);
         }
     }
 

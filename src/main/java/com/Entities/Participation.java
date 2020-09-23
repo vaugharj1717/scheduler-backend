@@ -14,7 +14,7 @@ public class Participation implements DataObject{
     private Integer id;
     @JsonIgnoreProperties("participations")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    private User user;
+    private User participant;
     @JsonIgnoreProperties("participations")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Meeting meeting;
@@ -35,17 +35,17 @@ public class Participation implements DataObject{
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getParticipant() {
+        return participant;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-        if(user != null){
-            if(user.getParticipations() == null){
-                user.setParticipations(new HashSet<Participation>());
+    public void setParticipant(User participant) {
+        this.participant = participant;
+        if(participant != null){
+            if(participant.getParticipations() == null){
+                participant.setParticipations(new HashSet<Participation>());
             }
-            user.getParticipations().add(this);
+            participant.getParticipations().add(this);
         }
     }
 

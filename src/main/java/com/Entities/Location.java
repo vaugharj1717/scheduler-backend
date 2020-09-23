@@ -14,35 +14,8 @@ public class Location implements DataObject{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
-    @JsonIgnoreProperties("location")
-    @OneToMany(cascade = CascadeType.MERGE)
-    private Set<Meeting> meetings;
     private String buildingName;
     private Integer roomNumber;
-
-    public void addMeeting(Meeting meeting){
-        if(this.meetings == null){
-            this.meetings = new HashSet<Meeting>();
-        }
-        this.meetings.add(meeting);
-        meeting.setLocation(this);
-    }
-
-    public void removeMeeting(Meeting meeting){
-        if(this.meetings != null){
-            this.meetings.remove(meeting);
-            meeting.setLocation(null);
-        }
-    }
-
-    public Set<Meeting> getMeetings() {
-        return meetings;
-    }
-
-    public void setMeetings(Set<Meeting> meetings) {
-        this.meetings = meetings;
-    }
 
     public String getBuildingName() {
         return buildingName;
@@ -59,8 +32,6 @@ public class Location implements DataObject{
     public void setRoomNumber(Integer roomNumber) {
         this.roomNumber = roomNumber;
     }
-
-
 
     @Override
     public Integer getId() {

@@ -1,10 +1,10 @@
 package com.Services;
 
-import com.Entities.ScheduleGroup;
+import com.Entities.Candidacy;
 
 import java.util.List;
 
 public interface ScheduleGroupService {
-    public List<ScheduleGroup> getAll();
-    public ScheduleGroup createScheduleGroup(Integer positionId);
+    public List<Candidacy> getAll();
+    public Candidacy createScheduleGroup(Integer positionId);
 }

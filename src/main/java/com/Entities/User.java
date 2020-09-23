@@ -28,24 +28,45 @@ public class User implements DataObject {
     private Role role;
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Department department;
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties("participant")
+    @JoinColumn(name="USER_ID")
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Participation> participations;
+    @JsonIgnoreProperties("candidate")
+    @JoinColumn(name="CANDIDATE_ID")
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
+    private Set<Candidacy> candidacies;
 
     public void addParticipation(Participation participation){
         if(this.participations == null){
             this.participations = new HashSet<Participation>();
         }
         this.participations.add(participation);
-        participation.setUser(this);
+        participation.setParticipant(this);
     }
 
     public void removeParticipation(Participation participation){
         if(this.participations != null){
             this.participations.remove(participation);
-            participation.setUser(null);
+            participation.setParticipant(null);
         }
     }
+
+    public void addCandidacy(Candidacy candidacy){
+        if(this.candidacies == null){
+            this.candidacies = new HashSet<Candidacy>();
+        }
+        this.candidacies.add(candidacy);
+        candidacy.setCandidate(this);
+    }
+
+    public void removeParticipation(Candidacy candidacy){
+        if(this.candidacies != null){
+            this.candidacies.remove(candidacy);
+            candidacy.setCandidate(null);
+        }
+    }
+
 
 
     @Override
@@ -128,6 +149,14 @@ public class User implements DataObject {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public Set<Candidacy> getCandidacies() {
+        return candidacies;
+    }
+
+    public void setCandidacies(Set<Candidacy> candidacies) {
+        this.candidacies = candidacies;
     }
 
     @Override

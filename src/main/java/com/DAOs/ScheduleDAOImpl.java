@@ -22,8 +22,7 @@ public class ScheduleDAOImpl implements ScheduleDAO{
 
     public Schedule getById(Integer id){
         Schedule schedule = em.createQuery(
-                "SELECT s FROM Schedule s LEFT JOIN FETCH s.meetings m LEFT JOIN FETCH m.participations p " +
-                        "LEFT JOIN FETCH p.user LEFT JOIN FETCH m.location WHERE s.id = :id"
+                "SELECT s FROM Schedule s WHERE s.id = :id"
                 , Schedule.class)
                 .setParameter("id", id)
                 .getSingleResult();
@@ -34,8 +33,10 @@ public class ScheduleDAOImpl implements ScheduleDAO{
         return savedSchedule;
     }
 
-    public void remove(Schedule schedule){
-        em.remove(schedule);
+    public void remove(Integer id){
+        em.createQuery("DELETE Schedule s WHERE s.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 
 }

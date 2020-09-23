@@ -32,7 +32,9 @@ public class ParticipationDAOImpl implements ParticipationDAO{
         return savedParticipation;
     }
 
-    public void remove(Participation participation){
-        em.remove(participation);
+    public void remove(Integer id){
+        em.createQuery("DELETE Participation p WHERE p.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 }

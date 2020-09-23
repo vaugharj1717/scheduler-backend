@@ -5,6 +5,6 @@ import java.util.List;
 public interface DAO<T> {
     List<T> getAll();
     T getById (Integer id);
-    void remove(T domainObject);
+    void remove(Integer id);
     T saveOrUpdate(T domainObject);
 }

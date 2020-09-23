@@ -1,6 +1,6 @@
 package com.Controllers;
 
-import com.Entities.ScheduleGroup;
+import com.Entities.Candidacy;
 import com.Services.ScheduleGroupService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,31 +21,31 @@ public class ScheduleGroupController {
     ScheduleGroupService scheduleGroupService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<ScheduleGroup>> getAll(){
+    public ResponseEntity<List<Candidacy>> getAll(){
         try {
-            List<ScheduleGroup> scheduleGroupList = scheduleGroupService.getAll();
-            return new ResponseEntity<List<ScheduleGroup>>(scheduleGroupList, HttpStatus.OK);
+            List<Candidacy> candidacyList = scheduleGroupService.getAll();
+            return new ResponseEntity<List<Candidacy>>(candidacyList, HttpStatus.OK);
         }
         catch(Exception e){
             e.printStackTrace();
-            return new ResponseEntity<List<ScheduleGroup>>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<List<Candidacy>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<ScheduleGroup> createScheduleGroup(@RequestBody JsonNode body){
+    public ResponseEntity<Candidacy> createScheduleGroup(@RequestBody JsonNode body){
         try{
             Integer positionId = body.get("positionId").asInt();
-            ScheduleGroup newScheduleGroup = scheduleGroupService.createScheduleGroup(positionId);
-            if(newScheduleGroup == null){
-                return new ResponseEntity<ScheduleGroup>(HttpStatus.BAD_REQUEST);
+            Candidacy newCandidacy = scheduleGroupService.createScheduleGroup(positionId);
+            if(newCandidacy == null){
+                return new ResponseEntity<Candidacy>(HttpStatus.BAD_REQUEST);
             }
             else{
-                return new ResponseEntity<ScheduleGroup>(newScheduleGroup, HttpStatus.OK);
+                return new ResponseEntity<Candidacy>(newCandidacy, HttpStatus.OK);
             }
         }
         catch(Exception e){
-            return new ResponseEntity<ScheduleGroup>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Candidacy>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

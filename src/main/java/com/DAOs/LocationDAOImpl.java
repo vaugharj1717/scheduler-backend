@@ -30,7 +30,9 @@ public class LocationDAOImpl implements LocationDAO{
         return savedLocation;
     }
 
-    public void remove(Location location){
-        em.remove(location);
+    public void remove(Integer id){
+        em.createQuery("DELETE Location l WHERE l.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 }

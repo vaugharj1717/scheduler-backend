@@ -1,12 +1,8 @@
 package com.Entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import javax.xml.stream.Location;
-import java.sql.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -18,15 +14,13 @@ public class Schedule implements DataObject{
     private Integer id;
 
     @JsonIgnoreProperties("schedule")
+    @JoinColumn(name="SCHEDULE_ID")
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Meeting> meetings;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    private User candidate;
-
-    @JsonIgnoreProperties("schedules")
+    @JsonIgnoreProperties("schedule")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    private ScheduleGroup scheduleGroup;
+    private Candidacy candidacy;
 
     public void addMeeting(Meeting meeting){
         if(this.meetings == null){
@@ -61,26 +55,19 @@ public class Schedule implements DataObject{
         this.id = id;
     }
 
-    public ScheduleGroup getScheduleGroup() {
-        return scheduleGroup;
+    public Candidacy getScheduleGroup() {
+        return candidacy;
     }
 
-    public void setScheduleGroup(ScheduleGroup scheduleGroup) {
-        this.scheduleGroup = scheduleGroup;
-        if(scheduleGroup != null){
-            if(scheduleGroup.getSchedules() == null){
-                scheduleGroup.setSchedules(new HashSet<Schedule>());
-            }
-            scheduleGroup.getSchedules().add(this);
+    public Candidacy getCandidacy() {
+        return candidacy;
+    }
+
+    public void setCandidacy(Candidacy candidacy) {
+        this.candidacy = candidacy;
+        if(candidacy.getSchedule() == null || !candidacy.getSchedule().equals(this)){
+            candidacy.setSchedule(this);
         }
-    }
-
-    public User getCandidate() {
-        return candidate;
-    }
-
-    public void setCandidate(User candidate) {
-        this.candidate = candidate;
     }
 
     @Override

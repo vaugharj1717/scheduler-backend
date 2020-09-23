@@ -11,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Date;
 
 @Component
 public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent>{
@@ -21,7 +20,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
     EntityManager em;
 
     @Autowired
-    ScheduleGroupDAO scheduleGroupDAO;
+    CandidacyDAO candidacyDAO;
     @Autowired
     ScheduleDAO scheduleDAO;
     @Autowired
@@ -48,12 +47,12 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         //create Department
         Department department = new Department();
         department.setDepartmentName("testDepartmentName");
-        Department savedDepartment = departmentDAO.saveOrUpdate(department);
+
         //create Position
         Position position = new Position();
         position.setPositionName("testPositionName");
-        position.setDepartment(departmentDAO.getById(savedDepartment.getId()));
-        Position savedPosition = positionDAO.saveOrUpdate(position);
+        position.setDepartment(department);
+        position = positionDAO.saveOrUpdate(position);
 
 
         //create Candidate
@@ -65,40 +64,30 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         candidate.setLastName("testLastName");
         candidate.setEmail("testEmail");
         candidate.setPhone("testPhone");
-        User savedCandidate = userDAO.saveOrUpdate(candidate);
 
+        //create Candidacy
+        Candidacy candidacy = new Candidacy();
+        em.persist(candidacy);
+        candidacy.setCandidate(candidate);
+        candidacy.setPosition(position);
+        candidacy = candidacyDAO.saveOrUpdate(candidacy);
 
-
-        //create ScheduleGroup
-        Position retrievedPosition = positionDAO.getById(savedPosition.getId());
-        ScheduleGroup scheduleGroup = new ScheduleGroup();
-        scheduleGroup.setPosition(retrievedPosition);
-        ScheduleGroup savedScheduleGroup = scheduleGroupDAO.saveOrUpdate(scheduleGroup);
 
         //create Schedule
-        ScheduleGroup retrievedScheduleGroup = scheduleGroupDAO.getById(savedScheduleGroup.getId());
-        User retrievedCandidate = userDAO.getById(savedCandidate.getId());
         Schedule schedule = new Schedule();
-        schedule.setScheduleGroup(retrievedScheduleGroup);
-        schedule.setCandidate(retrievedCandidate);
-        Schedule savedSchedule = scheduleDAO.saveOrUpdate(schedule);
+        em.persist(schedule);
+        schedule.setCandidacy(candidacy);
+        schedule = scheduleDAO.saveOrUpdate(schedule);
 
         //create Location
         Location location = new Location();
         location.setRoomNumber(1);
         location.setBuildingName("testBuildingName");
-        Location savedLocation = locationDAO.saveOrUpdate(location);
-
-        //create Meeting
-        Meeting meeting = new Meeting();
-        meeting = meetingDAO.saveOrUpdate(meeting);
-        meeting.setMeetingType("testingMeetingType");
-        meeting.setLocation(locationDAO.getById(savedLocation.getId()));
-        meeting.setSchedule(scheduleDAO.getById(savedSchedule.getId()));
-        Meeting savedMeeting = meetingDAO.saveOrUpdate(meeting);
+        location = locationDAO.saveOrUpdate(location);
 
         //create participant
         User participant = new User();
+        em.persist(participant);
         participant.setUsername("testUsername");
         participant.setPassword("testPassword");
         participant.setRole(Role.DEPARTMENT_ADMIN);
@@ -106,27 +95,39 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         participant.setLastName("testLastName");
         participant.setEmail("testEmail");
         participant.setPhone("testPhone");
-        User savedParticipant = userDAO.saveOrUpdate(participant);
+        participant.setDepartment(department);
+        participant = userDAO.saveOrUpdate(participant);
+
+        //create Meeting
+        Meeting meeting = new Meeting();
+        em.persist(meeting);
+        meeting.setMeetingType("testingMeetingType");
+        meeting.setLocation(location);
+        Date newDate1 = new Date(5);
+        Date newDate2 = new Date(6);
+        meeting.setStartTime(newDate1);
+        meeting.setEndTime(newDate2);
+        meeting.setSchedule(schedule);
+        meeting = meetingDAO.saveOrUpdate(meeting);
 
         //create participation
         Participation participation = new Participation();
-        User retrievedParticipant = userDAO.getById(savedParticipant.getId());
-        Meeting retrievedMeeting = meetingDAO.getById(savedMeeting.getId());
-        participation.setUser(retrievedParticipant);
-        participation.setMeeting(retrievedMeeting);
+        em.persist(participation);
+        participation.setParticipant(participant);
+        participation.setMeeting(meeting);
         participation.setAlert(true);
         participation.setAlertType("email");
         participation.setCanLeaveFeedback(true);
         participation.setCanViewFeedback(true);
         participation.setCanMakeDecision(true);
-        Participation savedParticipation = participationDAO.saveOrUpdate(participation);
-
-        //manual testing
-        List<Meeting> meetingListByLocation = meetingDAO.getByLocation(locationDAO.getById(savedLocation.getId()));
-        List<User> userList = new ArrayList<User>();
-        userList.add(userDAO.getById(savedCandidate.getId()));
-        userList.add(userDAO.getById(savedParticipant.getId()));
-        List<Meeting> meetingListByUser = meetingDAO.getByUserList(userList);
+        participation = participationDAO.saveOrUpdate(participation);
+//
+//        //manual testing
+//        List<Meeting> meetingListByLocation = meetingDAO.getByLocation(locationDAO.getById(savedLocation.getId()));
+//        List<User> userList = new ArrayList<User>();
+//        userList.add(userDAO.getById(savedCandidate.getId()));
+//        userList.add(userDAO.getById(savedParticipant.getId()));
+//        List<Meeting> meetingListByUser = meetingDAO.getByUserList(userList);
     }
 
 

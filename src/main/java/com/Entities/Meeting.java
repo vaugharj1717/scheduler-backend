@@ -23,6 +23,7 @@ public class Meeting implements DataObject{
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Schedule schedule;
     @JsonIgnoreProperties("meeting")
+    @JoinColumn(name="MEETING_ID")
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Participation> participations;
     private Date startTime;
@@ -50,12 +51,6 @@ public class Meeting implements DataObject{
 
     public void setLocation(Location location) {
         this.location = location;
-        if(location != null){
-            if(location.getMeetings() == null){
-                location.setMeetings(new HashSet<Meeting>());
-            }
-            location.getMeetings().add(this);
-        }
     }
 
     public Schedule getSchedule() {

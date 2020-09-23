@@ -1,11 +1,8 @@
 package com.DAOs;
 
-import com.Entities.Participation;
-import com.Entities.ScheduleGroup;
 import com.Entities.User;
 import com.Entities.enumeration.Role;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -43,8 +40,10 @@ public class UserDAOImpl implements UserDAO {
         return savedUser;
     }
 
-    public void remove(User user){
-        em.remove(user);
+    public void remove(Integer id){
+        em.createQuery("DELETE User u WHERE u.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 
     @Override
