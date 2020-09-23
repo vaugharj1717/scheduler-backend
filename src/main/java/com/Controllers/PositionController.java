@@ -1,5 +1,6 @@
 package com.Controllers;
 
+import com.Entities.Candidacy;
 import com.Entities.Department;
 import com.Entities.Position;
 import com.Services.PositionService;
@@ -38,6 +39,19 @@ public class PositionController {
         }
         catch(Exception e){
             return new ResponseEntity<List<Position>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/{positionId}/candidate/{candidateId}", method = RequestMethod.POST)
+    public ResponseEntity<Candidacy> assignCandidateToPosition(
+            @PathVariable("positionId") Integer positionId,
+            @PathVariable("candidateId") Integer candidateId){
+        try {
+            Candidacy candidacy = positionService.assignCandidateToPosition(positionId, candidateId);
+            return new ResponseEntity<Candidacy>(candidacy, HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<Candidacy>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
