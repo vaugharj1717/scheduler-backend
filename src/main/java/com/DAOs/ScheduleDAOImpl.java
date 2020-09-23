@@ -34,10 +34,15 @@ public class ScheduleDAOImpl implements ScheduleDAO{
     }
 
     public void remove(Integer id){
+        //update candidacy foreign-key to avoid referential constraint violation
+        em.createQuery("UPDATE Candidacy c SET c.schedule = null WHERE c.schedule.id = :id ")
+                .setParameter("id", id)
+                .executeUpdate();
+        //remove schedule by Id
         em.remove(
                 em.createQuery("SELECT s FROM Schedule s WHERE s.id = :id")
-                .setParameter("id", id)
-                .getSingleResult()
+                        .setParameter("id", id)
+                        .getSingleResult()
         );
     }
 
