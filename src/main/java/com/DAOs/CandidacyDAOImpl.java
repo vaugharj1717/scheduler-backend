@@ -34,8 +34,10 @@ public class CandidacyDAOImpl implements CandidacyDAO {
     }
 
     public void remove(Integer id){
-        em.createQuery("DELETE Candidacy c WHERE c.id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
+        em.remove(
+                em.createQuery("SELECT c FROM Candidacy c WHERE c.id = :id")
+                        .setParameter("id", id)
+                        .getSingleResult()
+        );
     }
 }

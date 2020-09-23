@@ -43,8 +43,10 @@ public class PositionDAOImpl implements PositionDAO{
     }
 
     public void remove(Integer id){
-        em.createQuery("DELETE Position p WHERE p.id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
+        em.remove(
+                em.createQuery("SELECT p FROM Position p WHERE p.id = :id")
+                        .setParameter("id", id)
+                        .getSingleResult()
+        );
     }
 }

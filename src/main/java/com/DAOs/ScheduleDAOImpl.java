@@ -34,9 +34,11 @@ public class ScheduleDAOImpl implements ScheduleDAO{
     }
 
     public void remove(Integer id){
-        em.createQuery("DELETE Schedule s WHERE s.id = :id")
+        em.remove(
+                em.createQuery("SELECT s FROM Schedule s WHERE s.id = :id")
                 .setParameter("id", id)
-                .executeUpdate();
+                .getSingleResult()
+        );
     }
 
 }

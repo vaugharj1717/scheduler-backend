@@ -38,9 +38,11 @@ public class MeetingDAOImpl implements MeetingDAO{
     }
 
     public void remove(Integer id){
-        em.createQuery("DELETE Meeting m WHERE m.id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
+        em.remove(
+                em.createQuery("SELECT m FROM Meeting m WHERE m.id = :id")
+                        .setParameter("id", id)
+                        .getSingleResult()
+        );
     }
 
     public List<Meeting> getByLocation(Location location){

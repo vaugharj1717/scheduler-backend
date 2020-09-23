@@ -36,9 +36,11 @@ public class DepartmentDAOImpl implements DepartmentDAO{
     }
 
     public void remove(Integer id){
-        em.createQuery("DELETE Department d WHERE d.id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
+        em.remove(
+                em.createQuery("SELECT d FROM Department d WHERE d.id = :id")
+                        .setParameter("id", id)
+                        .getSingleResult()
+        );
     }
 
     public List<Position> getPositionsByDepartment(Integer id) {

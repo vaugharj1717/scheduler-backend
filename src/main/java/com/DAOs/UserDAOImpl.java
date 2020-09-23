@@ -41,9 +41,11 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public void remove(Integer id){
-        em.createQuery("DELETE User u WHERE u.id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
+        em.remove(
+                em.createQuery("SELECT u FROM User u WHERE u.id = :id")
+                        .setParameter("id", id)
+                        .getSingleResult()
+        );
     }
 
     @Override
