@@ -55,10 +55,6 @@ public class Schedule implements DataObject{
         this.id = id;
     }
 
-    public Candidacy getScheduleGroup() {
-        return candidacy;
-    }
-
     public Candidacy getCandidacy() {
         return candidacy;
     }

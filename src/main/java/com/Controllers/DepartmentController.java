@@ -38,7 +38,6 @@ public class DepartmentController {
     public ResponseEntity<Position> createPositionToDepartment(@PathVariable("positionName") String positionName, @PathVariable("idDepartement") Integer idDepartement) {
         try {
             Position position = departmentService.createPositionToDepartment(positionName, idDepartement);
-
             return new ResponseEntity<Position>(position, HttpStatus.OK);
         }
         catch (Exception e) {
