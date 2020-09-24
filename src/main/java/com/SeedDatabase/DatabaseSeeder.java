@@ -60,8 +60,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         candidate.setUsername("testUsername");
         candidate.setPassword("testPassword");
         candidate.setRole(Role.CANDIDATE);
-        candidate.setFirstName("testFirstName");
-        candidate.setLastName("testLastName");
+        candidate.setName("testName");
         candidate.setEmail("testEmail");
         candidate.setPhone("testPhone");
 
@@ -91,8 +90,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         participant.setUsername("testUsername");
         participant.setPassword("testPassword");
         participant.setRole(Role.DEPARTMENT_ADMIN);
-        participant.setFirstName("testFirstName");
-        participant.setLastName("testLastName");
+        participant.setName("testName");
         participant.setEmail("testEmail");
         participant.setPhone("testPhone");
         participant.setDepartment(department);

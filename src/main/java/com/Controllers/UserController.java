@@ -1,13 +1,13 @@
 package com.Controllers;
 
+import com.Entities.Candidacy;
 import com.Entities.User;
 import com.Services.UserService;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,6 +43,24 @@ public class UserController {
         catch(Exception e){
             e.printStackTrace();
             return new ResponseEntity<List<User>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @RequestMapping(path = "/candidate/{positionId}", method = RequestMethod.POST)
+    public ResponseEntity<Candidacy> createCandidate(@PathVariable Integer positionId, @RequestBody JsonNode body){
+        try{
+          String name = body.get("name").asText();
+          String email = body.get("email").asText();
+
+          Candidacy newCandidacy = userService.createCandidate(positionId, name, email);
+          return new ResponseEntity<Candidacy>(newCandidacy, HttpStatus.OK);
+
+        }
+        //error case
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Candidacy>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
