@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService{
         return userDAO.getAllParticipants();
     }
 
-
+    @Transactional
     public Candidacy createCandidate(Integer positionId, String name, String email) {
         User newUser = new User();
         newUser.setName(name);
