@@ -43,4 +43,16 @@ public class ScheduleController {
             return new ResponseEntity<Schedule>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(path = "/{candidacyId}", method = RequestMethod.POST)
+    public ResponseEntity<Schedule> createSchedule(@PathVariable Integer candidacyId){
+        try{
+            Schedule newSchedule = scheduleService.createSchedule(candidacyId);
+            return new ResponseEntity<Schedule>(newSchedule, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Schedule>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
