@@ -54,5 +54,19 @@ public class PositionController {
             return new ResponseEntity<Candidacy>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @CrossOrigin
+    @RequestMapping(value = "/createPosition/{positionName}/{idDepartement}", method = RequestMethod.GET)
+    public ResponseEntity<Position> createPositionToDepartment(@PathVariable("positionName") String positionName, @PathVariable("idDepartement") Integer idDepartement) {
+        try {
+            Position position = positionService.createPositionToDepartment(positionName, idDepartement);
+            if (position == null) return new ResponseEntity<Position>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Position>(position, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<Position>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
 

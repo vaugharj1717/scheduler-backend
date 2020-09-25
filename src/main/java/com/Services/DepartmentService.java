@@ -9,5 +9,4 @@ public interface DepartmentService {
 
     public List<Department> getAllDepartments();
 
-    public Position createPositionToDepartment(String positionName, Integer idDepartement);
 }

@@ -33,16 +33,4 @@ public class DepartmentController {
             return new ResponseEntity<List<Department>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @CrossOrigin
-    @RequestMapping(value = "/createPosition/{positionName}/{idDepartement}", method = RequestMethod.GET)
-    public ResponseEntity<Position> createPositionToDepartment(@PathVariable("positionName") String positionName, @PathVariable("idDepartement") Integer idDepartement) {
-        try {
-            Position position = departmentService.createPositionToDepartment(positionName, idDepartement);
-            return new ResponseEntity<Position>(position, HttpStatus.OK);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<Position>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 }

@@ -23,17 +23,4 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         return departmentDAO.getAll();
     }
-
-    @Transactional
-    @Override
-    public Position createPositionToDepartment(String positionName, Integer idDepartement) {
-        Position postion = new Position();
-        postion.setPositionName(positionName);
-        Department department = departmentDAO.getById(idDepartement);
-        if(department == null) return null;
-        else {
-            postion.setDepartment(department);
-            return positionDao.saveOrUpdate(postion);
-        }
-    }
 }

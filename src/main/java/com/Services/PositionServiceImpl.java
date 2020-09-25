@@ -1,9 +1,11 @@
 package com.Services;
 
 import com.DAOs.CandidacyDAO;
+import com.DAOs.DepartmentDAO;
 import com.DAOs.PositionDAO;
 import com.DAOs.UserDAO;
 import com.Entities.Candidacy;
+import com.Entities.Department;
 import com.Entities.Position;
 import com.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class PositionServiceImpl implements PositionService{
     UserDAO userDao;
     @Autowired
     CandidacyDAO candidacyDao;
+    @Autowired
+    DepartmentDAO departmentDAO;
 
     @Override
     @Transactional
@@ -44,5 +48,18 @@ public class PositionServiceImpl implements PositionService{
         newCandidacy.setPosition(position);
         return candidacyDao.saveOrUpdate(newCandidacy);
 
+    }
+
+    @Transactional
+    @Override
+    public Position createPositionToDepartment(String positionName, Integer idDepartement) {
+        Position postion = new Position();
+        postion.setPositionName(positionName);
+        Department department = departmentDAO.getById(idDepartement);
+        if(department == null) return null;
+        else {
+            postion.setDepartment(department);
+            return positionDao.saveOrUpdate(postion);
+        }
     }
 }
