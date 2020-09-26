@@ -47,6 +47,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         //create Department
         Department department = new Department();
         department.setDepartmentName("testDepartmentName");
+        department = departmentDAO.saveOrUpdate(department);
 
         //create Position
         Position position = new Position();
