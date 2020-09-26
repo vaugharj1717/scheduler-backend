@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/location")
 public class LocationController {
     @Autowired
     LocationService locationService;
 
-    @CrossOrigin
     @RequestMapping(method= RequestMethod.GET)
     public ResponseEntity<List<Location>> getAllLocations() {
         try {

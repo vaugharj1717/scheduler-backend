@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.websocket.server.PathParam;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/position")
 public class PositionController {
     @Autowired
     PositionService positionService;
-    @CrossOrigin
     @RequestMapping(value = "/department/{id}", method = RequestMethod.GET)
     public ResponseEntity<List<Position>> getPositionsByDepartment(@PathVariable("id") Integer id){
         try {
@@ -30,7 +30,6 @@ public class PositionController {
         }
     }
 
-    @CrossOrigin
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Position>> getAllPositions(){
         try {
@@ -55,8 +54,19 @@ public class PositionController {
         }
     }
 
-    @CrossOrigin
-    @RequestMapping(value = "/createPosition/{positionName}/{idDepartement}", method = RequestMethod.GET)
+    @RequestMapping(value = "/candidacy/{candidacyId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Integer> unassignCandidateFromPosition(
+            @PathVariable("candidacyId") Integer candidacyId){
+        try {
+            positionService.unassignCandidateFromPosition(candidacyId);
+            return new ResponseEntity<Integer>(candidacyId, HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<Integer>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/createPosition/{positionName}/{idDepartement}", method = RequestMethod.POST)
     public ResponseEntity<Position> createPositionToDepartment(@PathVariable("positionName") String positionName, @PathVariable("idDepartement") Integer idDepartement) {
         try {
             Position position = positionService.createPositionToDepartment(positionName, idDepartement);

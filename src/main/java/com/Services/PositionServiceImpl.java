@@ -47,7 +47,12 @@ public class PositionServiceImpl implements PositionService{
         newCandidacy.setCandidate(candidate);
         newCandidacy.setPosition(position);
         return candidacyDao.saveOrUpdate(newCandidacy);
+    }
 
+    @Override
+    @Transactional
+    public void unassignCandidateFromPosition(Integer candidacyId){
+        candidacyDao.remove(candidacyId);
     }
 
     @Transactional

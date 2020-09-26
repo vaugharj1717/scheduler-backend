@@ -10,4 +10,5 @@ public interface PositionService {
     public List<Position> getAllPositions();
     public Candidacy assignCandidateToPosition(Integer positionId, Integer candidateId);
     public Position createPositionToDepartment(String positionName, Integer idDepartement);
+    public void unassignCandidateFromPosition(Integer candidacyId);
 }
