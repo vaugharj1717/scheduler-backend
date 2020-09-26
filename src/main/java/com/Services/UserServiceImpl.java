@@ -6,6 +6,7 @@ import com.DAOs.UserDAO;
 import com.Entities.Candidacy;
 import com.Entities.Position;
 import com.Entities.User;
+import com.Entities.enumeration.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UserService{
         User newUser = new User();
         newUser.setName(name);
         newUser.setEmail(email);
+        newUser.setRole(Role.CANDIDATE);
 
         Candidacy newCandidacy = new Candidacy();
         newCandidacy.setCandidate(newUser);

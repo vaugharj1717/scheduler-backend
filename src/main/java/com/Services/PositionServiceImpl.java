@@ -67,4 +67,10 @@ public class PositionServiceImpl implements PositionService{
             return positionDao.saveOrUpdate(postion);
         }
     }
+
+    @Transactional
+    @Override
+    public void removePosition(Integer positionId) {
+        positionDao.remove(positionId);
+    }
 }

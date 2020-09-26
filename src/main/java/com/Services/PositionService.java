@@ -11,4 +11,5 @@ public interface PositionService {
     public Candidacy assignCandidateToPosition(Integer positionId, Integer candidateId);
     public Position createPositionToDepartment(String positionName, Integer idDepartement);
     public void unassignCandidateFromPosition(Integer candidacyId);
+    public void removePosition(Integer positionId);
 }

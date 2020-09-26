@@ -78,5 +78,17 @@ public class PositionController {
             return new ResponseEntity<Position>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(value = "/{positionId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Integer> removePosition(@PathVariable("positionId") Integer positionId){
+        try {
+            positionService.removePosition(positionId);
+            return new ResponseEntity<Integer>(positionId, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<Integer>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
 
