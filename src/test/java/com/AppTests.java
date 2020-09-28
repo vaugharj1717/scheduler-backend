@@ -1,3 +1,5 @@
+package com;
+
 import com.App;
 import org.testng.annotations.Test;
 import org.junit.runner.RunWith;

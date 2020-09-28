@@ -46,12 +46,20 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
         //create Department
         Department department = new Department();
-        department.setDepartmentName("testDepartmentName");
+        department.setDepartmentName("CS");
         department = departmentDAO.saveOrUpdate(department);
+
+        Department department2 = new Department();
+        department2.setDepartmentName("Business");
+        department2 = departmentDAO.saveOrUpdate(department2);
+
+        Department department3 = new Department();
+        department3.setDepartmentName("Mathematics");
+        department3 = departmentDAO.saveOrUpdate(department3);
 
         //create Position
         Position position = new Position();
-        position.setPositionName("testPositionName");
+        position.setPositionName("Instructor");
         position.setDepartment(department);
         position = positionDAO.saveOrUpdate(position);
 
@@ -61,9 +69,27 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         candidate.setUsername("testUsername");
         candidate.setPassword("testPassword");
         candidate.setRole(Role.CANDIDATE);
-        candidate.setName("testName");
-        candidate.setEmail("testEmail");
+        candidate.setName("John Doe");
+        candidate.setEmail("jdoe19@gmail.com");
         candidate.setPhone("testPhone");
+
+        User candidate2 = new User();
+        candidate2.setUsername("testUsername");
+        candidate2.setPassword("testPassword");
+        candidate2.setRole(Role.CANDIDATE);
+        candidate2.setName("Susan Jones");
+        candidate2.setEmail("sjones44@gmail.com");
+        candidate2.setPhone("testPhone");
+        candidate2 = userDAO.saveOrUpdate(candidate2);
+
+        User candidate3 = new User();
+        candidate3.setUsername("testUsername");
+        candidate3.setPassword("testPassword");
+        candidate3.setRole(Role.CANDIDATE);
+        candidate3.setName("Russel Hapsburg");
+        candidate3.setEmail("rhapsburg07@gmail.com");
+        candidate3.setPhone("testPhone");
+        candidate2 = userDAO.saveOrUpdate(candidate3);
 
         //create Candidacy
         Candidacy candidacy = new Candidacy();

@@ -183,7 +183,7 @@ TESTING
 Notice the following two files
     1) main/resources/application.properties
     2) test/resources/application.properties
-These are two config files that allow us to set different configurations for when we are testing vs actual runtime
+These are two com.config files that allow us to set different configurations for when we are testing vs actual runtime
 Eventually we will have these files configured to use a MySQL database during runtime.
 During testing, we can use the H2 database (an in-memory database) that we can fill with preconfigured data each
 time tests are run so we have predictable data sets to run our tests against.
