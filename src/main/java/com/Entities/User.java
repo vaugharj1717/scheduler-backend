@@ -36,9 +36,15 @@ public class User implements DataObject {
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Candidacy> candidacies;
 
+    @JsonIgnoreProperties("user")
+    @JoinColumn(name="USER_ID")
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
+    private Set<UserFile> userFiles;
+
     public User(){
         this.candidacies = new HashSet<Candidacy>();
         this.participations = new HashSet<Participation>();
+        this.userFiles = new HashSet<UserFile>();
     }
     public void addParticipation(Participation participation){
         if(this.participations == null){
@@ -126,6 +132,14 @@ public class User implements DataObject {
         return name;
     }
 
+    public Set<UserFile> getUserFiles() {
+        return userFiles;
+    }
+
+    public void setUserFiles(Set<UserFile> userFiles) {
+        this.userFiles = userFiles;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -152,6 +166,21 @@ public class User implements DataObject {
 
     public void setCandidacies(Set<Candidacy> candidacies) {
         this.candidacies = candidacies;
+    }
+
+    public void addUserFile(UserFile userFile){
+        if(this.userFiles == null){
+            this.userFiles = new HashSet<UserFile>();
+        }
+        this.userFiles.add(userFile);
+        userFile.setUser(this);
+    }
+
+    public void removeUserFile(UserFile userFile){
+        if(this.userFiles != null){
+            this.userFiles.remove(userFile);
+            userFile.setUser(null);
+        }
     }
 
     @Override
