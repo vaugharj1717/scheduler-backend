@@ -22,6 +22,9 @@ public class Schedule implements DataObject{
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Candidacy candidacy;
 
+    public Schedule(){
+        this.meetings = new HashSet<>();
+    }
     public void addMeeting(Meeting meeting){
         if(this.meetings == null){
             this.meetings = new HashSet<Meeting>();

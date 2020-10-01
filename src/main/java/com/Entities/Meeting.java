@@ -30,6 +30,9 @@ public class Meeting implements DataObject{
     private Date endTime;
     private String meetingType;
 
+    public Meeting(){
+        this.participations = new HashSet<Participation>();
+    }
     public void addParticipation(Participation participation){
         if(this.participations == null){
             this.participations = new HashSet<Participation>();

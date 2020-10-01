@@ -16,7 +16,9 @@ public class PositionDAOImpl implements PositionDAO{
     EntityManager em;
 
     public List<Position> getAll(){
-        List<Position> positionList = em.createQuery("SELECT DISTINCT p from Position p LEFT JOIN FETCH p.department LEFT JOIN FETCH p.candidacies c LEFT JOIN FETCH c.candidate LEFT JOIN FETCH c.schedule", Position.class)
+        List<Position> positionList = em.createQuery("SELECT DISTINCT p from Position p LEFT JOIN FETCH p.department " +
+                "LEFT JOIN FETCH p.candidacies c LEFT JOIN FETCH c.candidate LEFT JOIN FETCH c.schedule s " +
+                "LEFT JOIN FETCH s.meetings", Position.class)
                 .getResultList();
         return positionList;
     }

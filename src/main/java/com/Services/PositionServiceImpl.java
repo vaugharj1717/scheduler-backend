@@ -4,14 +4,13 @@ import com.DAOs.CandidacyDAO;
 import com.DAOs.DepartmentDAO;
 import com.DAOs.PositionDAO;
 import com.DAOs.UserDAO;
-import com.Entities.Candidacy;
-import com.Entities.Department;
-import com.Entities.Position;
-import com.Entities.User;
+import com.Entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -44,8 +43,11 @@ public class PositionServiceImpl implements PositionService{
         Position position = positionDao.getById(positionId);
         User candidate = userDao.getById(candidateId);
         Candidacy newCandidacy = new Candidacy();
+        Schedule schedule = new Schedule();
         newCandidacy.setCandidate(candidate);
         newCandidacy.setPosition(position);
+//        schedule.setMeetings(new HashSet<Meeting>());
+        newCandidacy.setSchedule(schedule);
         return candidacyDao.saveOrUpdate(newCandidacy);
     }
 

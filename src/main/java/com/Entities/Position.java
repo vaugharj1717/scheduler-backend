@@ -25,6 +25,9 @@ public class Position implements DataObject{
 
     String positionName;
 
+    public Position(){
+        this.candidacies = new HashSet<Candidacy>();
+    }
     public String getPositionName() {
         return positionName;
     }

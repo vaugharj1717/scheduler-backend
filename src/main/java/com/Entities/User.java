@@ -36,6 +36,10 @@ public class User implements DataObject {
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Candidacy> candidacies;
 
+    public User(){
+        this.candidacies = new HashSet<Candidacy>();
+        this.participations = new HashSet<Participation>();
+    }
     public void addParticipation(Participation participation){
         if(this.participations == null){
             this.participations = new HashSet<Participation>();
