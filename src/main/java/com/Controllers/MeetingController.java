@@ -51,4 +51,14 @@ public class MeetingController {
         }
 
     }
+    @RequestMapping(path = "/{meetingId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Meeting> deleteMeeting(@PathVariable Integer meetingId) {
+        try {
+            meetingService.deleteMeeting(meetingId);
+            return new ResponseEntity<Meeting>(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<Meeting>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

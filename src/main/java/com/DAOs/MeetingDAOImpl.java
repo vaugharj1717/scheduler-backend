@@ -38,6 +38,12 @@ public class MeetingDAOImpl implements MeetingDAO{
     }
 
     public void remove(Integer id){
+        em.createQuery("UPDATE Schedule s SET s.meeting = null WHERE s.meeting.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+        em.createQuery("UPDATE Participation p SET p.meeting = null WHERE p.meeting.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
         em.remove(
                 em.createQuery("SELECT m FROM Meeting m WHERE m.id = :id")
                         .setParameter("id", id)

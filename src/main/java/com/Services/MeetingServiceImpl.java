@@ -42,4 +42,9 @@ public class MeetingServiceImpl implements MeetingService{
         }
 
     }
+
+    @Override
+    public void deleteMeeting(Integer id) {
+        meetingDAO.remove(id);
+    }
 }
