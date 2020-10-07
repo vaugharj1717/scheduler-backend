@@ -55,4 +55,16 @@ public class ScheduleController {
             return new ResponseEntity<Schedule>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(path = "/deleteAllMeeting/{scheduleId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Schedule> deleteAllMeetingByScheduleId(@PathVariable Integer scheduleId){
+        try{
+            scheduleService.deleteAllMeetingByScheduleId(scheduleId);
+            return new ResponseEntity<Schedule>(HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Schedule>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

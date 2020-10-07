@@ -36,4 +36,9 @@ public class ScheduleServiceImpl implements ScheduleService{
         return scheduleDAO.saveOrUpdate(newSchedule);
 
     }
+
+    @Override
+    public void deleteAllMeetingByScheduleId(Integer scheduleId) {
+        scheduleDAO.deleteAllMeetingByScheduleId(scheduleId);
+    }
 }
