@@ -20,12 +20,12 @@ public class DepartmentDAOImplTest {
     @Autowired
     private DepartmentDAO departmentDao;
 
-
+/*
     @Test
     public void testGetAll() throws Exception {
         List<Department> departments = (List<Department>) departmentDao.getAll();
 
         assert departments.size() == 1;
 
-    }
+    }*/
 }

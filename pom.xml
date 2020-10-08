@@ -13,6 +13,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>smart-scheduler</name>
 	<description>Backend for Smart Candidate Scheduler app</description>
+	<packaging>jar</packaging>
 
 	<properties>
 		<java.version>10</java.version>
