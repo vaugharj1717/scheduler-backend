@@ -3,9 +3,7 @@ package com.Entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Schedule implements DataObject{
@@ -16,18 +14,18 @@ public class Schedule implements DataObject{
     @JsonIgnoreProperties("schedule")
     @JoinColumn(name="SCHEDULE_ID")
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
-    private Set<Meeting> meetings;
+    private List<Meeting> meetings;
 
     @JsonIgnoreProperties("schedule")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Candidacy candidacy;
 
     public Schedule(){
-        this.meetings = new HashSet<>();
+        this.meetings = new ArrayList<>();
     }
     public void addMeeting(Meeting meeting){
         if(this.meetings == null){
-            this.meetings = new HashSet<Meeting>();
+            this.meetings = new ArrayList<Meeting>();
         }
         this.meetings.add(meeting);
         meeting.setSchedule(this);
@@ -40,11 +38,11 @@ public class Schedule implements DataObject{
         }
     }
 
-    public Set<Meeting> getMeetings() {
+    public List<Meeting> getMeetings() {
         return meetings;
     }
 
-    public void setMeetings(Set<Meeting> meetings) {
+    public void setMeetings(List<Meeting> meetings) {
         this.meetings = meetings;
     }
 

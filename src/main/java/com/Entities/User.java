@@ -8,9 +8,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.scheduling.annotation.Schedules;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class User implements DataObject {
@@ -30,25 +28,25 @@ public class User implements DataObject {
     @JsonIgnoreProperties("participant")
     @JoinColumn(name="USER_ID")
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
-    private Set<Participation> participations;
+    private List<Participation> participations;
     @JsonIgnoreProperties("candidate")
     @JoinColumn(name="CANDIDATE_ID")
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
-    private Set<Candidacy> candidacies;
+    private List<Candidacy> candidacies;
 
     @JsonIgnoreProperties("user")
     @JoinColumn(name="USER_ID")
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
-    private Set<UserFile> userFiles;
+    private List<UserFile> userFiles;
 
     public User(){
-        this.candidacies = new HashSet<Candidacy>();
-        this.participations = new HashSet<Participation>();
-        this.userFiles = new HashSet<UserFile>();
+        this.candidacies = new ArrayList<Candidacy>();
+        this.participations = new ArrayList<Participation>();
+        this.userFiles = new ArrayList<UserFile>();
     }
     public void addParticipation(Participation participation){
         if(this.participations == null){
-            this.participations = new HashSet<Participation>();
+            this.participations = new ArrayList<Participation>();
         }
         this.participations.add(participation);
         participation.setParticipant(this);
@@ -63,7 +61,7 @@ public class User implements DataObject {
 
     public void addCandidacy(Candidacy candidacy){
         if(this.candidacies == null){
-            this.candidacies = new HashSet<Candidacy>();
+            this.candidacies = new ArrayList<Candidacy>();
         }
         this.candidacies.add(candidacy);
         candidacy.setCandidate(this);
@@ -88,11 +86,11 @@ public class User implements DataObject {
         this.id = id;
     }
 
-    public Set<Participation> getParticipations() {
+    public List<Participation> getParticipations() {
         return participations;
     }
 
-    public void setParticipations(Set<Participation> participations) {
+    public void setParticipations(List<Participation> participations) {
         this.participations = participations;
     }
 
@@ -132,11 +130,11 @@ public class User implements DataObject {
         return name;
     }
 
-    public Set<UserFile> getUserFiles() {
+    public List<UserFile> getUserFiles() {
         return userFiles;
     }
 
-    public void setUserFiles(Set<UserFile> userFiles) {
+    public void setUserFiles(List<UserFile> userFiles) {
         this.userFiles = userFiles;
     }
 
@@ -160,17 +158,17 @@ public class User implements DataObject {
         this.department = department;
     }
 
-    public Set<Candidacy> getCandidacies() {
+    public List<Candidacy> getCandidacies() {
         return candidacies;
     }
 
-    public void setCandidacies(Set<Candidacy> candidacies) {
+    public void setCandidacies(List<Candidacy> candidacies) {
         this.candidacies = candidacies;
     }
 
     public void addUserFile(UserFile userFile){
         if(this.userFiles == null){
-            this.userFiles = new HashSet<UserFile>();
+            this.userFiles = new ArrayList<UserFile>();
         }
         this.userFiles.add(userFile);
         userFile.setUser(this);

@@ -2,6 +2,7 @@ package com.SeedDatabase;
 
 import com.DAOs.*;
 import com.Entities.*;
+import com.Entities.enumeration.MeetingType;
 import com.Entities.enumeration.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -123,10 +124,21 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         participant.setDepartment(department);
         participant = userDAO.saveOrUpdate(participant);
 
+        User participant2 = new User();
+        em.persist(participant2);
+        participant2.setUsername("testUsername2");
+        participant2.setPassword("testPassword2");
+        participant2.setRole(Role.PARTICIPANT);
+        participant2.setName("testName2");
+        participant2.setEmail("testEmail2");
+        participant2.setPhone("testPhone2");
+        participant2.setDepartment(department);
+        participant2 = userDAO.saveOrUpdate(participant2);
+
         //create Meeting
         Meeting meeting = new Meeting();
         em.persist(meeting);
-        meeting.setMeetingType("testingMeetingType");
+        meeting.setMeetingType(MeetingType.MEET_FACULTY);
         meeting.setLocation(location);
         Date newDate1 = new Date(5);
         Date newDate2 = new Date(6);

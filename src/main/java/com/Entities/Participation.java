@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -13,10 +14,10 @@ public class Participation implements DataObject{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @JsonIgnoreProperties("participations")
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private User participant;
     @JsonIgnoreProperties("participations")
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private Meeting meeting;
 
     private boolean alert;
@@ -43,9 +44,11 @@ public class Participation implements DataObject{
         this.participant = participant;
         if(participant != null){
             if(participant.getParticipations() == null){
-                participant.setParticipations(new HashSet<Participation>());
+                participant.setParticipations(new ArrayList<Participation>());
             }
-            participant.getParticipations().add(this);
+            if(!participant.getParticipations().contains(this)){
+                participant.getParticipations().add(this);
+            }
         }
     }
 
@@ -57,9 +60,11 @@ public class Participation implements DataObject{
         this.meeting = meeting;
         if(meeting != null){
             if(meeting.getParticipations() == null){
-                meeting.setParticipations(new HashSet<Participation>());
+                meeting.setParticipations(new ArrayList<Participation>());
             }
-            meeting.getParticipations().add(this);
+            if(!meeting.getParticipations().contains(this)){
+                meeting.getParticipations().add(this);
+            }
         }
     }
 

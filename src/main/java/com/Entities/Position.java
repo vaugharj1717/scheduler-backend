@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Position implements DataObject{
@@ -21,12 +19,12 @@ public class Position implements DataObject{
     @JsonIgnoreProperties("position")
     @JoinColumn(name="POSITION_ID")
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
-    Set<Candidacy> candidacies;
+    List<Candidacy> candidacies;
 
     String positionName;
 
     public Position(){
-        this.candidacies = new HashSet<Candidacy>();
+        this.candidacies = new ArrayList<Candidacy>();
     }
     public String getPositionName() {
         return positionName;
@@ -40,11 +38,11 @@ public class Position implements DataObject{
         return department;
     }
 
-    public Set<Candidacy> getCandidacies() {
+    public List<Candidacy> getCandidacies() {
         return candidacies;
     }
 
-    public void setCandidacies(Set<Candidacy> candidacies) {
+    public void setCandidacies(List<Candidacy> candidacies) {
         this.candidacies = candidacies;
     }
 
@@ -54,7 +52,7 @@ public class Position implements DataObject{
 
     public void addCandidacy(Candidacy candidacy){
         if(this.candidacies == null){
-            this.candidacies = new HashSet<Candidacy>();
+            this.candidacies = new ArrayList<Candidacy>();
         }
         this.candidacies.add(candidacy);
         candidacy.setPosition(this);

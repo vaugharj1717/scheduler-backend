@@ -1,14 +1,12 @@
 package com.Entities;
 
+import com.Entities.enumeration.MeetingType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Meeting implements DataObject{
@@ -24,18 +22,18 @@ public class Meeting implements DataObject{
     private Schedule schedule;
     @JsonIgnoreProperties("meeting")
     @JoinColumn(name="MEETING_ID")
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
-    private Set<Participation> participations;
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    private List<Participation> participations;
     private Date startTime;
     private Date endTime;
-    private String meetingType;
+    private MeetingType meetingType;
 
     public Meeting(){
-        this.participations = new HashSet<Participation>();
+        this.participations = new ArrayList<Participation>();
     }
     public void addParticipation(Participation participation){
         if(this.participations == null){
-            this.participations = new HashSet<Participation>();
+            this.participations = new ArrayList<Participation>();
         }
         this.participations.add(participation);
         participation.setMeeting(this);
@@ -64,17 +62,19 @@ public class Meeting implements DataObject{
         this.schedule = schedule;
         if(schedule != null){
             if(schedule.getMeetings() == null){
-                schedule.setMeetings(new HashSet<Meeting>());
+                schedule.setMeetings(new ArrayList<Meeting>());
             }
-            schedule.getMeetings().add(this);
+            if(!schedule.getMeetings().contains(this)){
+                schedule.getMeetings().add(this);
+            }
         }
     }
 
-    public Set<Participation> getParticipations() {
+    public List<Participation> getParticipations() {
         return participations;
     }
 
-    public void setParticipations(Set<Participation> participations) {
+    public void setParticipations(List<Participation> participations) {
         this.participations = participations;
     }
 
@@ -94,11 +94,11 @@ public class Meeting implements DataObject{
         this.endTime = endTime;
     }
 
-    public String getMeetingType() {
+    public MeetingType getMeetingType() {
         return meetingType;
     }
 
-    public void setMeetingType(String meetingType) {
+    public void setMeetingType(MeetingType meetingType) {
         this.meetingType = meetingType;
     }
 

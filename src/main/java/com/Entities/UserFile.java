@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -47,9 +48,11 @@ public class UserFile implements DataObject {
         this.user = user;
         if(user != null){
             if(user.getUserFiles() == null){
-                user.setUserFiles(new HashSet<UserFile>());
+                user.setUserFiles(new ArrayList<UserFile>());
             }
-            user.getUserFiles().add(this);
+            if(!user.getUserFiles().contains(this)){
+                user.getUserFiles().add(this);
+            }
         }
     }
 

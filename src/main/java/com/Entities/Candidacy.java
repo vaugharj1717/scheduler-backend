@@ -3,6 +3,7 @@ package com.Entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -48,9 +49,11 @@ public class Candidacy implements DataObject{
         this.candidate = candidate;
         if(candidate != null){
             if(candidate.getCandidacies() == null){
-                candidate.setCandidacies(new HashSet<Candidacy>());
+                candidate.setCandidacies(new ArrayList<Candidacy>());
             }
-            candidate.getCandidacies().add(this);
+            if(!candidate.getCandidacies().contains(this)){
+                candidate.getCandidacies().add(this);
+            }
         }
     }
 
@@ -58,9 +61,11 @@ public class Candidacy implements DataObject{
         this.position = position;
         if(position != null){
             if(position.getCandidacies() == null){
-                position.setCandidacies(new HashSet<Candidacy>());
+                position.setCandidacies(new ArrayList<Candidacy>());
             }
-            position.getCandidacies().add(this);
+            if(!position.getCandidacies().contains(this)){
+                position.getCandidacies().add(this);
+            }
         }
     }
 

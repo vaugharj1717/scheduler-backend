@@ -1,8 +1,8 @@
 package com.Entities.enumeration;
 
 public enum MeetingType {
-    CANDIDATE,
-    DEPARTMENT_ADMIN,
+    PRESENTATION,
+    MEET_FACULTY,
     NOTSET;
 
     public static MeetingType getFromName(String name) {
