@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,18 @@ public class MeetingServiceImpl implements MeetingService{
     @Transactional
     public Meeting createMeeting(Integer scheduleId, Integer locationId, Date startTime, Date endTime, MeetingType meetingType,
                                  List<Boolean> canViewFeedbackList, List<Boolean> canLeaveFeedbackList, List<Integer> participantList){
+
+        //Check for scheduling conflicts
+        //Check for conflict with participant or candidate's schedules
+        User candidate = userDAO.getByScheduleId(scheduleId);
+        List<Meeting> conflictingMeetingList = meetingDAO.getConflictingUserSchedules(candidate.getId(), participantList, startTime, endTime);
+        if(conflictingMeetingList.size() != 0){
+            return null;
+        }
+
+        //Check for conflict with location availability
+        //TODO:
+
 
         //object to save
         Meeting newMeeting = new Meeting();

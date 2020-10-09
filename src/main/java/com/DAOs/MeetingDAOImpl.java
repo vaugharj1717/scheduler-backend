@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -27,6 +29,31 @@ public class MeetingDAOImpl implements MeetingDAO{
                 .setParameter("id", id)
                 .getSingleResult();
         return meeting;
+    }
+
+    public List<Meeting> getConflictingUserSchedules(Integer candidateId, List<Integer> participantList, Date startTime, Date endTime){
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss");
+        String startTimeString = sdf.format(startTime);
+        String endTimeString = sdf.format(endTime);
+        List<Meeting> conflictingMeetingList = em.createQuery(
+                "SELECT m from Meeting m JOIN m.participations p JOIN p.participant pt JOIN m.schedule s JOIN s.candidacy c " +
+                        "JOIN c.candidate u " +
+                        "WHERE (pt.id IN :participantList OR u.id = :candidateId) " +
+                        //meetings that begin somewhere between start and end of new meeting
+                        "AND ((m.startTime >= '" + startTimeString + "' AND m.startTime <= '" + endTimeString + "') " +
+                        //and meetings that end somewhere between start and end of new meeting
+                        "OR (m.endTime >= '" + startTimeString + "' AND m.endTime <= '" + endTimeString + "') " +
+                        //and meetings that begin before the start of new meeting and end after start of new meeting
+                        "OR (m.startTime <= '" + startTimeString + "' AND m.endTime >= '" + endTimeString + "'))"
+                , Meeting.class)
+                .setParameter("participantList", participantList)
+                .setParameter("candidateId", candidateId)
+                //.setParameter("startTime", startTime)
+                //.setParameter("endTime", endTime)
+                .getResultList();
+        return conflictingMeetingList;
+
+
     }
     public Meeting saveOrUpdate(Meeting meeting){
         Meeting savedMeeting = em.merge(meeting);

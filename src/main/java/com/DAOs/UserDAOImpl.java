@@ -35,6 +35,13 @@ public class UserDAOImpl implements UserDAO {
                 .getSingleResult();
         return user;
     }
+    public User getByScheduleId(Integer scheduleId){
+        User user = em.createQuery(
+                "SELECT DISTINCT u FROM Schedule s JOIN s.candidacy c JOIN c.candidate u WHERE s.id = :scheduleId", User.class)
+                .setParameter("scheduleId", scheduleId)
+                .getSingleResult();
+        return user;
+    }
     public User saveOrUpdate(User user){
         User savedUser = em.merge(user);
         return savedUser;

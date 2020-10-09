@@ -147,6 +147,17 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         meeting.setSchedule(schedule);
         meeting = meetingDAO.saveOrUpdate(meeting);
 
+        Meeting meeting2 = new Meeting();
+        em.persist(meeting2);
+        meeting2.setMeetingType(MeetingType.MEET_FACULTY);
+        meeting2.setLocation(location);
+        Date newDate3 = new Date(5);
+        Date newDate4 = new Date(6);
+        meeting2.setStartTime(newDate3);
+        meeting2.setEndTime(newDate4);
+        meeting2.setSchedule(schedule);
+        meeting2 = meetingDAO.saveOrUpdate(meeting2);
+
         //create participation
         Participation participation = new Participation();
         em.persist(participation);
@@ -158,6 +169,28 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         participation.setCanViewFeedback(true);
         participation.setCanMakeDecision(true);
         participation = participationDAO.saveOrUpdate(participation);
+
+        Participation participation2 = new Participation();
+        em.persist(participation2);
+        participation2.setParticipant(participant);
+        participation2.setMeeting(meeting2);
+        participation2.setAlert(true);
+        participation2.setAlertType("email");
+        participation2.setCanLeaveFeedback(true);
+        participation2.setCanViewFeedback(true);
+        participation2.setCanMakeDecision(true);
+        participation2 = participationDAO.saveOrUpdate(participation2);
+
+        Participation participation3 = new Participation();
+        em.persist(participation3);
+        participation3.setParticipant(participant);
+        participation3.setMeeting(meeting);
+        participation3.setAlert(true);
+        participation3.setAlertType("email");
+        participation3.setCanLeaveFeedback(true);
+        participation3.setCanViewFeedback(true);
+        participation3.setCanMakeDecision(true);
+        participation3 = participationDAO.saveOrUpdate(participation3);
 //
 //        //manual testing
 //        List<Meeting> meetingListByLocation = meetingDAO.getByLocation(locationDAO.getById(savedLocation.getId()));
