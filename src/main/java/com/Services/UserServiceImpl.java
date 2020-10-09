@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService{
                 return new PasswordAuthentication("uwecscheduler@gmail.com", "scheduler$@#!");
             }
         });
-        session.setDebug(true);
+        //session.setDebug(true);
         try{
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress("vaugharj1717@gmail.com"));
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService{
             Transport.send(message);
         }
         catch(MessagingException mex){
-            mex.printStackTrace();
+            //mex.printStackTrace();
             return null;
         }
 
