@@ -13,12 +13,17 @@ public class Participation implements DataObject{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @Transient
+    private Integer transientId;
+
     @JsonIgnoreProperties("participations")
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private User participant;
     @JsonIgnoreProperties("participations")
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private Meeting meeting;
+
+
 
     private boolean alert;
     private String alertType;
@@ -44,7 +49,7 @@ public class Participation implements DataObject{
         this.participant = participant;
         if(participant != null){
             if(participant.getParticipations() == null){
-                participant.setParticipations(new ArrayList<Participation>());
+                participant.setParticipations(new HashSet<Participation>());
             }
             if(!participant.getParticipations().contains(this)){
                 participant.getParticipations().add(this);
@@ -60,7 +65,7 @@ public class Participation implements DataObject{
         this.meeting = meeting;
         if(meeting != null){
             if(meeting.getParticipations() == null){
-                meeting.setParticipations(new ArrayList<Participation>());
+                meeting.setParticipations(new HashSet<Participation>());
             }
             if(!meeting.getParticipations().contains(this)){
                 meeting.getParticipations().add(this);
@@ -108,16 +113,25 @@ public class Participation implements DataObject{
         this.canMakeDecision = canMakeDecision;
     }
 
+    public Integer getTransientId() {
+        return transientId;
+    }
+
+    public void setTransientId(Integer transientId) {
+        this.transientId = transientId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Participation that = (Participation) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(transientId, that.transientId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, transientId);
     }
 }

@@ -13,9 +13,11 @@ public class Candidacy implements DataObject{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @Transient
+    private Integer transientId;
 
     @JsonIgnoreProperties("candidacy")
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true, fetch=FetchType.LAZY)
     Schedule schedule;
     @JsonIgnoreProperties("candidacies")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
@@ -49,7 +51,7 @@ public class Candidacy implements DataObject{
         this.candidate = candidate;
         if(candidate != null){
             if(candidate.getCandidacies() == null){
-                candidate.setCandidacies(new ArrayList<Candidacy>());
+                candidate.setCandidacies(new HashSet<Candidacy>());
             }
             if(!candidate.getCandidacies().contains(this)){
                 candidate.getCandidacies().add(this);
@@ -61,7 +63,7 @@ public class Candidacy implements DataObject{
         this.position = position;
         if(position != null){
             if(position.getCandidacies() == null){
-                position.setCandidacies(new ArrayList<Candidacy>());
+                position.setCandidacies(new HashSet<Candidacy>());
             }
             if(!position.getCandidacies().contains(this)){
                 position.getCandidacies().add(this);
@@ -79,16 +81,25 @@ public class Candidacy implements DataObject{
         this.id = id;
     }
 
+    public Integer getTransientId() {
+        return transientId;
+    }
+
+    public void setTransientId(Integer transientId) {
+        this.transientId = transientId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Candidacy that = (Candidacy) o;
-        return Objects.equals(id, that.id);
+        Candidacy candidacy = (Candidacy) o;
+        return Objects.equals(id, candidacy.id) &&
+                Objects.equals(transientId, candidacy.transientId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, transientId);
     }
 }

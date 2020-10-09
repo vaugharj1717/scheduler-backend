@@ -13,6 +13,8 @@ public class Meeting implements DataObject{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @Transient
+    private Integer transientId;
 
     @JsonIgnoreProperties("meetings")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
@@ -23,17 +25,17 @@ public class Meeting implements DataObject{
     @JsonIgnoreProperties("meeting")
     @JoinColumn(name="MEETING_ID")
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
-    private List<Participation> participations;
+    private Set<Participation> participations;
     private Date startTime;
     private Date endTime;
     private MeetingType meetingType;
 
     public Meeting(){
-        this.participations = new ArrayList<Participation>();
+        this.participations = new HashSet<Participation>();
     }
     public void addParticipation(Participation participation){
         if(this.participations == null){
-            this.participations = new ArrayList<Participation>();
+            this.participations = new HashSet<Participation>();
         }
         this.participations.add(participation);
         participation.setMeeting(this);
@@ -62,7 +64,7 @@ public class Meeting implements DataObject{
         this.schedule = schedule;
         if(schedule != null){
             if(schedule.getMeetings() == null){
-                schedule.setMeetings(new ArrayList<Meeting>());
+                schedule.setMeetings(new HashSet<Meeting>());
             }
             if(!schedule.getMeetings().contains(this)){
                 schedule.getMeetings().add(this);
@@ -70,11 +72,11 @@ public class Meeting implements DataObject{
         }
     }
 
-    public List<Participation> getParticipations() {
+    public Set<Participation> getParticipations() {
         return participations;
     }
 
-    public void setParticipations(List<Participation> participations) {
+    public void setParticipations(Set<Participation> participations) {
         this.participations = participations;
     }
 
@@ -116,16 +118,25 @@ public class Meeting implements DataObject{
         this.id = id;
     }
 
+    public Integer getTransientId() {
+        return transientId;
+    }
+
+    public void setTransientId(Integer transientId) {
+        this.transientId = transientId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Meeting meeting = (Meeting) o;
-        return Objects.equals(id, meeting.id);
+        return Objects.equals(id, meeting.id) &&
+                Objects.equals(transientId, meeting.transientId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, transientId);
     }
 }

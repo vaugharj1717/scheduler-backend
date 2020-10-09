@@ -1,6 +1,8 @@
 package com.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,18 +16,18 @@ public class Schedule implements DataObject{
     @JsonIgnoreProperties("schedule")
     @JoinColumn(name="SCHEDULE_ID")
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
-    private List<Meeting> meetings;
+    private Set<Meeting> meetings;
 
     @JsonIgnoreProperties("schedule")
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Candidacy candidacy;
 
     public Schedule(){
-        this.meetings = new ArrayList<>();
+        this.meetings = new HashSet<>();
     }
     public void addMeeting(Meeting meeting){
         if(this.meetings == null){
-            this.meetings = new ArrayList<Meeting>();
+            this.meetings = new HashSet<Meeting>();
         }
         this.meetings.add(meeting);
         meeting.setSchedule(this);
@@ -38,11 +40,11 @@ public class Schedule implements DataObject{
         }
     }
 
-    public List<Meeting> getMeetings() {
+    public Set<Meeting> getMeetings() {
         return meetings;
     }
 
-    public void setMeetings(List<Meeting> meetings) {
+    public void setMeetings(Set<Meeting> meetings) {
         this.meetings = meetings;
     }
 

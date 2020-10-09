@@ -48,7 +48,7 @@ public class UserFile implements DataObject {
         this.user = user;
         if(user != null){
             if(user.getUserFiles() == null){
-                user.setUserFiles(new ArrayList<UserFile>());
+                user.setUserFiles(new HashSet<UserFile>());
             }
             if(!user.getUserFiles().contains(this)){
                 user.getUserFiles().add(this);
