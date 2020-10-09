@@ -12,7 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.List;
+import java.util.Properties;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -51,6 +55,36 @@ public class UserServiceImpl implements UserService{
         Position position = positionDAO.getById(positionId);
         newCandidacy.setPosition(position);
 
-        return candidacyDAO.saveOrUpdate(newCandidacy);
+        Candidacy savedCandidacy = candidacyDAO.saveOrUpdate(newCandidacy);
+
+        //send email
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+        properties.setProperty("smpt.gmail.com", "localhost");
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator(){
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("uwecscheduler@gmail.com", "scheduler$@#!");
+            }
+        });
+        session.setDebug(true);
+        try{
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("vaugharj1717@gmail.com"));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+            message.setSubject("Invitation to UWEC Scheduler");
+            message.setText("This is the actual message");
+            Transport.send(message);
+        }
+        catch(MessagingException mex){
+            mex.printStackTrace();
+            return null;
+        }
+
+        return savedCandidacy;
+
     }
 }
