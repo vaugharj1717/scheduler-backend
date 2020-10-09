@@ -54,6 +54,7 @@ public class MeetingServiceImpl implements MeetingService{
             newParticipation.setParticipant(participant);
             newParticipation.setCanViewFeedback(canViewFeedbackList.get(i));
             newParticipation.setCanLeaveFeedback(canLeaveFeedbackList.get(i));
+            newParticipation.setTransientId(i);
             newMeeting.addParticipation(newParticipation);
         }
 
