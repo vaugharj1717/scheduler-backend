@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.sql.Date;
+import java.util.Date;
 
 @Component
 public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent>{
