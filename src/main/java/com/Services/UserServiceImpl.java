@@ -5,6 +5,7 @@ import com.DAOs.PositionDAO;
 import com.DAOs.UserDAO;
 import com.Entities.Candidacy;
 import com.Entities.Position;
+import com.Entities.Schedule;
 import com.Entities.User;
 import com.Entities.enumeration.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,8 @@ public class UserServiceImpl implements UserService{
 
         Candidacy newCandidacy = new Candidacy();
         newCandidacy.setCandidate(newUser);
+        Schedule newSchedule = new Schedule();
+        newCandidacy.setSchedule(newSchedule);
         Position position = positionDAO.getById(positionId);
         newCandidacy.setPosition(position);
 
