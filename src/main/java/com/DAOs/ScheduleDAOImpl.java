@@ -48,17 +48,17 @@ public class ScheduleDAOImpl implements ScheduleDAO{
 
     @Override
     public void deleteAllMeetingByScheduleId(Integer scheduleId) {
-        em.createQuery("UPDATE Schedule s SET s.meetings = null WHERE s.id = :id")
+        /*em.createQuery("UPDATE Schedule s SET s.meetings = null WHERE s.id = :id")
                 .setParameter("id", scheduleId)
                 .executeUpdate();
         em.createQuery("UPDATE Participation p SET p.meeting = null WHERE p.meeting.schedule.id = :id")
                 .setParameter("id", scheduleId)
-                .executeUpdate();
-        em.remove(
-                em.createQuery("SELECT m FROM Meeting m WHERE m.schedule.id = :id")
-                        .setParameter("id", scheduleId)
-                        .getResultList()
-        );
+                .executeUpdate();*/
+        for(Meeting m : em.createQuery("SELECT m FROM Meeting m WHERE m.schedule.id = :id", Meeting.class)
+                .setParameter("id", scheduleId).getResultList()){
+                    em.remove(m);
+        }
+
     }
 
 }

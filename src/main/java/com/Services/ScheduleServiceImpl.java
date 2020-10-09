@@ -37,7 +37,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     }
 
-    @Override
+    @Transactional
     public void deleteAllMeetingByScheduleId(Integer scheduleId) {
         scheduleDAO.deleteAllMeetingByScheduleId(scheduleId);
     }
