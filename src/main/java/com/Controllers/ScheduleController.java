@@ -57,14 +57,14 @@ public class ScheduleController {
     }
 
     @RequestMapping(path = "/deleteAllMeeting/{scheduleId}", method = RequestMethod.DELETE)
-    public ResponseEntity<Schedule> deleteAllMeetingByScheduleId(@PathVariable Integer scheduleId){
+    public ResponseEntity<Integer> deleteAllMeetingByScheduleId(@PathVariable Integer scheduleId){
         try{
             scheduleService.deleteAllMeetingByScheduleId(scheduleId);
-            return new ResponseEntity<Schedule>(HttpStatus.OK);
+            return new ResponseEntity<Integer>(scheduleId, HttpStatus.OK);
         }
         catch(Exception e){
             e.printStackTrace();
-            return new ResponseEntity<Schedule>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Integer>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
