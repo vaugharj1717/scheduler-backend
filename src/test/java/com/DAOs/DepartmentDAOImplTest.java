@@ -21,7 +21,7 @@ public class DepartmentDAOImplTest {
     @Autowired
     private DepartmentDAO departmentDao;
 
-
+/*
     @Test
     @Transactional
     public void testGetAll() throws Exception {
@@ -36,5 +36,5 @@ public class DepartmentDAOImplTest {
         Department department = departmentDao.getById(departments.get(0).getId());
         assert departments.size() == 2;
         assert department.equals(departments.get(0));
-    }
+    }*/
 }

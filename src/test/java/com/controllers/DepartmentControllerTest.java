@@ -37,7 +37,7 @@ public class DepartmentControllerTest {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(departmentController).build();
     }
-
+/*
     @Test
     public void testList() throws Exception{
         //define return value of dependency
@@ -58,5 +58,5 @@ public class DepartmentControllerTest {
         System.out.println(expectedResponse);
     }
 
-
+*/
 }
