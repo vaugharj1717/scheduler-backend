@@ -22,7 +22,9 @@ public class ScheduleDAOImpl implements ScheduleDAO{
 
     public Schedule getById(Integer id){
         Schedule schedule = em.createQuery(
-                "SELECT s FROM Schedule s WHERE s.id = :id"
+                "SELECT s FROM Schedule s LEFT JOIN FETCH s.meetings m LEFT JOIN FETCH m.location l " +
+                        "LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
+                        "LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate WHERE s.id = :id"
                 , Schedule.class)
                 .setParameter("id", id)
                 .getSingleResult();

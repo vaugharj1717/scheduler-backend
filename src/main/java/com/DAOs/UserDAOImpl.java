@@ -58,7 +58,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> getAllParticipants() {
         Query q = em.createQuery("select i from User i where UPPER(i.role) = ?1 or i.role = ?2");
-        q.setParameter(1, Role.CANDIDATE);
+        q.setParameter(1, Role.PARTICIPANT);
         q.setParameter(2, Role.DEPARTMENT_ADMIN);
         List<User> userList = q.getResultList();
         return userList;

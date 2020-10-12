@@ -84,6 +84,7 @@ public class MeetingServiceImpl implements MeetingService{
     }
 
     @Override
+    @Transactional
     public void deleteMeeting(Integer id) {
         meetingDAO.remove(id);
     }

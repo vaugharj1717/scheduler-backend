@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent>{
@@ -40,9 +42,129 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        /*loadLocations();
+        loadDepartments();
+        loadCandidates();
+        loadParticipants();
+        loadPositions();
+        loadCandidacies();
+        loadMeetings();*/
+
         loadData();
     }
 
+    @Transactional
+    //Load 2 locations
+    public void loadLocations(){
+        for(int i = 1; i <= 2; i++){
+            Location newLocation = new Location();
+            newLocation.setRoomNumber(i);
+            newLocation.setBuildingName("Building" + i);
+            locationDAO.saveOrUpdate(newLocation);
+        }
+    }
+
+    @Transactional
+    //Load 1 department
+    public void loadDepartments(){
+        Department newDepartment = new Department();
+        newDepartment.setDepartmentName("Department1");
+        departmentDAO.saveOrUpdate(newDepartment);
+    }
+
+    @Transactional
+    //Load 1 candidate
+    public void loadCandidates(){
+        User newCandidate = new User();
+        newCandidate.setEmail("CandidateEmail1");
+        newCandidate.setPhone("CandidatePhone1");
+        newCandidate.setName("CandidateName1");
+        newCandidate.setRole(Role.CANDIDATE);
+        newCandidate.setPassword("CandidatePassword1");
+        userDAO.saveOrUpdate(newCandidate);
+
+    }
+
+    @Transactional
+    //Load two participants
+    public void loadParticipants(){
+        List<Department> departmentList = departmentDAO.getAll();
+        for(int i = 1; i <= 2; i++){
+            User newParticipant = new User();
+            newParticipant.setEmail("ParticipantEmail" + i);
+            newParticipant.setPhone("ParticipantPhone" + i);
+            newParticipant.setName("ParticipantName" + i);
+            newParticipant.setRole(Role.PARTICIPANT);
+            newParticipant.setPassword("ParticipantPassword" + i);
+            newParticipant.setDepartment(departmentList.get(0));
+            userDAO.saveOrUpdate(newParticipant);
+        }
+    }
+
+    @Transactional
+    //load one position
+    public void loadPositions(){
+        List<Department> departmentList = departmentDAO.getAll();
+        Position newPosition = new Position();
+        newPosition.setPositionName("PositionName1");
+        newPosition.setDepartment(departmentList.get(0));
+        positionDAO.saveOrUpdate(newPosition);
+    }
+
+    @Transactional
+    //load one candidacy
+    public void loadCandidacies(){
+        List<Position> positionList = positionDAO.getAll();
+        List<User> candidateList = userDAO.getAllCandidates();
+        Candidacy candidacy = new Candidacy();
+        candidacy.setPosition(positionList.get(0));
+        candidacy.setSchedule(new Schedule());
+        candidacy.setCandidate(candidateList.get(0));
+        candidacyDAO.saveOrUpdate(candidacy);
+    }
+
+    //load one meeting with two participations
+    public void loadMeetings(){
+        List<Schedule> scheduleList = scheduleDAO.getAll();
+        List<Location> locationList = locationDAO.getAll();
+        List<User> participantList = userDAO.getAllParticipants();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss");
+        Meeting newMeeting = new Meeting();
+        try {
+            newMeeting.setSchedule(scheduleList.get(0));
+            newMeeting.setStartTime(sdf.parse("2020-01-01 12:00:00"));
+            newMeeting.setEndTime(sdf.parse("2020-01-01 14:00:00"));
+            newMeeting.setLocation(locationList.get(0));
+            newMeeting.setMeetingType(MeetingType.MEET_FACULTY);
+
+            Participation participation1 = new Participation();
+            em.persist(participation1);
+            participation1.setCanViewFeedback(false);
+            participation1.setCanLeaveFeedback(false);
+            participation1.setAlertType("email");
+            participation1.setAlert(false);
+            participation1.setParticipant(participantList.get(0));
+            participation1.setTransientId(1);
+
+            Participation participation2 = new Participation();
+            em.persist(participation2);
+            participation2.setCanViewFeedback(false);
+            participation2.setCanLeaveFeedback(false);
+            participation2.setAlertType("email");
+            participation2.setAlert(false);
+            participation2.setParticipant(participantList.get(1));
+            participation2.setTransientId(2);
+
+            newMeeting.addParticipation(participation1);
+            newMeeting.addParticipation(participation2);
+            meetingDAO.saveOrUpdate(newMeeting);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
     public void loadData(){
 
         //create Department
@@ -108,9 +230,22 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
         //create Location
         Location location = new Location();
-        location.setRoomNumber(1);
-        location.setBuildingName("testBuildingName");
+        location.setRoomNumber(113);
+        location.setBuildingName("Hibbard");
         location = locationDAO.saveOrUpdate(location);
+        location = new Location();
+        location.setRoomNumber(114);
+        location.setBuildingName("Hibbard");
+        location = locationDAO.saveOrUpdate(location);
+        location = new Location();
+        location.setRoomNumber(115);
+        location.setBuildingName("Hibbard");
+        location = locationDAO.saveOrUpdate(location);location = new Location();
+        location.setRoomNumber(116);
+        location.setBuildingName("Hibbard");
+        location = locationDAO.saveOrUpdate(location);
+
+
 
         //create participant
         User participant = new User();
@@ -118,7 +253,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         participant.setUsername("testUsername");
         participant.setPassword("testPassword");
         participant.setRole(Role.DEPARTMENT_ADMIN);
-        participant.setName("testName");
+        participant.setName("John Doe");
         participant.setEmail("testEmail");
         participant.setPhone("testPhone");
         participant.setDepartment(department);
@@ -129,7 +264,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         participant2.setUsername("testUsername2");
         participant2.setPassword("testPassword2");
         participant2.setRole(Role.PARTICIPANT);
-        participant2.setName("testName2");
+        participant2.setName("Jen Doe");
         participant2.setEmail("testEmail2");
         participant2.setPhone("testPhone2");
         participant2.setDepartment(department);

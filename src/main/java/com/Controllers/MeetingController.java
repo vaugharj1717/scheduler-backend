@@ -49,7 +49,7 @@ public class MeetingController {
             Integer locationId = body.get("locationId").asInt();
             MeetingType meetingType = body.get("meetingType").asText()
                     .equals("MEET_FACULTY") ? MeetingType.MEET_FACULTY : MeetingType.PRESENTATION;
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date startTime = formatter.parse(body.get("startTime").asText());
             Date endTime = formatter.parse(body.get("endTime").asText());
 
@@ -57,7 +57,7 @@ public class MeetingController {
             ArrayList<Boolean> canLeaveFeedbackList = new ArrayList<>();
             ArrayList<Boolean> canViewFeedbackList = new ArrayList<>();
             ArrayList<Integer> participantList = new ArrayList<>();
-            ArrayNode getParticipants =  (ArrayNode) body.get("participants");
+            ArrayNode getParticipants =  (ArrayNode) body.get("participations");
             Iterator<JsonNode> itr = getParticipants.elements();
             while(itr.hasNext()) {
                 JsonNode nextNode = itr.next();
@@ -89,13 +89,13 @@ public class MeetingController {
 
 
     @RequestMapping(path = "/{meetingId}", method = RequestMethod.DELETE)
-    public ResponseEntity<Meeting> deleteMeeting(@PathVariable Integer meetingId) {
+    public ResponseEntity<Integer> deleteMeeting(@PathVariable Integer meetingId) {
         try {
             meetingService.deleteMeeting(meetingId);
-            return new ResponseEntity<Meeting>(HttpStatus.OK);
+            return new ResponseEntity<Integer>(meetingId, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<Meeting>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Integer>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
