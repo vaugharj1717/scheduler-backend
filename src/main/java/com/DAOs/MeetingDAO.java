@@ -12,5 +12,5 @@ public interface MeetingDAO extends DAO<Meeting>{
     public List<Meeting> getByUserList(List<User> user);
     public void remove(Integer id);
     public List<Meeting> getConflictingUserSchedules(Integer candidateId, List<Integer> participantList, Date startTime, Date endTime);
-
-}
+    public List<Meeting> getConflictingLocations(Integer locationId, Date startTime, Date endTime);
+    }

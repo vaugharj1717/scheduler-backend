@@ -47,8 +47,11 @@ public class MeetingServiceImpl implements MeetingService{
         }
 
         //Check for conflict with location availability
-        //TODO:
-
+        List<Meeting> conflictingMeetingList2 = meetingDAO.getConflictingLocations(locationId, startTime, endTime);
+        if(conflictingMeetingList2.size() != 0){
+            System.out.println("Conflicting location");
+            return null;
+        }
 
         //object to save
         Meeting newMeeting = new Meeting();

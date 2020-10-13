@@ -57,6 +57,34 @@ public class MeetingDAOImpl implements MeetingDAO{
 
 
     }
+    public List<Meeting> getConflictingLocations(Integer locationId, Date startTime, Date endTime){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        String startTimeString = sdf.format(startTime);
+        String endTimeString = sdf.format(endTime);
+//        System.out.println(startTimeString);
+//        System.out.println(endTimeString);
+//        System.out.println(locationId);
+
+        //get all meetings for all users overlapping in time and in same location as new meeting
+        List<Meeting> conflictingMeetingList = em.createQuery(
+                "SELECT m from Meeting m JOIN m.location l " +
+                        "WHERE (l.id = :locationId) " +
+                        //meetings that begin somewhere between start and end of new meeting
+                        "AND ((m.startTime >= '" + startTimeString + "' AND m.startTime <= '" + endTimeString + "') " +
+                        //and meetings that end somewhere between start and end of new meeting
+                        "OR (m.endTime >= '" + startTimeString + "' AND m.endTime <= '" + endTimeString + "') " +
+                        //and meetings that begin before the start of new meeting and end after start of new meeting
+                        "OR (m.startTime <= '" + startTimeString + "' AND m.endTime >= '" + endTimeString + "'))"
+                , Meeting.class)
+                .setParameter("locationId", locationId)
+                //.setParameter("startTime", startTime)
+                //.setParameter("endTime", endTime)
+                .getResultList();
+
+        return conflictingMeetingList;
+    }
+
     public Meeting saveOrUpdate(Meeting meeting){
         Meeting savedMeeting = em.merge(meeting);
         return savedMeeting;
