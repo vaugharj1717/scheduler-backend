@@ -32,9 +32,11 @@ public class MeetingDAOImpl implements MeetingDAO{
     }
 
     public List<Meeting> getConflictingUserSchedules(Integer candidateId, List<Integer> participantList, Date startTime, Date endTime){
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
         String startTimeString = sdf.format(startTime);
         String endTimeString = sdf.format(endTime);
+        System.out.println(startTimeString);
+        System.out.println(endTimeString);
         List<Meeting> conflictingMeetingList = em.createQuery(
                 "SELECT m from Meeting m JOIN m.participations p JOIN p.participant pt JOIN m.schedule s JOIN s.candidacy c " +
                         "JOIN c.candidate u " +
