@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class UserController {
     UserService userService;
 
     @RequestMapping("/participant")
+    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<List<User>> getAllParticipants(){
         try{
             List<User> participantList = userService.getAllParticipants();
@@ -34,6 +36,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/candidate", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<List<User>> getAllCandidates(){
         try{
             List<User> candidateList = userService.getAllCandidates();
@@ -49,6 +52,7 @@ public class UserController {
 
 
     @RequestMapping(path = "/candidate/{positionId}", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<Candidacy> createCandidate(@PathVariable Integer positionId, @RequestBody JsonNode body){
         try{
           String name = body.get("name").asText();

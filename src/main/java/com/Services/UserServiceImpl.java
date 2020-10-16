@@ -8,7 +8,9 @@ import com.Entities.Position;
 import com.Entities.Schedule;
 import com.Entities.User;
 import com.Entities.enumeration.Role;
+import com.Security.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,9 @@ public class UserServiceImpl implements UserService{
     @Autowired
     CandidacyDAO candidacyDAO;
 
+    @Autowired
+    PasswordEncoder encoder;
+
     @Transactional
     public List<User> getAllCandidates(){
         //no business logic
@@ -44,9 +49,11 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public Candidacy createCandidate(Integer positionId, String name, String email) {
         User newUser = new User();
+        String generatedPassword = PasswordGenerator.generatePassword();
         newUser.setName(name);
         newUser.setEmail(email);
         newUser.setRole(Role.CANDIDATE);
+        newUser.setPassword(encoder.encode(generatedPassword));
 
         Candidacy newCandidacy = new Candidacy();
         newCandidacy.setCandidate(newUser);
@@ -76,7 +83,9 @@ public class UserServiceImpl implements UserService{
             message.setFrom(new InternetAddress("vaugharj1717@gmail.com"));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             message.setSubject("Invitation to UWEC Scheduler");
-            message.setText("This is the actual message");
+            message.setText("You have been provisioned an account on the UWEC Scheduling System\n" +
+                    "Username: " + email + "\n" +
+                    "Password: " + generatedPassword + "\n");
             Transport.send(message);
         }
         catch(MessagingException mex){

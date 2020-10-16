@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -17,6 +18,7 @@ public class ScheduleController {
     ScheduleService scheduleService;
 
     @RequestMapping(path = "/{scheduleId}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<Schedule> getSchedule(@PathVariable Integer scheduleId){
         try{
             Schedule schedule = scheduleService.getSchedule(scheduleId);
@@ -34,6 +36,7 @@ public class ScheduleController {
     }
 
     @RequestMapping(path = "/{scheduleId}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<Schedule> deleteSchedule(@PathVariable Integer scheduleId){
         try{
             scheduleService.deleteSchedule(scheduleId);
@@ -46,6 +49,7 @@ public class ScheduleController {
     }
 
     @RequestMapping(path = "/{candidacyId}", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<Schedule> createSchedule(@PathVariable Integer candidacyId){
         try{
             Schedule newSchedule = scheduleService.createSchedule(candidacyId);
@@ -58,6 +62,7 @@ public class ScheduleController {
     }
 
     @RequestMapping(path = "/deleteAllMeeting/{scheduleId}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<Integer> deleteAllMeetingByScheduleId(@PathVariable Integer scheduleId){
         try{
             scheduleService.deleteAllMeetingByScheduleId(scheduleId);

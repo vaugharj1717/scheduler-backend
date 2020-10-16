@@ -8,6 +8,7 @@ import com.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class DepartmentController {
     DepartmentService departmentService;
 
     @RequestMapping(method= RequestMethod.GET)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<List<Department>> getAllDepartments(){
         try{
             List<Department> departmentList = departmentService.getAllDepartments();

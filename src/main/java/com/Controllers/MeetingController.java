@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -26,6 +27,7 @@ public class MeetingController {
     MeetingService meetingService;
 
     @RequestMapping(path = "/{meetingId}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<Meeting> getMeeting(@PathVariable Integer meetingId){
         try{
             Meeting meeting = meetingService.getMeeting(meetingId);
@@ -43,6 +45,7 @@ public class MeetingController {
     }
 
     @RequestMapping(path="/{scheduleId}", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<Meeting> createMeeting(@RequestBody JsonNode body, @PathVariable Integer scheduleId){
         try{
             //pull data from request
@@ -89,6 +92,7 @@ public class MeetingController {
 
 
     @RequestMapping(path = "/{meetingId}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<Integer> deleteMeeting(@PathVariable Integer meetingId) {
         try {
             meetingService.deleteMeeting(meetingId);

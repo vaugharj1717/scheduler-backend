@@ -4,6 +4,9 @@ public enum  Role {
     CANDIDATE,
     DEPARTMENT_ADMIN,
     PARTICIPANT,
+    SCHEDULER,
+    ADMIN,
+    SUPER_ADMIN,
     NOTSET;
 
     public static Role getFromName(String name) {

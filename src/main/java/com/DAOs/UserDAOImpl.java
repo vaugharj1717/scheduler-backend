@@ -5,6 +5,7 @@ import com.Entities.enumeration.Role;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
@@ -53,6 +54,17 @@ public class UserDAOImpl implements UserDAO {
                         .setParameter("id", id)
                         .getSingleResult()
         );
+    }
+
+    public User findByEmail(String email){
+        try {
+            return em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        }
+        catch(NoResultException e){
+            return null;
+        }
     }
 
     @Override

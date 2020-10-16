@@ -7,6 +7,7 @@ import com.Entities.enumeration.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,8 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
     ParticipationDAO participationDAO;
     @Autowired
     DepartmentDAO departmentDAO;
+    @Autowired
+    PasswordEncoder encoder;
 
     @Override
     @Transactional
@@ -189,7 +192,6 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
         //create Candidate
         User candidate = new User();
-        candidate.setUsername("testUsername");
         candidate.setPassword("testPassword");
         candidate.setRole(Role.CANDIDATE);
         candidate.setName("John Doe");
@@ -197,7 +199,6 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         candidate.setPhone("testPhone");
 
         User candidate2 = new User();
-        candidate2.setUsername("testUsername");
         candidate2.setPassword("testPassword");
         candidate2.setRole(Role.CANDIDATE);
         candidate2.setName("Susan Jones");
@@ -206,7 +207,6 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         candidate2 = userDAO.saveOrUpdate(candidate2);
 
         User candidate3 = new User();
-        candidate3.setUsername("testUsername");
         candidate3.setPassword("testPassword");
         candidate3.setRole(Role.CANDIDATE);
         candidate3.setName("Russel Hapsburg");
@@ -245,12 +245,17 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         location.setBuildingName("Hibbard");
         location = locationDAO.saveOrUpdate(location);
 
-
+        //create scheduler
+        User scheduler = new User();
+        em.persist(scheduler);
+        scheduler.setEmail("scheduler");
+        scheduler.setPassword(encoder.encode("schedulerPassword"));
+        scheduler.setRole(Role.SCHEDULER);
+        userDAO.saveOrUpdate(scheduler);
 
         //create participant
         User participant = new User();
         em.persist(participant);
-        participant.setUsername("testUsername");
         participant.setPassword("testPassword");
         participant.setRole(Role.DEPARTMENT_ADMIN);
         participant.setName("John Doe");
@@ -261,7 +266,6 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
         User participant2 = new User();
         em.persist(participant2);
-        participant2.setUsername("testUsername2");
         participant2.setPassword("testPassword2");
         participant2.setRole(Role.PARTICIPANT);
         participant2.setName("Jen Doe");

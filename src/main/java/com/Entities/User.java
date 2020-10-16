@@ -16,7 +16,6 @@ public class User implements DataObject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String username;
     @JsonIgnore
     private String password;
     private String email;
@@ -92,14 +91,6 @@ public class User implements DataObject {
 
     public void setParticipations(Set<Participation> participations) {
         this.participations = participations;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
