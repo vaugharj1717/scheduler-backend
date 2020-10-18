@@ -21,4 +21,12 @@ public class LocationServiceImpl implements  LocationService {
     public void deleteLocation(Integer id) {
         locationDAO.remove(id);
     }
+
+    @Override
+    public Location createLocation(String buildingName, Integer roomNumber) {
+        Location location = new Location();
+        location.setBuildingName(buildingName);
+        location.setRoomNumber(roomNumber);
+        return locationDAO.saveOrUpdate(location);
+    }
 }
