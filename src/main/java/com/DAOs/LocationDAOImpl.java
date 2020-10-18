@@ -31,6 +31,9 @@ public class LocationDAOImpl implements LocationDAO{
     }
 
     public void remove(Integer id){
+        em.createQuery("UPDATE Meeting m SET m.location = null WHERE m.location.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
         em.remove(
                 em.createQuery("SELECT l FROM Location l WHERE l.id = :id")
                         .setParameter("id", id)

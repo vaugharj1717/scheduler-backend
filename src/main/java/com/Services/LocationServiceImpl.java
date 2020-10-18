@@ -16,4 +16,9 @@ public class LocationServiceImpl implements  LocationService {
     public List<Location> getAllLocations() {
         return locationDAO.getAll();
     }
+
+    @Override
+    public void deleteLocation(Integer id) {
+        locationDAO.remove(id);
+    }
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface LocationService {
     public List<Location> getAllLocations();
+    public void deleteLocation(Integer id);
+
 }
