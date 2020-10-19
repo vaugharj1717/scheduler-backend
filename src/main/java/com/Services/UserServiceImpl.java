@@ -96,4 +96,57 @@ public class UserServiceImpl implements UserService{
         return savedCandidacy;
 
     }
+
+    @Transactional
+    public User adminControlsCreateUser(String name, String email, String role) {
+        User newUser = new User();
+        String generatedPassword = PasswordGenerator.generatePassword();
+        newUser.setName(name);
+        newUser.setEmail(email);
+        if(role.equals("SUPER_ADMIN")) return null;
+        newUser.setRole(Role.getFromName(role));
+        newUser.setPassword(encoder.encode(generatedPassword));
+        User savedUser = userDAO.saveOrUpdate(newUser);
+
+        //send email
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+        properties.setProperty("smpt.gmail.com", "localhost");
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator(){
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("uwecscheduler@gmail.com", "scheduler$@#!");
+            }
+        });
+        //session.setDebug(true);
+        try{
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("vaugharj1717@gmail.com"));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+            message.setSubject("Invitation to UWEC Scheduler");
+            message.setText("You have been provisioned an account on the UWEC Scheduling System\n" +
+                    "Username: " + email + "\n" +
+                    "Password: " + generatedPassword + "\n");
+            Transport.send(message);
+        }
+        catch(MessagingException mex){
+            //mex.printStackTrace();
+            return null;
+        }
+
+        return savedUser;
+
+    }
+
+    @Transactional
+    public void adminControlDeleteUser(Integer userId){
+        User user = userDAO.getById(userId);
+        if(user == null || user.getRole().equals(Role.SUPER_ADMIN)){
+            return;
+        }
+        userDAO.remove(userId);
+    }
 }

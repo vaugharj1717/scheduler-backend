@@ -68,4 +68,41 @@ public class UserController {
             return new ResponseEntity<Candidacy>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(path = "/{userId}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
+    public ResponseEntity<?> adminControlDeleteUser(@PathVariable Integer userId){
+        try{
+            userService.adminControlDeleteUser(userId);
+            return new ResponseEntity<Integer>(userId, HttpStatus.OK);
+
+        }
+        //error case
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
+    public ResponseEntity<?> adminControlsCreateUser(@RequestBody JsonNode body){
+        try{
+            String name = body.get("name").asText();
+            String email = body.get("email").asText();
+            String role = body.get("role").asText();
+
+            User newUser = userService.adminControlsCreateUser(name, email, role);
+            if(newUser == null){
+                return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<User>(newUser, HttpStatus.OK);
+
+        }
+        //error case
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
