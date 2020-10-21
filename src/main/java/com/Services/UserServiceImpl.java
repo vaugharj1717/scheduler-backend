@@ -211,11 +211,11 @@ public class UserServiceImpl implements UserService{
 
     @Transactional(rollbackFor = Exception.class)
     public Resource loadUserFileAsResource(Integer fileId) throws IOException {
-//        UserFile userFile = userDAO.getUserFileById(fileId);
-//        if(userFile == null) return null;
-//        String fileName = userFile.getFilename();
+        UserFile userFile = userDAO.getUserFileById(fileId);
+        if(userFile == null) return null;
+        String fileName = userFile.getFilename();
         try {
-            Path filePath = this.fileStorageLocation.resolve("RyanVaughanResume.docx").normalize();
+            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
             if(resource.exists()) {
                 return resource;
