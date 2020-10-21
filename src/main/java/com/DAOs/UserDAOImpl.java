@@ -90,4 +90,10 @@ public class UserDAOImpl implements UserDAO {
         return userFile;
     }
 
+    public List<UserFile> getUserFilesByUserId(Integer userId){
+        return em.createQuery("SELECT uf FROM UserFile uf WHERE uf.user.id = :id", UserFile.class)
+                .setParameter("id", userId)
+                .getResultList();
+    }
+
 }

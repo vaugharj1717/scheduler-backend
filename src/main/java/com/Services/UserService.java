@@ -18,4 +18,6 @@ public interface UserService {
     public User adminControlsCreateUser(String name, String email, String role);
     public UserFile storeUserFile(MultipartFile file, Integer userId) throws IOException;
     public Resource loadUserFileAsResource(Integer fileId) throws IOException;
+    public void deleteFile(Integer fileId) throws IOException;
+    public List<UserFile> getUserFiles(Integer userId);
 }

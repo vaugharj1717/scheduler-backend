@@ -12,4 +12,5 @@ public interface UserDAO extends DAO<User>{
     public User findByEmail(String email);
     public UserFile addUserFile(UserFile userFile);
     public UserFile getUserFileById(Integer userFileId);
+    public List<UserFile> getUserFilesByUserId(Integer userId);
 }

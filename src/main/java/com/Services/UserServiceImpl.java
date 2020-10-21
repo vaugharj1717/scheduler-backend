@@ -23,10 +23,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.List;
 import java.util.Properties;
 
@@ -225,5 +222,26 @@ public class UserServiceImpl implements UserService{
         } catch (MalformedURLException ex) {
             throw new IOException("File not found", ex);
         }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteFile(Integer fileId) throws IOException{
+        UserFile userFile = userDAO.getUserFileById(fileId);
+        if(userFile == null) throw new NoSuchFileException("File does not exist");
+        String fileName = userFile.getFilename();
+        Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+        File fileToDelete = new File(filePath.toString());
+        if(fileToDelete.delete()){
+            return;
+        }
+        else{
+            throw new IOException("Could not delete file");
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public List<UserFile> getUserFiles(Integer userId){
+        List<UserFile> userFileList = userDAO.getUserFilesByUserId(userId);
+        return userFileList;
     }
 }

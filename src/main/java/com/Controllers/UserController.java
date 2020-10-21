@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.List;
 
 @CrossOrigin
@@ -116,6 +117,12 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}/files")
+    public ResponseEntity<?> getUserFiles(@PathVariable Integer userId){
+            List<UserFile> userFileList = userService.getUserFiles(userId);
+            return new ResponseEntity<List<UserFile>>(userFileList, HttpStatus.OK);
+    }
+
     @PostMapping("/{userId}/uploadFile")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Integer userId) {
         try {
@@ -153,6 +160,20 @@ public class UserController {
         }
         catch(Exception e){
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/deleteFile/{fileId}")
+    public ResponseEntity<?> deleteFile(@PathVariable Integer fileId){
+        try{
+            userService.deleteFile(fileId);
+            return new ResponseEntity<>(1, HttpStatus.OK);
+        }
+        catch(NoSuchFileException nsfe){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        catch(IOException ioe){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
