@@ -56,6 +56,7 @@ public class UserFile implements DataObject {
         }
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

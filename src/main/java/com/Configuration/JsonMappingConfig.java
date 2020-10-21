@@ -23,5 +23,6 @@ public class JsonMappingConfig extends WebMvcConfigurationSupport {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(new MappingJackson2HttpMessageConverter(jsonMapper()));
+        addDefaultHttpMessageConverters(converters);
     }
 }

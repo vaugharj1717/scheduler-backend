@@ -20,6 +20,7 @@ import java.util.List;
 public class PositionController {
     @Autowired
     PositionService positionService;
+
     @RequestMapping(value = "/department/{id}", method = RequestMethod.GET)
     public ResponseEntity<List<Position>> getPositionsByDepartment(@PathVariable("id") Integer id){
         try {
@@ -27,6 +28,7 @@ public class PositionController {
             return new ResponseEntity<List<Position>>(positionList, HttpStatus.OK);
         }
         catch(Exception e){
+            e.printStackTrace();
             return new ResponseEntity<List<Position>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
