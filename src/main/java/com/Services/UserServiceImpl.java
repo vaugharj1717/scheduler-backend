@@ -63,6 +63,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
+    public void changeRole(Role role, Integer userId){
+        //no business logic
+        userDAO.changeRole(role, userId);
+
+    }
+
+    @Transactional
     public List<User> getAllParticipants() {
         return userDAO.getAllParticipants();
     }

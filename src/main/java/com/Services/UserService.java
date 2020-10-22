@@ -3,6 +3,7 @@ package com.Services;
 import com.Entities.Candidacy;
 import com.Entities.User;
 import com.Entities.UserFile;
+import com.Entities.enumeration.Role;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,4 +21,5 @@ public interface UserService {
     public Resource loadUserFileAsResource(Integer fileId) throws IOException;
     public void deleteFile(Integer fileId) throws IOException;
     public List<UserFile> getUserFiles(Integer userId);
+    public void changeRole(Role role, Integer userId);
 }
