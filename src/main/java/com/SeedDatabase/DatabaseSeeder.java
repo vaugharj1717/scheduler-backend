@@ -52,7 +52,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         loadPositions();
         loadCandidacies();
         loadMeetings();*/
-
+        loadAccounts();
         loadData();
     }
 
@@ -340,6 +340,24 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
     }
 
 
+    @Transactional
+    public void loadAccounts(){
+        User admin = new User();
+        admin.setPassword(encoder.encode("admin"));
+        admin.setRole(Role.ADMIN);
+        admin.setName("Admin Admin");
+        admin.setEmail("admin@gmail.com");
+        admin.setPhone("Admin");
+        admin = userDAO.saveOrUpdate(admin);
 
+        User superAdmin = new User();
+        superAdmin.setPassword(encoder.encode("superAdmin"));
+        superAdmin.setRole(Role.SUPER_ADMIN);
+        superAdmin.setName("SuperAdmin SuperAdmin");
+        superAdmin.setEmail("superadmin@gmail.com");
+        superAdmin.setPhone("SuperAdmin");
+        superAdmin = userDAO.saveOrUpdate(superAdmin);
+
+    }
 }
 

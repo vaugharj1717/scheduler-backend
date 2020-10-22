@@ -1,6 +1,7 @@
 package com.DAOs;
 
 import com.Entities.User;
+import com.Entities.UserFile;
 import com.Entities.enumeration.Role;
 import org.springframework.stereotype.Repository;
 
@@ -74,6 +75,25 @@ public class UserDAOImpl implements UserDAO {
         q.setParameter(2, Role.DEPARTMENT_ADMIN);
         List<User> userList = q.getResultList();
         return userList;
+    }
+
+    public UserFile addUserFile(UserFile userFile){
+        UserFile savedUserFile = em.merge(userFile);
+        return savedUserFile;
+    }
+
+    public UserFile getUserFileById(Integer userFileId){
+        UserFile userFile = em.createQuery(
+                "SELECT uf FROM UserFile uf WHERE uf.id = :id", UserFile.class)
+                .setParameter("id", userFileId)
+                .getSingleResult();
+        return userFile;
+    }
+
+    public List<UserFile> getUserFilesByUserId(Integer userId){
+        return em.createQuery("SELECT uf FROM UserFile uf WHERE uf.user.id = :id", UserFile.class)
+                .setParameter("id", userId)
+                .getResultList();
     }
 
 }
