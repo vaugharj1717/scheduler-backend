@@ -97,7 +97,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public void changeRole(Role role, Integer userId){
-        em.createQuery("UPDATE User u SET u.role WHERE u.id = :userId")
+        em.createQuery("UPDATE User u SET u.role = role WHERE u.id = :userId")
                .setParameter("role", role)
                .setParameter("userId", userId)
                .executeUpdate();
