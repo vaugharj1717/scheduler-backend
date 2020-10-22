@@ -6,6 +6,8 @@ import com.DAOs.ScheduleDAO;
 import com.DAOs.UserDAO;
 import com.Entities.*;
 import com.Entities.enumeration.MeetingType;
+import com.Exceptions.ConflictingLocationException;
+import com.Exceptions.ConflictingUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,21 +38,21 @@ public class MeetingServiceImpl implements MeetingService{
 
     @Transactional
     public Meeting createMeeting(Integer scheduleId, Integer locationId, Date startTime, Date endTime, MeetingType meetingType,
-                                 List<Boolean> canViewFeedbackList, List<Boolean> canLeaveFeedbackList, List<Integer> participantList){
+                                 List<Boolean> canViewFeedbackList, List<Boolean> canLeaveFeedbackList, List<Integer> participantList)
+                                 throws Exception{
 
         //Check for scheduling conflicts
         //Check for conflict with participant or candidate's schedules
         User candidate = userDAO.getByScheduleId(scheduleId);
         List<Meeting> conflictingMeetingList = meetingDAO.getConflictingUserSchedules(candidate.getId(), participantList, startTime, endTime);
         if(conflictingMeetingList.size() != 0){
-            return null;
+            throw new ConflictingUserException();
         }
 
         //Check for conflict with location availability
         List<Meeting> conflictingMeetingList2 = meetingDAO.getConflictingLocations(locationId, startTime, endTime);
         if(conflictingMeetingList2.size() != 0){
-            System.out.println("Conflicting location");
-            return null;
+            throw new ConflictingLocationException();
         }
 
         //object to save
@@ -59,7 +61,7 @@ public class MeetingServiceImpl implements MeetingService{
         //retrieve schedule and location and check that values were returned, else return null (failure)
         Schedule schedule = scheduleDAO.getById(scheduleId);
         Location location = locationDAO.getById(locationId);
-        if(schedule == null || location == null) return null;
+        if(schedule == null || location == null) throw new IllegalStateException();
 
         //retrieve each participant and create participation object for each
         //then attach participation to new meeting

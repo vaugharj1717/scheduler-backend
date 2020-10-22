@@ -3,6 +3,9 @@ package com.Controllers;
 import com.Entities.Meeting;
 import com.Entities.Participation;
 import com.Entities.enumeration.MeetingType;
+import com.Exceptions.ConflictingLocationException;
+import com.Exceptions.ConflictingUserException;
+import com.Exceptions.ErrorResponse;
 import com.Services.MeetingService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +49,7 @@ public class MeetingController {
 
     @RequestMapping(path="/{scheduleId}", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('SCHEDULER')")
-    public ResponseEntity<Meeting> createMeeting(@RequestBody JsonNode body, @PathVariable Integer scheduleId){
+    public ResponseEntity<?> createMeeting(@RequestBody JsonNode body, @PathVariable Integer scheduleId){
         try{
             //pull data from request
             Integer locationId = body.get("locationId").asInt();
@@ -72,19 +75,27 @@ public class MeetingController {
             //Call on meetingService to create meeting
             Meeting newMeeting = meetingService.createMeeting(scheduleId, locationId, startTime, endTime, meetingType,
                     canViewFeedbackList, canLeaveFeedbackList, participantList);
-            //If bad request
-            if(newMeeting == null) return new ResponseEntity<Meeting>(HttpStatus.BAD_REQUEST);
 
-                //If successful
-            else{
-                return new ResponseEntity<Meeting>(newMeeting, HttpStatus.OK);
-            }
+            return new ResponseEntity<Meeting>(newMeeting, HttpStatus.OK);
+
         }
 
         //If server error
+        catch(ConflictingLocationException cle){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("This location is not available at the specified time"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        catch(ConflictingUserException cue){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("A user has a meeting during this time"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        catch(IllegalStateException ise){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("Received invalid data"),
+                    HttpStatus.BAD_REQUEST);
+        }
         catch(Exception e){
-            e.printStackTrace();
-            return new ResponseEntity<Meeting>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("There was an error creating meeting"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
