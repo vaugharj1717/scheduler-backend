@@ -26,7 +26,7 @@ public class MeetingDAOImpl implements MeetingDAO{
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
         String nowString = sdf.format(now);
         List<Meeting> upcomingMeetingList = em.createQuery(
-                "SELECT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
+                "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
                         "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate " +
                 "WHERE (m.startTime >= '" + nowString + "')", Meeting.class).getResultList();
         return upcomingMeetingList;
@@ -37,7 +37,7 @@ public class MeetingDAOImpl implements MeetingDAO{
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
         String nowString = sdf.format(now);
         List<Meeting> pastMeetingList = em.createQuery(
-                "SELECT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
+                "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
                         "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate " +
                         "WHERE (m.endTime <= '" + nowString + "')", Meeting.class).getResultList();
         return pastMeetingList;
