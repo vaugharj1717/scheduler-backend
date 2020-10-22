@@ -21,6 +21,17 @@ public class MeetingDAOImpl implements MeetingDAO{
         return meetingList;
     }
 
+    public List<Meeting> getUpcomingMeetings(){
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        String nowString = sdf.format(now);
+        List<Meeting> upcomingMeetingList = em.createQuery(
+                "SELECT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant" +
+                        "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH f.candidacy c LEFT JOIN FETCH c.candidate " +
+                "WHERE (m.startTime >= '" + nowString + "')", Meeting.class).getResultList();
+        return upcomingMeetingList;
+    }
+
     public Meeting getById(Integer id){
         Meeting meeting = em.createQuery(
                 "SELECT m from Meeting m LEFT JOIN FETCH m.location LEFT JOIN FETCH m.participations p " +

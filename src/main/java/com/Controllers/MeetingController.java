@@ -47,6 +47,21 @@ public class MeetingController {
         }
     }
 
+    @RequestMapping(path = "/getUpcoming", method = RequestMethod.GET)
+    //@PreAuthorize("hasAuthority('SCHEDULER')")
+    public ResponseEntity<?> getUpcomingMeetings(){
+        try{
+            List<Meeting> meetings = meetingService.getUpcomingMeetings();
+            return new ResponseEntity<List<Meeting>>(meetings, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Meeting>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
     @RequestMapping(path="/{scheduleId}", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<?> createMeeting(@RequestBody JsonNode body, @PathVariable Integer scheduleId){
