@@ -3,6 +3,7 @@ package com.DAOs;
 import com.Entities.Department;
 import com.Entities.Position;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -49,5 +50,25 @@ public class DepartmentDAOImpl implements DepartmentDAO{
         List<Position> positionList = q.getResultList();
         return positionList;
 
+    }
+
+    @Override
+    @Transactional
+    public void removeDepartment(Integer id) {
+        em.createQuery("UPDATE User u SET u.department = null WHERE u.department.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
+
+        em.remove(
+                em.createQuery("SELECT p FROM Position p WHERE p.department.id = :id")
+                        .setParameter("id", id)
+                        .getSingleResult()
+        );
+
+        em.remove(
+                em.createQuery("SELECT d FROM Department d WHERE d.id = :id")
+                        .setParameter("id", id)
+                        .getSingleResult()
+        );
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,4 +37,22 @@ public class DepartmentController {
             return new ResponseEntity<List<Department>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(path = "/{departmentId}", method= RequestMethod.DELETE)
+    @Transactional
+    @PreAuthorize("hasAuthority('SCHEDULER')")
+    public ResponseEntity<Integer> deleteDepartment(@PathVariable Integer departmentId){
+        try{
+            departmentService.deleteDepartment(departmentId);
+
+            //success case
+            return new ResponseEntity<Integer>(departmentId, HttpStatus.OK);
+        }
+        //error case
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Integer>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

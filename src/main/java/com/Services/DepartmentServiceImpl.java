@@ -23,4 +23,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         return departmentDAO.getAll();
     }
+
+    @Override
+    @Transactional
+    public void deleteDepartment(Integer id) {
+        departmentDAO.removeDepartment(id);
+    }
 }

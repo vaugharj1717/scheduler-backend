@@ -8,5 +8,5 @@ import java.util.List;
 public interface DepartmentService {
 
     public List<Department> getAllDepartments();
-
+    public void deleteDepartment(Integer id);
 }
