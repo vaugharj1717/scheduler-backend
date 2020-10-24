@@ -19,9 +19,8 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-@Profile("!test")
-public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent>{
-
+@Profile("test")
+public class TestDatabaseSeeder implements ApplicationListener<ContextRefreshedEvent> {
     @PersistenceContext
     EntityManager em;
 
@@ -47,15 +46,15 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-//        loadLocations();
-//        loadDepartments();
-//        loadCandidates();
-//        loadParticipants();
-//        loadPositions();
-//        loadCandidacies();
-//        loadMeetings();
-        loadAccounts();
-        loadData();
+        loadLocations();
+        loadDepartments();
+        loadCandidates();
+        loadParticipants();
+        loadPositions();
+        loadCandidacies();
+        loadMeetings();
+//        loadAccounts();
+//        loadData();
     }
 
     @Transactional
@@ -128,18 +127,18 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         candidacyDAO.saveOrUpdate(candidacy);
     }
 
-    //load one meeting with two participations
+    //load two meetings with two participations
     public void loadMeetings(){
         List<Schedule> scheduleList = scheduleDAO.getAll();
         List<Location> locationList = locationDAO.getAll();
         List<User> participantList = userDAO.getAllParticipants();
 
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss");
-        Meeting newMeeting = new Meeting();
         try {
+            Meeting newMeeting = new Meeting();
             newMeeting.setSchedule(scheduleList.get(0));
-            newMeeting.setStartTime(sdf.parse("2020-01-01 12:00:00"));
-            newMeeting.setEndTime(sdf.parse("2020-01-01 14:00:00"));
+            newMeeting.setStartTime(sdf.parse("2010-01-01 12:00:00"));
+            newMeeting.setEndTime(sdf.parse("2010-01-01 14:00:00"));
             newMeeting.setLocation(locationList.get(0));
             newMeeting.setMeetingType(MeetingType.MEET_FACULTY);
 
@@ -153,6 +152,35 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
             participation1.setTransientId(1);
 
             Participation participation2 = new Participation();
+            em.persist(participation2);
+            participation2.setCanViewFeedback(false);
+            participation2.setCanLeaveFeedback(false);
+            participation2.setAlertType("email");
+            participation2.setAlert(false);
+            participation2.setParticipant(participantList.get(1));
+            participation2.setTransientId(2);
+
+            newMeeting.addParticipation(participation1);
+            newMeeting.addParticipation(participation2);
+            meetingDAO.saveOrUpdate(newMeeting);
+
+            newMeeting = new Meeting();
+            newMeeting.setSchedule(scheduleList.get(0));
+            newMeeting.setStartTime(sdf.parse("2030-01-01 12:00:00"));
+            newMeeting.setEndTime(sdf.parse("2030-01-01 14:00:00"));
+            newMeeting.setLocation(locationList.get(0));
+            newMeeting.setMeetingType(MeetingType.MEET_FACULTY);
+
+            participation1 = new Participation();
+            em.persist(participation1);
+            participation1.setCanViewFeedback(false);
+            participation1.setCanLeaveFeedback(false);
+            participation1.setAlertType("email");
+            participation1.setAlert(false);
+            participation1.setParticipant(participantList.get(0));
+            participation1.setTransientId(1);
+
+            participation2 = new Participation();
             em.persist(participation2);
             participation2.setCanViewFeedback(false);
             participation2.setCanLeaveFeedback(false);
@@ -362,4 +390,3 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
     }
 }
-

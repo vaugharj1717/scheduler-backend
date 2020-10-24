@@ -1,9 +1,11 @@
 package com.DAOs;
 
-import com.Entities.Department;
-import com.Entities.Department;
-import com.Entities.Department;
 import com.App;
+import com.Entities.Schedule;
+import com.Entities.Schedule;
+import com.Entities.Schedule;
+import com.Entities.User;
+import com.Entities.enumeration.Role;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
 @WebAppConfiguration
-public class DepartmentDAOImplTest {
+public class ScheduleDAOImplTest {
 
     @Autowired
-    private DepartmentDAO departmentDAO;
+    private ScheduleDAO scheduleDAO;
 
     @PersistenceContext
     EntityManager em;
@@ -32,41 +34,42 @@ public class DepartmentDAOImplTest {
     @Test
     @Transactional
     public void testGetAll() throws Exception {
-        List<Department> departments = (List<Department>) departmentDAO.getAll();
-        assert departments.size() == 1;
+        List<Schedule> schedules = (List<Schedule>) scheduleDAO.getAll();
+        assert schedules.size() == 1;
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
     @Transactional
     public void testRemove() throws Exception {
-        List<Department> departments = (List<Department>) departmentDAO.getAll();
-        departmentDAO.removeDepartment(departments.get(0).getId());
+        List<Schedule> schedules = (List<Schedule>) scheduleDAO.getAll();
+        scheduleDAO.remove(schedules.get(0).getId());
 
         em.flush();
-        for(Department department : departments) em.detach(department);
+        for(Schedule schedule : schedules) em.detach(schedule);
 
-        Department department = departmentDAO.getById(departments.get(0).getId());
+        Schedule schedule = scheduleDAO.getById(schedules.get(0).getId());
     }
 
     @Test
     @Transactional
     public void testSaveOrUpdate() throws Exception {
-        Department department = new Department();
-        department = departmentDAO.saveOrUpdate(department);
+        Schedule schedule = new Schedule();
+        schedule = scheduleDAO.saveOrUpdate(schedule);
 
         em.flush();
-        em.detach(department);
+        em.detach(schedule);
 
-        Department resultDepartment = departmentDAO.getById(department.getId());
-        assert resultDepartment.equals(department);
+        Schedule resultSchedule = scheduleDAO.getById(schedule.getId());
+        assert resultSchedule.equals(schedule);
     }
 
     @Test
     @Transactional
     public void testGetById() throws Exception {
-        List<Department> departments = (List<Department>) departmentDAO.getAll();
-        Department department = departmentDAO.getById(departments.get(0).getId());
-        assert departments.size() == 1;
-        assert department.equals(departments.get(0));
+        List<Schedule> schedules = (List<Schedule>) scheduleDAO.getAll();
+        Schedule schedule = scheduleDAO.getById(schedules.get(0).getId());
+        assert schedule.equals(schedules.get(0));
     }
+
+
 }

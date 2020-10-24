@@ -185,7 +185,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/{userId}/changeRole", method = RequestMethod.PATCH)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+//    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<Role> changeRole(@PathVariable Integer userId, @RequestBody JsonNode body ){
         try{
             Role role = Role.getFromName(body.get("role").asText());

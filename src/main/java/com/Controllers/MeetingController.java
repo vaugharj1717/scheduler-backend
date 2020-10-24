@@ -120,6 +120,7 @@ public class MeetingController {
                     HttpStatus.BAD_REQUEST);
         }
         catch(Exception e){
+            e.printStackTrace();
             return new ResponseEntity<ErrorResponse>(new ErrorResponse("There was an error creating meeting"),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
