@@ -23,6 +23,14 @@ public class UserDAOImpl implements UserDAO {
         return userList;
     }
 
+    public List<User> getAllBesidesSuperAdminsAndSelf(String email){
+        List<User> userList = em.createQuery("SELECT u from User u WHERE u.role != :role and u.email != :email", User.class)
+                .setParameter("role", Role.SUPER_ADMIN)
+                .setParameter("email", email)
+                .getResultList();
+        return userList;
+    }
+
     public List<User> getAllCandidates(){
         List<User> userList = em.createQuery("SELECT u from User u WHERE u.role = ?1", User.class)
                 .setParameter(1, Role.CANDIDATE)

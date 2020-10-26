@@ -15,4 +15,5 @@ public interface UserDAO extends DAO<User>{
     public UserFile getUserFileById(Integer userFileId);
     public List<UserFile> getUserFilesByUserId(Integer userId);
     public void changeRole(Role role, Integer userId);
+    public List<User> getAllBesidesSuperAdminsAndSelf(String email);
 }

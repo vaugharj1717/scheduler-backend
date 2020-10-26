@@ -15,11 +15,12 @@ public interface UserService {
     public List<User> getAllCandidates();
     public List<User> getAllParticipants();
     public Candidacy createCandidate(Integer positionId, String name, String email);
-    public void adminControlDeleteUser(Integer userId);
+    public void adminControlDeleteUser(Integer userId, String loggedUserEmail) throws Exception;
     public User adminControlsCreateUser(String name, String email, String role);
     public UserFile storeUserFile(MultipartFile file, Integer userId) throws IOException;
     public Resource loadUserFileAsResource(Integer fileId) throws IOException;
     public void deleteFile(Integer fileId) throws IOException;
     public List<UserFile> getUserFiles(Integer userId);
     public void changeRole(Role role, Integer userId);
+    public List<User> getAllUsers(String loggedUserEmail);
 }

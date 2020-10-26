@@ -29,6 +29,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional
     public Department createDepartment(String departmentName) {
         Department department = new Department();
         department.setDepartmentName(departmentName);

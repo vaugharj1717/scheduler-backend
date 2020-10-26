@@ -3,6 +3,7 @@ package com.Controllers;
 import com.Entities.Department;
 import com.Entities.Position;
 import com.Entities.User;
+import com.Security.UserDetailsImpl;
 import com.Services.DepartmentService;
 import com.Services.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -10,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @CrossOrigin
@@ -24,7 +27,7 @@ public class DepartmentController {
     DepartmentService departmentService;
 
     @RequestMapping(method= RequestMethod.GET)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<Department>> getAllDepartments(){
         try{
             List<Department> departmentList = departmentService.getAllDepartments();
@@ -40,11 +43,11 @@ public class DepartmentController {
     }
 
     @RequestMapping(path = "/{departmentId}", method= RequestMethod.DELETE)
-    @Transactional
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Integer> deleteDepartment(@PathVariable Integer departmentId){
         try{
             departmentService.deleteDepartment(departmentId);
+
 
             //success case
             return new ResponseEntity<Integer>(departmentId, HttpStatus.OK);
@@ -56,8 +59,8 @@ public class DepartmentController {
         }
     }
 
-    @RequestMapping(path = "/create", method= RequestMethod.POST)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @RequestMapping(method= RequestMethod.POST)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Department> createDepartment(@RequestBody JsonNode body){
         try{
             String departmentName = body.get("departmentName").asText();

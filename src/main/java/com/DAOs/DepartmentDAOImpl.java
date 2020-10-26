@@ -53,17 +53,14 @@ public class DepartmentDAOImpl implements DepartmentDAO{
     }
 
     @Override
-    @Transactional
     public void removeDepartment(Integer id) {
         em.createQuery("UPDATE User u SET u.department = null WHERE u.department.id = :id")
                 .setParameter("id", id)
                 .executeUpdate();
 
-        em.remove(
-                em.createQuery("SELECT p FROM Position p WHERE p.department.id = :id")
+        em.createQuery("UPDATE Position p SET p.department = null WHERE p.department.id = :id")
                         .setParameter("id", id)
-                        .getSingleResult()
-        );
+                        .executeUpdate();
 
         em.remove(
                 em.createQuery("SELECT d FROM Department d WHERE d.id = :id")

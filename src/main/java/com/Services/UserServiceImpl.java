@@ -6,6 +6,7 @@ import com.DAOs.PositionDAO;
 import com.DAOs.UserDAO;
 import com.Entities.*;
 import com.Entities.enumeration.Role;
+import com.Exceptions.InvalidUserDeletionException;
 import com.Security.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
@@ -59,6 +60,13 @@ public class UserServiceImpl implements UserService{
         } catch (Exception ex) {
             throw new IOException("Could not create the directory where the uploaded files will be stored.", ex);
         }
+    }
+
+    @Transactional
+    public List<User> getAllUsers(String loggedUserEmail){
+        //no business logic
+        List<User> userList = userDAO.getAllBesidesSuperAdminsAndSelf(loggedUserEmail);
+        return userList;
     }
 
     @Transactional
@@ -176,10 +184,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
-    public void adminControlDeleteUser(Integer userId){
+    public void adminControlDeleteUser(Integer userId, String loggedUserEmail) throws Exception{
         User user = userDAO.getById(userId);
-        if(user == null || user.getRole().equals(Role.SUPER_ADMIN)){
-            return;
+        if(user == null || user.getRole().equals(Role.SUPER_ADMIN) || user.getEmail().equals(loggedUserEmail)){
+            throw new InvalidUserDeletionException();
         }
         userDAO.remove(userId);
     }

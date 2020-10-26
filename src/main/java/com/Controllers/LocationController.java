@@ -2,6 +2,7 @@ package com.Controllers;
 
 import com.DAOs.LocationDAO;
 import com.Entities.Location;
+import com.Exceptions.ErrorResponse;
 import com.Services.LocationService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class LocationController {
     LocationService locationService;
 
     @RequestMapping(method= RequestMethod.GET)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<Location>> getAllLocations() {
         try {
             List<Location> locationList = locationService.getAllLocations();
@@ -31,25 +32,25 @@ public class LocationController {
     }
 
     @RequestMapping(path = "/{locationId}", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
-    public ResponseEntity<Location> deleteLocation(@PathVariable Integer locationId) {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> deleteLocation(@PathVariable Integer locationId) {
         try {
             locationService.deleteLocation(locationId);
-            return new ResponseEntity<Location>(HttpStatus.OK);
+            return new ResponseEntity<Integer>(locationId, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<Location>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not delete location"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @RequestMapping(path = "/create", method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @RequestMapping(method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Location> createLocation( @RequestBody JsonNode body) {
         try {
             String buildingName = body.get("buildingName").asText();
             Integer roomNumber = body.get("roomNumber").asInt();
-            locationService.createLocation(buildingName, roomNumber);
-            return new ResponseEntity<Location>(HttpStatus.OK);
+            Location location = locationService.createLocation(buildingName, roomNumber);
+            return new ResponseEntity<Location>(location, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<Location>(HttpStatus.INTERNAL_SERVER_ERROR);

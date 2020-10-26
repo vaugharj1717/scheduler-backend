@@ -344,6 +344,14 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
     @Transactional
     public void loadAccounts(){
+        User scheduler = new User();
+        scheduler.setPassword(encoder.encode("scheduler"));
+        scheduler.setRole(Role.SCHEDULER);
+        scheduler.setName("Scheduler Scheduler");
+        scheduler.setEmail("scheduler@gmail.com");
+        scheduler.setPhone("715-123-4567");
+        scheduler = userDAO.saveOrUpdate(scheduler);
+
         User admin = new User();
         admin.setPassword(encoder.encode("admin"));
         admin.setRole(Role.ADMIN);
