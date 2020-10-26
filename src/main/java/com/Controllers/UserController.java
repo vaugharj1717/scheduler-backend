@@ -3,6 +3,7 @@ package com.Controllers;
 import com.Entities.Candidacy;
 import com.Entities.User;
 import com.Entities.UserFile;
+import com.Entities.enumeration.Role;
 import com.Services.UserService;
 import com.Exceptions.ErrorResponse;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -181,6 +182,22 @@ public class UserController {
     @GetMapping("/test")
     public ResponseEntity<?> test(){
         return new ResponseEntity<ErrorResponse>(new ErrorResponse("Error message"), HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(path = "/{userId}/changeRole", method = RequestMethod.PATCH)
+//    @PreAuthorize("hasAuthority('SCHEDULER')")
+    public ResponseEntity<Role> changeRole(@PathVariable Integer userId, @RequestBody JsonNode body ){
+        try{
+            Role role = Role.getFromName(body.get("role").asText());
+            userService.changeRole(role, userId);
+            //success case
+            return new ResponseEntity<Role>(role, HttpStatus.OK);
+        }
+        //error case
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Role>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

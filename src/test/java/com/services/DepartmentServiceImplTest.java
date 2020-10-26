@@ -4,6 +4,7 @@ import com.App;
 import com.DAOs.DepartmentDAO;
 import com.Entities.Department;
 import com.Services.DepartmentService;
+import com.Services.DepartmentServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.when;
 public class DepartmentServiceImplTest {
 
     @InjectMocks
-    private DepartmentService departmentService;
+    private DepartmentServiceImpl departmentService;
 
     @Mock
     private DepartmentDAO departmentDao;
@@ -38,8 +39,7 @@ public class DepartmentServiceImplTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    /*@Test
-
+    @Test
     public void testGetAll() throws Exception {
         //define return value of dependency
         List<Department> departments= new ArrayList<Department>();
@@ -56,5 +56,5 @@ public class DepartmentServiceImplTest {
         assert ret.size() == 2;
         assert ret.get(0).getDepartmentName().equals("department1");
         assert ret.get(1).getDepartmentName().equals("department2");
-    }*/
+    }
 }

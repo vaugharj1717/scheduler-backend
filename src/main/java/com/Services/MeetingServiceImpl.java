@@ -37,6 +37,18 @@ public class MeetingServiceImpl implements MeetingService{
     }
 
     @Transactional
+    public List<Meeting> getUpcomingMeetings(){
+        List<Meeting> meetings = meetingDAO.getUpcomingMeetings();
+        return meetings;
+    }
+
+    @Transactional
+    public List<Meeting> getPastMeetings(){
+        List<Meeting> meetings = meetingDAO.getPastMeetings();
+        return meetings;
+    }
+
+    @Transactional
     public Meeting createMeeting(Integer scheduleId, Integer locationId, Date startTime, Date endTime, MeetingType meetingType,
                                  List<Boolean> canViewFeedbackList, List<Boolean> canLeaveFeedbackList, List<Integer> participantList)
                                  throws Exception{

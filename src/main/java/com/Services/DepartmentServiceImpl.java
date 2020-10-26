@@ -15,8 +15,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Autowired
     DepartmentDAO departmentDAO;
-    @Autowired
-    PositionDAO positionDao;
 
     @Transactional
     public List<Department> getAllDepartments() {

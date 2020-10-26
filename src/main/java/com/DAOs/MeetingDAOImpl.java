@@ -21,10 +21,32 @@ public class MeetingDAOImpl implements MeetingDAO{
         return meetingList;
     }
 
+    public List<Meeting> getUpcomingMeetings(){
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String nowString = sdf.format(now);
+        List<Meeting> upcomingMeetingList = em.createQuery(
+                "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
+                        "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate " +
+                "WHERE (m.startTime >= '" + nowString + "')", Meeting.class).getResultList();
+        return upcomingMeetingList;
+    }
+
+    public List<Meeting> getPastMeetings(){
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String nowString = sdf.format(now);
+        List<Meeting> pastMeetingList = em.createQuery(
+                "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
+                        "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate " +
+                        "WHERE (m.endTime <= '" + nowString + "')", Meeting.class).getResultList();
+        return pastMeetingList;
+    }
+
     public Meeting getById(Integer id){
         Meeting meeting = em.createQuery(
                 "SELECT m from Meeting m LEFT JOIN FETCH m.location LEFT JOIN FETCH m.participations p " +
-                        "LEFT JOIN FETCH p.user WHERE m.id = :id"
+                        "LEFT JOIN FETCH p.participant WHERE m.id = :id"
                 , Meeting.class)
                 .setParameter("id", id)
                 .getSingleResult();
@@ -32,13 +54,13 @@ public class MeetingDAOImpl implements MeetingDAO{
     }
 
     public List<Meeting> getConflictingUserSchedules(Integer candidateId, List<Integer> participantList, Date startTime, Date endTime){
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String startTimeString = sdf.format(startTime);
         String endTimeString = sdf.format(endTime);
         System.out.println(startTimeString);
         System.out.println(endTimeString);
         List<Meeting> conflictingMeetingList = em.createQuery(
-                "SELECT m from Meeting m JOIN m.participations p JOIN p.participant pt JOIN m.schedule s JOIN s.candidacy c " +
+                "SELECT DISTINCT m from Meeting m JOIN m.participations p JOIN p.participant pt JOIN m.schedule s JOIN s.candidacy c " +
                         "JOIN c.candidate u " +
                         "WHERE (pt.id IN :participantList OR u.id = :candidateId) " +
                         //meetings that begin somewhere between start and end of new meeting
@@ -59,7 +81,7 @@ public class MeetingDAOImpl implements MeetingDAO{
     }
     public List<Meeting> getConflictingLocations(Integer locationId, Date startTime, Date endTime){
 
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String startTimeString = sdf.format(startTime);
         String endTimeString = sdf.format(endTime);
 //        System.out.println(startTimeString);
@@ -68,7 +90,7 @@ public class MeetingDAOImpl implements MeetingDAO{
 
         //get all meetings for all users overlapping in time and in same location as new meeting
         List<Meeting> conflictingMeetingList = em.createQuery(
-                "SELECT m from Meeting m JOIN m.location l " +
+                "SELECT DISTINCT m from Meeting m JOIN m.location l " +
                         "WHERE (l.id = :locationId) " +
                         //meetings that begin somewhere between start and end of new meeting
                         "AND ((m.startTime >= '" + startTimeString + "' AND m.startTime <= '" + endTimeString + "') " +

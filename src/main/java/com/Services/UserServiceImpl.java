@@ -29,22 +29,28 @@ import java.util.Properties;
 
 @Service
 public class UserServiceImpl implements UserService{
-    @Autowired
-    UserDAO userDAO;
+//    @Autowired
+    private UserDAO userDAO;
 
-    @Autowired
-    PositionDAO positionDAO;
+//    @Autowired
+    private PositionDAO positionDAO;
 
-    @Autowired
-    CandidacyDAO candidacyDAO;
+//    @Autowired
+    private CandidacyDAO candidacyDAO;
 
-    @Autowired
-    PasswordEncoder encoder;
+//    @Autowired
+    private PasswordEncoder encoder;
 
     private Path fileStorageLocation;
 
     @Autowired
-    public UserServiceImpl(FileStorageProperties fileStorageProperties) throws IOException {
+    public UserServiceImpl(UserDAO userDAO, PositionDAO positionDAO,
+                           CandidacyDAO candidacyDAO, PasswordEncoder encoder,
+                           FileStorageProperties fileStorageProperties) throws IOException {
+        this.userDAO = userDAO;
+        this.positionDAO = positionDAO;
+        this.candidacyDAO = candidacyDAO;
+        this.encoder = encoder;
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
                 .toAbsolutePath().normalize();
 
@@ -60,6 +66,13 @@ public class UserServiceImpl implements UserService{
         //no business logic
         List<User> userList = userDAO.getAllCandidates();
         return userList;
+    }
+
+    @Transactional
+    public void changeRole(Role role, Integer userId){
+        //no business logic
+        userDAO.changeRole(role, userId);
+
     }
 
     @Transactional

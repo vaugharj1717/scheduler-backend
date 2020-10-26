@@ -47,6 +47,32 @@ public class MeetingController {
         }
     }
 
+    @RequestMapping(path = "/getUpcoming", method = RequestMethod.GET)
+    //@PreAuthorize("hasAuthority('SCHEDULER')")
+    public ResponseEntity<?> getUpcomingMeetings(){
+        try{
+            List<Meeting> meetings = meetingService.getUpcomingMeetings();
+            return new ResponseEntity<List<Meeting>>(meetings, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Meeting>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(path = "/getPast", method = RequestMethod.GET)
+    //@PreAuthorize("hasAuthority('SCHEDULER')")
+    public ResponseEntity<?> getPastMeetings(){
+        try{
+            List<Meeting> meetings = meetingService.getPastMeetings();
+            return new ResponseEntity<List<Meeting>>(meetings, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Meeting>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(path="/{scheduleId}", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<?> createMeeting(@RequestBody JsonNode body, @PathVariable Integer scheduleId){
@@ -94,6 +120,7 @@ public class MeetingController {
                     HttpStatus.BAD_REQUEST);
         }
         catch(Exception e){
+            e.printStackTrace();
             return new ResponseEntity<ErrorResponse>(new ErrorResponse("There was an error creating meeting"),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }

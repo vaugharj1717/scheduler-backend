@@ -1,9 +1,10 @@
 package com.DAOs;
 
-import com.Entities.Department;
-import com.Entities.Department;
-import com.Entities.Department;
 import com.App;
+import com.Entities.Location;
+import com.Entities.Location;
+import com.Entities.Location;
+import com.Entities.Meeting;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,10 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
 @WebAppConfiguration
-public class DepartmentDAOImplTest {
+public class LocationDAOImplTest {
 
     @Autowired
-    private DepartmentDAO departmentDAO;
+    private LocationDAO locationDAO;
 
     @PersistenceContext
     EntityManager em;
@@ -32,41 +33,42 @@ public class DepartmentDAOImplTest {
     @Test
     @Transactional
     public void testGetAll() throws Exception {
-        List<Department> departments = (List<Department>) departmentDAO.getAll();
-        assert departments.size() == 1;
+        List<Location> locations = locationDAO.getAll();
+        assert locations.size() == 2;
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
     @Transactional
     public void testRemove() throws Exception {
-        List<Department> departments = (List<Department>) departmentDAO.getAll();
-        departmentDAO.removeDepartment(departments.get(0).getId());
+        List<Location> locations = (List<Location>) locationDAO.getAll();
+        locationDAO.remove(locations.get(0).getId());
 
         em.flush();
-        for(Department department : departments) em.detach(department);
+        for(Location Location : locations) em.detach(Location);
 
-        Department department = departmentDAO.getById(departments.get(0).getId());
+        Location location = locationDAO.getById(locations.get(0).getId());
     }
 
     @Test
     @Transactional
     public void testSaveOrUpdate() throws Exception {
-        Department department = new Department();
-        department = departmentDAO.saveOrUpdate(department);
+        Location location = new Location();
+        location = locationDAO.saveOrUpdate(location);
 
         em.flush();
-        em.detach(department);
+        em.detach(location);
 
-        Department resultDepartment = departmentDAO.getById(department.getId());
-        assert resultDepartment.equals(department);
+        Location resultLocation = locationDAO.getById(location.getId());
+        assert resultLocation.equals(location);
     }
 
     @Test
     @Transactional
     public void testGetById() throws Exception {
-        List<Department> departments = (List<Department>) departmentDAO.getAll();
-        Department department = departmentDAO.getById(departments.get(0).getId());
-        assert departments.size() == 1;
-        assert department.equals(departments.get(0));
+        List<Location> locations = (List<Location>) locationDAO.getAll();
+        Location location = locationDAO.getById(locations.get(0).getId());
+        assert location.equals(locations.get(0));
     }
+
+
 }
