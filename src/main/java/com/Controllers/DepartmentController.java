@@ -5,6 +5,7 @@ import com.Entities.Position;
 import com.Entities.User;
 import com.Services.DepartmentService;
 import com.Services.UserService;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,5 +55,23 @@ public class DepartmentController {
             return new ResponseEntity<Integer>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(path = "/create", method= RequestMethod.POST)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
+    public ResponseEntity<Department> createDepartment(@RequestBody JsonNode body){
+        try{
+            String departmentName = body.get("departmentName").asText();
+            Department department = departmentService.createDepartment(departmentName);
+
+            //success case
+            return new ResponseEntity<Department>(department, HttpStatus.OK);
+        }
+        //error case
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Department>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }

@@ -29,4 +29,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     public void deleteDepartment(Integer id) {
         departmentDAO.removeDepartment(id);
     }
+
+    @Override
+    public Department createDepartment(String departmentName) {
+        Department department = new Department();
+        department.setDepartmentName(departmentName);
+        return departmentDAO.saveOrUpdate(department);
+    }
 }
