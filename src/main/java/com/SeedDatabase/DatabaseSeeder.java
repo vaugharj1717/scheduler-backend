@@ -344,6 +344,22 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         scheduler.setPhone("715-123-4567");
         scheduler = userDAO.saveOrUpdate(scheduler);
 
+        User participant = new User();
+        participant.setPassword(encoder.encode("participant"));
+        participant.setRole(Role.PARTICIPANT);
+        participant.setName("Participant");
+        participant.setEmail("participant@gmail.com");
+        participant.setPhone("715-123-4567");
+        participant = userDAO.saveOrUpdate(participant);
+
+        User candidate = new User();
+        candidate.setPassword(encoder.encode("candidate"));
+        candidate.setRole(Role.CANDIDATE);
+        candidate.setName("Candidate");
+        candidate.setEmail("candidate@gmail.com");
+        candidate.setPhone("715-123-4567");
+        candidate = userDAO.saveOrUpdate(candidate);
+
         User admin = new User();
         admin.setPassword(encoder.encode("admin"));
         admin.setRole(Role.ADMIN);
@@ -359,6 +375,16 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         superAdmin.setEmail("superadmin@gmail.com");
         superAdmin.setPhone("SuperAdmin");
         superAdmin = userDAO.saveOrUpdate(superAdmin);
+
+        em.flush();
+
+        UserMessage userMessage = new UserMessage();
+        userMessage.setMessage("Test message");
+        userMessage.setSeen(false);
+        userMessage.setSentTime(new Date());
+        userMessage.setSender(userDAO.findByEmail("candidate@gmail.com"));
+        userMessage.setReceiver(userDAO.findByEmail("participant@gmail.com"));
+        userMessage = userDAO.saveMessage(userMessage);
 
     }
 }

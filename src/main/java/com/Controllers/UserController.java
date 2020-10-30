@@ -236,11 +236,10 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "/{userId}/getMessages")
+    @GetMapping(path = "/{userId}/getMessages/{isViewing}")
     @PreAuthorize("hasAuthority('CANDIDATE') or hasAuthority('PARTICIPANT')")
-    public ResponseEntity<?> getMessages(@PathVariable Integer userId, @RequestBody JsonNode body){
+    public ResponseEntity<?> getMessages(@PathVariable Integer userId, @PathVariable Boolean isViewing){
         try {
-            boolean isViewing = body.get("isViewing").asBoolean();
             List<UserMessage> messages = userService.getMessages(userId, isViewing);
             return new ResponseEntity<List<UserMessage>>(messages, HttpStatus.OK);
         }
@@ -259,6 +258,7 @@ public class UserController {
             return new ResponseEntity<UserMessage>(newMessage, HttpStatus.OK);
         }
         catch(Exception e){
+            e.printStackTrace();
             return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not get messages"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

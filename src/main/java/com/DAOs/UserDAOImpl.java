@@ -123,13 +123,14 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public void markMessagesAsSeen(Integer recipientId){
-        em.createQuery("UPDATE UserMessage m SET m.seen = true WHERE m.receiver.id := :recipientId")
+        em.createQuery("UPDATE UserMessage m SET m.seen = TRUE WHERE m.receiver.id = :recipientId")
                 .setParameter("recipientId", recipientId)
                 .executeUpdate();
     }
 
     public List<UserMessage> getMessagesByUserId(Integer userId){
-        return em.createQuery("SELECT m FROM UserMessage m WHERE (m.receiver.id = :id1 OR m.sender.id = :id2)", UserMessage.class)
+        return em.createQuery("SELECT m FROM UserMessage m LEFT JOIN FETCH m.receiver " +
+                "LEFT JOIN FETCH m.sender WHERE (m.receiver.id = :id1 OR m.sender.id = :id2)", UserMessage.class)
                 .setParameter("id1", userId)
                 .setParameter("id2", userId)
                 .getResultList();

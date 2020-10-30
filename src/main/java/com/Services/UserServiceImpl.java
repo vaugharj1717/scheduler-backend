@@ -202,10 +202,10 @@ public class UserServiceImpl implements UserService{
             @Override
             public int compare(UserMessage o1, UserMessage o2) {
                 if(o1.getSentTime().before(o2.getSentTime())){
-                    return -1;
+                    return 1;
                 }
                 else if(o2.getSentTime().before(o1.getSentTime())){
-                    return 1;
+                    return -1;
                 }
                 else return 0;
             }
@@ -223,6 +223,7 @@ public class UserServiceImpl implements UserService{
             newMessage.setSender(sender);
             newMessage.setMessage(message);
             newMessage.setSentTime(new Date());
+            newMessage.setSeen(false);
             return userDAO.saveMessage(newMessage);
         }
         catch(Exception e){
