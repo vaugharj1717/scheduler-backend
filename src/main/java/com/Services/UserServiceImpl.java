@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.*;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -182,8 +184,53 @@ public class UserServiceImpl implements UserService{
         return savedUser;
 
     }
-
     @Transactional
+    public List<User> getCandidatesAndParticipants(String loggedUserEmail){
+        return userDAO.getCandidatesAndParticipants(loggedUserEmail);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public List<UserMessage> getMessages(Integer userId, boolean isViewing){
+        //if isViewing, then mark all messages that have userId as recipient as seen
+        if(isViewing) {
+            userDAO.markMessagesAsSeen(userId);
+        }
+        //retrieve all messages where this user is recipient or a sender
+        List<UserMessage> messageList = userDAO.getMessagesByUserId(userId);
+        //sort by date
+        messageList.sort(new Comparator<UserMessage>(){
+            @Override
+            public int compare(UserMessage o1, UserMessage o2) {
+                if(o1.getSentTime().before(o2.getSentTime())){
+                    return -1;
+                }
+                else if(o2.getSentTime().before(o1.getSentTime())){
+                    return 1;
+                }
+                else return 0;
+            }
+        });
+        return messageList;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public UserMessage sendMessage(Integer senderId, Integer recipientId, String message) throws Exception{
+        try{
+            UserMessage newMessage = new UserMessage();
+            User recipient = userDAO.getById(recipientId);
+            User sender = userDAO.getById(senderId);
+            newMessage.setReceiver(recipient);
+            newMessage.setSender(sender);
+            newMessage.setMessage(message);
+            newMessage.setSentTime(new Date());
+            return userDAO.saveMessage(newMessage);
+        }
+        catch(Exception e){
+            throw e;
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
     public void adminControlDeleteUser(Integer userId, String loggedUserEmail) throws Exception{
         User user = userDAO.getById(userId);
         if(user == null || user.getRole().equals(Role.SUPER_ADMIN) || user.getEmail().equals(loggedUserEmail)){

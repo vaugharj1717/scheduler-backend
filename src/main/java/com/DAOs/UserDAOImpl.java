@@ -2,6 +2,7 @@ package com.DAOs;
 
 import com.Entities.User;
 import com.Entities.UserFile;
+import com.Entities.UserMessage;
 import com.Entities.enumeration.Role;
 import org.springframework.stereotype.Repository;
 
@@ -34,6 +35,16 @@ public class UserDAOImpl implements UserDAO {
     public List<User> getAllCandidates(){
         List<User> userList = em.createQuery("SELECT u from User u WHERE u.role = ?1", User.class)
                 .setParameter(1, Role.CANDIDATE)
+                .getResultList();
+        return userList;
+    }
+
+    public List<User> getCandidatesAndParticipants(String userEmail){
+        List<User> userList = em.createQuery("SELECT u from User u WHERE (u.role = ?1 or u.role = ?2) " +
+                "AND u.email != ?3", User.class)
+                .setParameter(1, Role.CANDIDATE)
+                .setParameter(2, Role.PARTICIPANT)
+                .setParameter(3, userEmail)
                 .getResultList();
         return userList;
     }
@@ -109,6 +120,23 @@ public class UserDAOImpl implements UserDAO {
                .setParameter("role", role)
                .setParameter("userId", userId)
                .executeUpdate();
+    }
+
+    public void markMessagesAsSeen(Integer recipientId){
+        em.createQuery("UPDATE UserMessage m SET m.seen = true WHERE m.receiver.id := :recipientId")
+                .setParameter("recipientId", recipientId)
+                .executeUpdate();
+    }
+
+    public List<UserMessage> getMessagesByUserId(Integer userId){
+        return em.createQuery("SELECT m FROM UserMessage m WHERE (m.receiver.id = :id1 OR m.sender.id = :id2)", UserMessage.class)
+                .setParameter("id1", userId)
+                .setParameter("id2", userId)
+                .getResultList();
+    }
+
+    public UserMessage saveMessage(UserMessage message){
+        return em.merge(message);
     }
 
 }

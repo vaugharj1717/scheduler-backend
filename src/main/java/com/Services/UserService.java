@@ -3,6 +3,7 @@ package com.Services;
 import com.Entities.Candidacy;
 import com.Entities.User;
 import com.Entities.UserFile;
+import com.Entities.UserMessage;
 import com.Entities.enumeration.Role;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.core.io.Resource;
@@ -23,4 +24,7 @@ public interface UserService {
     public List<UserFile> getUserFiles(Integer userId);
     public void changeRole(Role role, Integer userId);
     public List<User> getAllUsers(String loggedUserEmail);
+    public List<User> getCandidatesAndParticipants(String loggedUserEmail);
+    public List<UserMessage> getMessages(Integer userId, boolean isViewing);
+    public UserMessage sendMessage(Integer senderId, Integer recipientId, String message) throws Exception;
 }

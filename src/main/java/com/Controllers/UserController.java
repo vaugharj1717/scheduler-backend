@@ -3,6 +3,7 @@ package com.Controllers;
 import com.Entities.Candidacy;
 import com.Entities.User;
 import com.Entities.UserFile;
+import com.Entities.UserMessage;
 import com.Entities.enumeration.Role;
 import com.Exceptions.InvalidUserDeletionException;
 import com.Security.UserDetailsImpl;
@@ -204,6 +205,8 @@ public class UserController {
         }
     }
 
+
+
     @RequestMapping(path = "/{userId}/changeRole", method = RequestMethod.PATCH)
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> changeRole(@PathVariable Integer userId, @RequestBody JsonNode body ){
@@ -217,6 +220,46 @@ public class UserController {
         catch(Exception e){
             e.printStackTrace();
             return new ResponseEntity<Role>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(path = "/getCandidatesAndParticipants")
+    @PreAuthorize("hasAuthority('CANDIDATE') or hasAuthority('PARTICIPANT')")
+    public ResponseEntity<?> getCandidatesAndParticipants(Principal principal){
+        try {
+            String loggedUserEmail = principal.getName();
+            List<User> userList = userService.getCandidatesAndParticipants(loggedUserEmail);
+            return new ResponseEntity<List<User>>(userList, HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not get users"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(path = "/{userId}/getMessages")
+    @PreAuthorize("hasAuthority('CANDIDATE') or hasAuthority('PARTICIPANT')")
+    public ResponseEntity<?> getMessages(@PathVariable Integer userId, @RequestBody JsonNode body){
+        try {
+            boolean isViewing = body.get("isViewing").asBoolean();
+            List<UserMessage> messages = userService.getMessages(userId, isViewing);
+            return new ResponseEntity<List<UserMessage>>(messages, HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not get messages"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping(path = "/{senderId}/sendMessage/{recipientId}")
+    @PreAuthorize("hasAuthority('CANDIDATE') or hasAuthority('PARTICIPANT')")
+    public ResponseEntity<?> getMessages(@PathVariable Integer senderId, @PathVariable Integer recipientId,
+                                         @RequestBody JsonNode body){
+        try {
+            String message = body.get("message").asText();
+            UserMessage newMessage = userService.sendMessage(senderId, recipientId, message);
+            return new ResponseEntity<UserMessage>(newMessage, HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not get messages"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
