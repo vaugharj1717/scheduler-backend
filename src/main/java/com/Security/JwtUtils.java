@@ -17,7 +17,8 @@ public class JwtUtils {
     @Value("secretsecret")
     private String jwtSecret;
 
-    private final int jwtExpirationMs = 600000;
+    //TODO: Refresh strategy for tokens
+    private final int jwtExpirationMs = 600000000;
 
     public String generateJwtToken(Authentication authentication) {
 
