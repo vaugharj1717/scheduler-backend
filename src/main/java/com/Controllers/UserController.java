@@ -251,7 +251,7 @@ public class UserController {
 
     @PostMapping(path = "/{senderId}/sendMessage/{recipientId}")
     @PreAuthorize("hasAuthority('CANDIDATE') or hasAuthority('PARTICIPANT')")
-    public ResponseEntity<?> getMessages(@PathVariable Integer senderId, @PathVariable Integer recipientId,
+    public ResponseEntity<?> sendMessage(@PathVariable Integer senderId, @PathVariable Integer recipientId,
                                          @RequestBody JsonNode body){
         try {
             String message = body.get("message").asText();
