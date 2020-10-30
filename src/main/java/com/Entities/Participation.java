@@ -30,6 +30,7 @@ public class Participation implements DataObject{
     private boolean canLeaveFeedback;
     private boolean canViewFeedback;
     private boolean canMakeDecision;
+    private String feedback;
 
     @Override
     public Integer getId() {

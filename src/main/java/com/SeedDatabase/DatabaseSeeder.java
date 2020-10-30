@@ -247,14 +247,6 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         location.setBuildingName("Hibbard");
         location = locationDAO.saveOrUpdate(location);
 
-        //create scheduler
-        User scheduler = new User();
-        em.persist(scheduler);
-        scheduler.setEmail("scheduler");
-        scheduler.setPassword(encoder.encode("schedulerPassword"));
-        scheduler.setRole(Role.SCHEDULER);
-        userDAO.saveOrUpdate(scheduler);
-
         //create participant
         User participant = new User();
         em.persist(participant);
