@@ -85,6 +85,28 @@ public class UserController {
         }
     }
 
+    @RequestMapping(path = "/changePassword", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
+    public ResponseEntity<?> changePassword(Principal principal, @RequestBody JsonNode body) {
+        try{
+            String logUser = principal.getName();
+            Integer userId = body.get("userId").asInt();
+            String oldPassword = body.get("oldPassword").asText();
+            String newPassword = body.get("newPassword").asText();
+            String newPassword2 = body.get("newPassword2").asText();
+
+            userService.changePassword(logUser, userId, oldPassword, newPassword, newPassword2);
+            return new ResponseEntity<Integer>(1, HttpStatus.OK);
+
+        }
+        //error case
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("There was an error creating candidate"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @RequestMapping(path = "/{userId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<?> adminControlDeleteUser(@PathVariable Integer userId, Principal loggedUser){

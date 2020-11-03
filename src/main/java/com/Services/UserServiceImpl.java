@@ -313,4 +313,24 @@ public class UserServiceImpl implements UserService{
         List<UserFile> userFileList = userDAO.getUserFilesByUserId(userId);
         return userFileList;
     }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public void changePassword(String logUser, Integer userId, String oldPassword, String newPassword, String newPassword2) throws Exception {
+
+        User user = userDAO.findByEmail(logUser);
+        if(!user.getId().equals(userId)) {
+            throw new Exception();
+        }
+        if(!user.getPassword().equals(oldPassword)) {
+            throw new Exception();
+        }
+        if (!newPassword.equals(newPassword2)) {
+            throw new Exception();
+        }
+        user.setPassword(newPassword);
+        userDAO.saveOrUpdate(user);
+    }
+
+
 }
