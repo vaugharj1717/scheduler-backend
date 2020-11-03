@@ -86,7 +86,6 @@ public class UserController {
     }
 
     @RequestMapping(path = "/changePassword", method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<?> changePassword(Principal principal, @RequestBody JsonNode body) {
         try{
             String logUser = principal.getName();
