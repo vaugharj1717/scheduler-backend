@@ -66,7 +66,7 @@ public class MeetingDAOImpl implements MeetingDAO{
                 "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
                         "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca" +
                         "WHERE (m.endTime <= '" + nowString + "') " +
-                        "And (ca.id = :userId OR p.id = :userId)"
+                        "AND (ca.id = :userId OR p.id = :userId)"
                 , Meeting.class)
                 .setParameter("userId", userId).getResultList();
         return pastMeetingList;
