@@ -60,11 +60,37 @@ public class MeetingController {
         }
     }
 
+    @RequestMapping(path = "/{userId}/getUpcoming", method = RequestMethod.GET)
+    //@PreAuthorize("hasAuthority('SCHEDULER')")
+    public ResponseEntity<?> getUpcomingMeetingsById(@PathVariable Integer userId){
+        try{
+            List<Meeting> meetings = meetingService.getUpcomingMeetingsById(userId);
+            return new ResponseEntity<List<Meeting>>(meetings, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Meeting>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(path = "/getPast", method = RequestMethod.GET)
     //@PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<?> getPastMeetings(){
         try{
             List<Meeting> meetings = meetingService.getPastMeetings();
+            return new ResponseEntity<List<Meeting>>(meetings, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Meeting>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(path = "/{userId}/getPast", method = RequestMethod.GET)
+    //@PreAuthorize("hasAuthority('SCHEDULER')")
+    public ResponseEntity<?> getPastMeetingsById(@PathVariable Integer userId){
+        try{
+            List<Meeting> meetings = meetingService.getPastMeetingsById(userId);
             return new ResponseEntity<List<Meeting>>(meetings, HttpStatus.OK);
         }
         catch(Exception e){

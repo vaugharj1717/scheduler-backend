@@ -27,8 +27,22 @@ public class MeetingDAOImpl implements MeetingDAO{
         String nowString = sdf.format(now);
         List<Meeting> upcomingMeetingList = em.createQuery(
                 "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
-                        "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate " +
+                        "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca" +
                 "WHERE (m.startTime >= '" + nowString + "')", Meeting.class).getResultList();
+        return upcomingMeetingList;
+    }
+
+    public List<Meeting> getUpcomingMeetingsById(Integer userId){
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String nowString = sdf.format(now);
+        List<Meeting> upcomingMeetingList = em.createQuery(
+                "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
+                        "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca" +
+                        "WHERE (m.startTime >= '" + nowString + "') " +
+                        "AND (ca.id = :userId OR p.id = :userId)"
+                , Meeting.class)
+                .setParameter("userId", userId).getResultList();
         return upcomingMeetingList;
     }
 
@@ -38,8 +52,23 @@ public class MeetingDAOImpl implements MeetingDAO{
         String nowString = sdf.format(now);
         List<Meeting> pastMeetingList = em.createQuery(
                 "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
-                        "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate " +
-                        "WHERE (m.endTime <= '" + nowString + "')", Meeting.class).getResultList();
+                        "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca" +
+                        "WHERE (m.endTime <= '" + nowString + "')"
+                , Meeting.class).getResultList();
+        return pastMeetingList;
+    }
+
+    public List<Meeting> getPastMeetingsById(Integer userId){
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String nowString = sdf.format(now);
+        List<Meeting> pastMeetingList = em.createQuery(
+                "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
+                        "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca" +
+                        "WHERE (m.endTime <= '" + nowString + "') " +
+                        "And (ca.id = :userId OR p.id = :userId)"
+                , Meeting.class)
+                .setParameter("userId", userId).getResultList();
         return pastMeetingList;
     }
 

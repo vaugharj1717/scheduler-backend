@@ -10,6 +10,8 @@ import java.util.List;
 public interface MeetingDAO extends DAO<Meeting>{
     public List<Meeting> getUpcomingMeetings();
     public List<Meeting> getPastMeetings();
+    public List<Meeting> getUpcomingMeetingsById(Integer userId);
+    public List<Meeting> getPastMeetingsById(Integer userId);
     public List<Meeting> getByLocation(Location location);
     public List<Meeting> getByUserList(List<User> user);
     public void remove(Integer id);
