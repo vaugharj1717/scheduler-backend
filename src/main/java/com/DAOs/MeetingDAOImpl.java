@@ -90,7 +90,8 @@ public class MeetingDAOImpl implements MeetingDAO{
 
         //get all meetings for all users overlapping in time and in same location as new meeting
         List<Meeting> conflictingMeetingList = em.createQuery(
-                "SELECT DISTINCT m from Meeting m JOIN m.location l " +
+                "SELECT DISTINCT m from Meeting m JOIN m.location l JOIN m.participations p JOIN p.participant pt " +
+                        "JOIN m.schedule s JOIN s.candidacy c JOIN c.candidate u " +
                         "WHERE (l.id = :locationId) " +
                         //meetings that begin somewhere between start and end of new meeting
                         "AND ((m.startTime >= '" + startTimeString + "' AND m.startTime <= '" + endTimeString + "') " +
