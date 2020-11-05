@@ -25,8 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -72,6 +71,37 @@ public class UserControllerTest {
                 .perform(post("/user/candidate/1")
                 .contentType(APPLICATION_JSON)
                 .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        assert response.equals(expected);
+    }
+
+    @Test
+    public void testUpdateInfo() throws Exception{
+        //mock dependency behavior
+        User user = new User();
+        user.setId(1); user.setAddress("testAddress"); user.setPhone("testPhone");
+        user.setBio("testBio"); user.setUniversity("testUniversity");
+
+        when(userService.updateInfo(1, "testAddress", "testPhone", "testBio", "testUniversity")).thenReturn(user);
+
+        //establish expected result
+        ObjectWriter ow = new ObjectMapper().writer();
+        String expected = ow.writeValueAsString(user);
+
+        //perform test
+        JSONObject request = new JSONObject();
+        request.put("address", "testAddress");
+        request.put("phone", "testPhone");
+        request.put("bio", "testBio");
+        request.put("university", "testUniversity");
+        String requestJson = request.toString();
+
+        String response = mockMvc
+                .perform(patch("/user/1/updateInfo")
+                        .contentType(APPLICATION_JSON)
+                        .content(requestJson))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
