@@ -1,0 +1,36 @@
+package com.Controllers;
+
+import com.Entities.UserMessage;
+import com.Exceptions.ErrorResponse;
+import com.Services.ParticipationService;
+import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+@CrossOrigin
+@RestController
+@RequestMapping("/participation")
+public class ParticipationController {
+
+    @Autowired
+    ParticipationService participationService;
+
+    @RequestMapping(path = "/setFeedback/{participationId}", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('PARTICIPANT')")
+    @Transactional
+    public ResponseEntity<?> setFeedback(@PathVariable Integer participationId, @RequestBody JsonNode body){
+        try {
+            String feedback = body.get("feedback").asText();
+            participationService.setFeedback(participationId, feedback);
+            return new ResponseEntity<>(1, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(new ErrorResponse("Could not leave feedback"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}

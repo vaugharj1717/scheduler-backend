@@ -135,4 +135,12 @@ public class Participation implements DataObject{
     public int hashCode() {
         return Objects.hash(id, transientId);
     }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
 }
