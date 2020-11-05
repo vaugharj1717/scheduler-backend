@@ -314,6 +314,17 @@ public class UserServiceImpl implements UserService{
         return userFileList;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public User updateInfo(Integer userId, String address, String phone, String bio, String university){
+       User user = userDAO.getById(userId);
+       user.setAddress(address);
+       user.setPhone(phone);
+       user.setBio(bio);
+       user.setUniversity(university);
+       user = userDAO.saveOrUpdate(user);
+       return user;
+    }
+
 
     @Transactional(rollbackFor = Exception.class)
     public void changePassword(String logUser, Integer userId, String oldPassword, String newPassword, String newPassword2) throws Exception {

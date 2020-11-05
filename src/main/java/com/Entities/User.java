@@ -22,6 +22,10 @@ public class User implements DataObject {
     private String phone;
     private String name;
     private Role role;
+    private String bio;
+    private String address;
+    private String university;
+
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Department department;
     @JsonIgnoreProperties("participant")
@@ -127,6 +131,30 @@ public class User implements DataObject {
 
     public void setUserFiles(Set<UserFile> userFiles) {
         this.userFiles = userFiles;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(String university) {
+        this.university = university;
     }
 
     public void setName(String name) {
