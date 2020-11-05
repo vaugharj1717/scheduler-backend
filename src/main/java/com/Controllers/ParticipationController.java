@@ -1,5 +1,6 @@
 package com.Controllers;
 
+import com.Entities.Participation;
 import com.Entities.UserMessage;
 import com.Exceptions.ErrorResponse;
 import com.Services.ParticipationService;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -27,6 +30,20 @@ public class ParticipationController {
             String feedback = body.get("feedback").asText();
             participationService.setFeedback(participationId, feedback);
             return new ResponseEntity<>(1, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(new ErrorResponse("Could not leave feedback"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(path = "/getAllParticipation/{meetingId}", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('PARTICIPANT')")
+    @Transactional
+    public ResponseEntity<?> getAllParticipation(@PathVariable Integer meetingId){
+        try {
+            List<Participation> participationList =  participationService.getAllParticipationByMeetingId(meetingId);
+            return new ResponseEntity<>(participationList, HttpStatus.OK);
         }
         catch(Exception e){
             e.printStackTrace();

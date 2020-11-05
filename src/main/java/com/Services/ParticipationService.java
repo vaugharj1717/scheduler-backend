@@ -1,9 +1,10 @@
 package com.Services;
 
-import com.Entities.Department;
+import com.Entities.Participation;
 
 import java.util.List;
 
 public interface ParticipationService {
     void setFeedback (Integer participationId, String feedback) throws Exception;
+    List<Participation> getAllParticipationByMeetingId(Integer meetingId);
 }

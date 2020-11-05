@@ -32,4 +32,9 @@ public class ParticipationServiceImpl implements ParticipationService {
         }
 
     }
+
+    @Override
+    public List<Participation> getAllParticipationByMeetingId(Integer meetingId) {
+        return participationDAO.getAllParticipationByMeetingId(meetingId);
+    }
 }

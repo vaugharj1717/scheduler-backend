@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Repository
@@ -38,5 +39,12 @@ public class ParticipationDAOImpl implements ParticipationDAO{
                         .setParameter("id", id)
                         .getSingleResult()
         );
+    }
+
+    public List<Participation> getAllParticipationByMeetingId(Integer meetingId) {
+        List<Participation> participationList = em.createQuery("SELECT p FROM Participation p  LEFT JOIN FETCH p.participant LEFT JOIN FETCH p.meeting WHERE (p.meeting.id = :id)", Participation.class)
+                .setParameter("id", meetingId)
+                .getResultList();
+        return participationList;
     }
 }
