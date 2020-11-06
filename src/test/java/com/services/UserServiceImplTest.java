@@ -79,4 +79,26 @@ public class UserServiceImplTest {
         assert retList.size() == 2;
         for(User participant : participantList) assert participant.getRole().equals(Role.PARTICIPANT);
     }
+
+    @Test
+    public void testUpdateInfo() throws Exception {
+
+        User user = new User();
+        user.setId(1); user.setAddress("testAddress"); user.setPhone("testPhone");
+        user.setBio("testBio"); user.setUniversity("testUniversity");
+        when(userDAO.getById(1)).thenReturn(user);
+
+        User user2 = new User();
+        user2.setId(1); user2.setAddress("testAddress2"); user2.setPhone("testPhone2");
+        user2.setBio("testBio2"); user2.setUniversity("testUniversity2");
+        when(userDAO.saveOrUpdate(user)).thenReturn(user2);
+
+        //run test
+        User retUser = userService.updateInfo(1, "testAddress", "testPhone", "testBio", "testUniversity");
+        assert retUser.equals(user2);
+        assert retUser.getAddress().equals(user2.getAddress());
+        assert retUser.getPhone().equals(user2.getPhone());
+        assert retUser.getBio().equals(user2.getBio());
+        assert retUser.getUniversity().equals(user2.getUniversity());
+    }
 }
