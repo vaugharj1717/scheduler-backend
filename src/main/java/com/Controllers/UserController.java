@@ -174,8 +174,15 @@ public class UserController {
 
     @GetMapping("/{userId}/files")
     public ResponseEntity<?> getUserFiles(@PathVariable Integer userId){
+        try {
             List<UserFile> userFileList = userService.getUserFiles(userId);
             return new ResponseEntity<List<UserFile>>(userFileList, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not get files"), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
     }
 
     @PostMapping("/{userId}/uploadFile")

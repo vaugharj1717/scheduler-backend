@@ -298,6 +298,12 @@ public class UserServiceImpl implements UserService{
         UserFile userFile = userDAO.getUserFileById(fileId);
         if(userFile == null) throw new NoSuchFileException("File does not exist");
         String fileName = userFile.getFilename();
+        try{
+            userDAO.removeFile(userFile.getId());
+        }
+        catch(Exception e){
+            throw new IOException();
+        }
         Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
         File fileToDelete = new File(filePath.toString());
         if(fileToDelete.delete()){
