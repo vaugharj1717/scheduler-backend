@@ -140,4 +140,13 @@ public class UserDAOImpl implements UserDAO {
         return em.merge(message);
     }
 
+    @Override
+    public User getUserWithDepart(Integer userId) {
+        User user = em.createQuery(
+                "SELECT u FROM User u LEFT JOIN FETCH u.department WHERE u.id = :userId", User.class)
+                .setParameter("userId", userId)
+                .getSingleResult();
+        return user;
+    }
+
 }

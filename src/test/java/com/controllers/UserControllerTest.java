@@ -4,6 +4,7 @@ import com.App;
 import com.Controllers.DepartmentController;
 import com.Controllers.UserController;
 import com.Entities.Candidacy;
+import com.Entities.Department;
 import com.Entities.User;
 import com.Entities.enumeration.Role;
 import com.Services.DepartmentService;
@@ -72,6 +73,30 @@ public class UserControllerTest {
                 .perform(post("/user/candidate/1")
                 .contentType(APPLICATION_JSON)
                 .content(requestJson))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        assert response.equals(expected);
+    }
+
+    @Test
+    public void testGetUserWithDepart() throws Exception{
+        //mock dependency behavior
+        User user = new User();
+        user.setId(1000); user.setEmail("testEmail"); user.setPhone("testPhone");
+        user.setRole(Role.DEPARTMENT_ADMIN); user.setName("testName");
+        Department department = new Department();
+        department.setDepartmentName("testName");
+        user.setDepartment(department);
+        when(userService.getUserWithDepart(1000)).thenReturn(user);
+
+        //establish expected result
+        ObjectWriter ow = new ObjectMapper().writer();
+        String expected = ow.writeValueAsString(user);
+
+        String response = mockMvc
+                .perform(post("/user/getUserWithDepart/1000")
+                        .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 

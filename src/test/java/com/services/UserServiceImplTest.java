@@ -6,11 +6,14 @@ import com.DAOs.CandidacyDAO;
 import com.DAOs.PositionDAO;
 import com.DAOs.ScheduleDAO;
 import com.DAOs.UserDAO;
+import com.Entities.Department;
 import com.Entities.Schedule;
 import com.Entities.User;
 import com.Entities.enumeration.Role;
 import com.Services.ScheduleServiceImpl;
 import com.Services.UserServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -79,4 +85,20 @@ public class UserServiceImplTest {
         assert retList.size() == 2;
         for(User participant : participantList) assert participant.getRole().equals(Role.PARTICIPANT);
     }
+
+    @Test
+    public void testGetUserWithDepart() {
+        User user = new User();
+        user.setId(1000); user.setEmail("testEmail"); user.setPhone("testPhone");
+        user.setRole(Role.DEPARTMENT_ADMIN); user.setName("testName");
+        Department department = new Department();
+        department.setDepartmentName("testName");
+        user.setDepartment(department);
+        when(userDAO.getUserWithDepart(1000)).thenReturn(user);
+
+        //run test
+        User testUser = userService.getUserWithDepart(1000);
+        assert testUser.getDepartment().getDepartmentName().equals("testName");
+    }
+
 }

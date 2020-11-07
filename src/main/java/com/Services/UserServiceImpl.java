@@ -332,5 +332,11 @@ public class UserServiceImpl implements UserService{
         userDAO.saveOrUpdate(user);
     }
 
+    @Override
+    public User getUserWithDepart(Integer userId) {
+        User user = userDAO.getUserWithDepart(userId);
+        return user;
+    }
+
 
 }

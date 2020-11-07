@@ -102,4 +102,21 @@ public class UserDAOImplTest {
 
         assert resultUser.getRole().equals(Role.PARTICIPANT);
     }
+
+    @Test
+    @Transactional
+    public void testGetUserWithDepart() {
+        List<User> users = (List<User>) userDAO.getAll();
+        Boolean hasDepart = false;
+        for(User user : users){
+            User user1 = userDAO.getUserWithDepart(user.getId());
+            if (user1.getDepartment() != null) {
+                if (user1.getDepartment().getDepartmentName() != null) {
+                    hasDepart = true;
+                }
+            }
+        }
+
+        assert hasDepart.equals(true);
+    }
 }

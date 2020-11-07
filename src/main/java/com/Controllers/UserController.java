@@ -35,6 +35,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
+
     @RequestMapping("/participant")
     @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<List<User>> getAllParticipants(){
@@ -281,6 +282,17 @@ public class UserController {
         catch(Exception e){
             e.printStackTrace();
             return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not get messages"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(path = "/getUserWithDepart/{userId}")
+    public ResponseEntity<?> getUserWithDepart(@PathVariable Integer userId){
+        try {
+            User user = userService.getUserWithDepart(userId);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not get users"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

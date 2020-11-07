@@ -28,4 +28,5 @@ public interface UserService {
     public List<UserMessage> getMessages(Integer userId, boolean isViewing);
     public UserMessage sendMessage(Integer senderId, Integer recipientId, String message) throws Exception;
     public void changePassword(String logUser, Integer userId, String oldPassword, String newPassword, String newPassword2) throws Exception;
+    public User getUserWithDepart(Integer userId);
 }
