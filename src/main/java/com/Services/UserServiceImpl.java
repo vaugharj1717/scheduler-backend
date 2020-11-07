@@ -339,13 +339,16 @@ public class UserServiceImpl implements UserService{
         if(!user.getId().equals(userId)) {
             throw new Exception();
         }
-        if(!user.getPassword().equals(oldPassword)) {
+        if(!encoder.matches(oldPassword, user.getPassword())) {
+            System.out.println(user.getPassword());
+            System.out.println(oldPassword);
+            System.out.println(encoder.encode(oldPassword));
             throw new Exception();
         }
         if (!newPassword.equals(newPassword2)) {
             throw new Exception();
         }
-        user.setPassword(newPassword);
+        user.setPassword(encoder.encode(newPassword));
         userDAO.saveOrUpdate(user);
     }
 
