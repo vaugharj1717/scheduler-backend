@@ -298,6 +298,12 @@ public class UserServiceImpl implements UserService{
         UserFile userFile = userDAO.getUserFileById(fileId);
         if(userFile == null) throw new NoSuchFileException("File does not exist");
         String fileName = userFile.getFilename();
+        try{
+            userDAO.removeFile(userFile.getId());
+        }
+        catch(Exception e){
+            throw new IOException();
+        }
         Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
         File fileToDelete = new File(filePath.toString());
         if(fileToDelete.delete()){
@@ -314,6 +320,17 @@ public class UserServiceImpl implements UserService{
         return userFileList;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public User updateInfo(Integer userId, String address, String phone, String bio, String university){
+       User user = userDAO.getById(userId);
+       user.setAddress(address);
+       user.setPhone(phone);
+       user.setBio(bio);
+       user.setUniversity(university);
+       user = userDAO.saveOrUpdate(user);
+       return user;
+    }
+
 
     @Transactional(rollbackFor = Exception.class)
     public void changePassword(String logUser, Integer userId, String oldPassword, String newPassword, String newPassword2) throws Exception {
@@ -322,13 +339,16 @@ public class UserServiceImpl implements UserService{
         if(!user.getId().equals(userId)) {
             throw new Exception();
         }
-        if(!user.getPassword().equals(oldPassword)) {
+        if(!encoder.matches(oldPassword, user.getPassword())) {
+            System.out.println(user.getPassword());
+            System.out.println(oldPassword);
+            System.out.println(encoder.encode(oldPassword));
             throw new Exception();
         }
         if (!newPassword.equals(newPassword2)) {
             throw new Exception();
         }
-        user.setPassword(newPassword);
+        user.setPassword(encoder.encode(newPassword));
         userDAO.saveOrUpdate(user);
     }
 

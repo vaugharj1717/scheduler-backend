@@ -106,6 +106,25 @@ public class UserController {
         }
     }
 
+    @RequestMapping(path = "/{userId}/updateInfo", method = RequestMethod.PATCH)
+    public ResponseEntity<?> updateInfo(@PathVariable Integer userId, @RequestBody JsonNode body) {
+        try{
+
+            String address = body.get("address").asText();
+            String phone = body.get("phone").asText();
+            String bio = body.get("bio").asText();
+            String university = body.get("university").asText();
+            User user = userService.updateInfo(userId, address, phone, bio, university);
+            return new ResponseEntity<User>(user, HttpStatus.OK);
+
+        }
+        //error case
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("There was an error creating candidate"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @RequestMapping(path = "/{userId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
@@ -156,8 +175,15 @@ public class UserController {
 
     @GetMapping("/{userId}/files")
     public ResponseEntity<?> getUserFiles(@PathVariable Integer userId){
+        try {
             List<UserFile> userFileList = userService.getUserFiles(userId);
             return new ResponseEntity<List<UserFile>>(userFileList, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not get files"), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
     }
 
     @PostMapping("/{userId}/uploadFile")

@@ -28,5 +28,6 @@ public interface UserService {
     public List<UserMessage> getMessages(Integer userId, boolean isViewing);
     public UserMessage sendMessage(Integer senderId, Integer recipientId, String message) throws Exception;
     public void changePassword(String logUser, Integer userId, String oldPassword, String newPassword, String newPassword2) throws Exception;
+    public User updateInfo(Integer userId, String address, String phone, String bio, String university);
     public User getUserWithDepart(Integer userId);
 }

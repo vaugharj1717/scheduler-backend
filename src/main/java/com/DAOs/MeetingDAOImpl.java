@@ -37,12 +37,15 @@ public class MeetingDAOImpl implements MeetingDAO{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String nowString = sdf.format(now);
         List<Meeting> upcomingMeetingList = em.createQuery(
-                "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
+                "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant pa " +
                         "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca " +
                         "WHERE (m.startTime >= '" + nowString + "') " +
-                        "AND (ca.id = :userId OR p.id = :userId)"
+                        "AND (ca.id = :userId OR pa.id = :userId2)"
                 , Meeting.class)
-                .setParameter("userId", userId).getResultList();
+                .setParameter("userId", userId)
+                .setParameter("userId2", userId).getResultList();
+
+        System.out.println("UPCOMING MEETING LIST! " + upcomingMeetingList);
         return upcomingMeetingList;
     }
 
@@ -63,12 +66,13 @@ public class MeetingDAOImpl implements MeetingDAO{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String nowString = sdf.format(now);
         List<Meeting> pastMeetingList = em.createQuery(
-                "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant " +
+                "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant pa " +
                         "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca " +
                         "WHERE (m.endTime <= '" + nowString + "') " +
-                        "AND (ca.id = :userId OR p.id = :userId)"
+                        "AND (ca.id = :userId OR pa.id = :userId2)"
                 , Meeting.class)
-                .setParameter("userId", userId).getResultList();
+                .setParameter("userId", userId)
+                .setParameter("userId2", userId).getResultList();
         return pastMeetingList;
     }
 

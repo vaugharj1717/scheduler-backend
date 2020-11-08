@@ -21,5 +21,6 @@ public interface UserDAO extends DAO<User>{
     public void markMessagesAsSeen(Integer recipientId);
     public List<UserMessage> getMessagesByUserId(Integer userId);
     public UserMessage saveMessage(UserMessage message);
+    public void removeFile(Integer id);
     public User getUserWithDepart(Integer userId);
 }

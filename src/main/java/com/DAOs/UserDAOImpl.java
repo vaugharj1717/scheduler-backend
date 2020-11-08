@@ -76,6 +76,14 @@ public class UserDAOImpl implements UserDAO {
         );
     }
 
+    public void removeFile(Integer id){
+        em.remove(
+                em.createQuery("SELECT uf FROM UserFile uf WHERE uf.id = :id")
+                        .setParameter("id", id)
+                        .getSingleResult()
+        );
+    }
+
     public User findByEmail(String email){
         try {
             return em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
