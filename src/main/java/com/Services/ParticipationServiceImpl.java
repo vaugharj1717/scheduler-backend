@@ -37,4 +37,11 @@ public class ParticipationServiceImpl implements ParticipationService {
     public List<Participation> getAllParticipationByMeetingId(Integer meetingId) {
         return participationDAO.getAllParticipationByMeetingId(meetingId);
     }
+
+    @Override
+    public void patchParticipantAlert(Integer participationId, Boolean alert) {
+        Participation participation = participationDAO.getById(participationId);
+        participation.setAlert(alert);
+        participationDAO.saveOrUpdate(participation);
+    }
 }

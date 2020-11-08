@@ -50,4 +50,20 @@ public class ParticipationController {
             return new ResponseEntity<>(new ErrorResponse("Could not leave feedback"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(path = "/patchParticipantAlert", method = RequestMethod.PATCH)
+    @PreAuthorize("hasAuthority('PARTICIPANT')")
+    @Transactional
+    public ResponseEntity<?> patchParticipantAlert(@RequestBody JsonNode body){
+        try {
+            Integer participationId = Integer.valueOf(body.get("participationId").asText());
+            Boolean alert = Boolean.valueOf(body.get("alert").asText());
+            participationService.patchParticipantAlert(participationId, alert);
+            return new ResponseEntity<>(1, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(new ErrorResponse("Could not change alert for participant"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
