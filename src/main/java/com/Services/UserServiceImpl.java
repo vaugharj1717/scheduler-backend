@@ -353,6 +353,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public User getUserWithDepart(Integer userId) {
         User user = userDAO.getUserWithDepart(userId);
         return user;

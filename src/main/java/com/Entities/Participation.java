@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
@@ -30,6 +31,7 @@ public class Participation implements DataObject{
     private boolean canLeaveFeedback;
     private boolean canViewFeedback;
     private boolean canMakeDecision;
+    @Size(max=4000)
     private String feedback;
 
     @Override
