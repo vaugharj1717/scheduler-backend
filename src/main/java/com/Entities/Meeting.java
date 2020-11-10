@@ -139,4 +139,9 @@ public class Meeting implements DataObject{
     public int hashCode() {
         return Objects.hash(id, transientId);
     }
+
+    public String toString(){
+        return this.id + ": " + participations.toString();
+    }
+
 }

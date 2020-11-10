@@ -145,4 +145,8 @@ public class Participation implements DataObject{
     public void setFeedback(String feedback) {
         this.feedback = feedback;
     }
+
+    public String toString(){
+        return this.id.toString();
+    }
 }
