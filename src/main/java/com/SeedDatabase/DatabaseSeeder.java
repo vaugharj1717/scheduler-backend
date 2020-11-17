@@ -242,7 +242,8 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         location = new Location();
         location.setRoomNumber(115);
         location.setBuildingName("Hibbard");
-        location = locationDAO.saveOrUpdate(location);location = new Location();
+        location = locationDAO.saveOrUpdate(location);
+        location = new Location();
         location.setRoomNumber(116);
         location.setBuildingName("Hibbard");
         location = locationDAO.saveOrUpdate(location);
@@ -253,7 +254,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         participant.setPassword("testPassword");
         participant.setRole(Role.DEPARTMENT_ADMIN);
         participant.setName("John Doe");
-        participant.setEmail("testEmail");
+        participant.setEmail("vaugharj@uwec.edu");
         participant.setPhone("testPhone");
         participant.setDepartment(department);
         participant = userDAO.saveOrUpdate(participant);
@@ -263,7 +264,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         participant2.setPassword("testPassword2");
         participant2.setRole(Role.PARTICIPANT);
         participant2.setName("Jen Doe");
-        participant2.setEmail("testEmail2");
+        participant2.setEmail("vaugharj@uwec.edu");
         participant2.setPhone("testPhone2");
         participant2.setDepartment(department);
         participant2 = userDAO.saveOrUpdate(participant2);
@@ -274,7 +275,9 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         meeting.setMeetingType(MeetingType.MEET_FACULTY);
         meeting.setLocation(location);
         Date newDate1 = new Date(5);
+        newDate1.setTime(new Date().getTime() + 1500000);
         Date newDate2 = new Date(6);
+        newDate2.setTime(new Date().getTime() + 1500000);
         meeting.setStartTime(newDate1);
         meeting.setEndTime(newDate2);
         meeting.setSchedule(schedule);
@@ -305,7 +308,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
         Participation participation2 = new Participation();
         em.persist(participation2);
-        participation2.setParticipant(participant);
+        participation2.setParticipant(participant2);
         participation2.setMeeting(meeting2);
         participation2.setAlert(true);
         participation2.setAlertType("email");

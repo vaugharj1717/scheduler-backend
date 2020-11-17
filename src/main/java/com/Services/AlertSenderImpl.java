@@ -19,7 +19,7 @@ public class AlertSenderImpl implements AlertSender {
     MeetingDAO meetingDAO;
     private Collection<Meeting> upcomingMeetings = Collections.synchronizedCollection(new HashSet<Meeting>());
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 10000)
     public void getAlertMeetings() {
         Date twentyMin = new Date();
         Date thirtyMin = new Date();
@@ -27,9 +27,10 @@ public class AlertSenderImpl implements AlertSender {
         thirtyMin.setTime(new Date().getTime() + 1800000);
         List<Meeting> meetingList = meetingDAO.getAlertMeetings(twentyMin, thirtyMin);
         upcomingMeetings.addAll(meetingList);
+        System.out.println(upcomingMeetings);
     }
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 10000)
     public void sendAlert() {
         Date now = new Date();
         Date soon = new Date();
@@ -45,7 +46,10 @@ public class AlertSenderImpl implements AlertSender {
                     }
                 }
                 User candidate = m.getSchedule().getCandidacy().getCandidate();
-                if(m.getSchedule().getCandidacy().getCandidate().getAlert()){
+                if(candidate == null){
+                    System.out.println("NULL");
+                }
+                else if(candidate.getAlert()){
                     String email = candidate.getEmail();
                     sendEmail(email, m);
                 }
@@ -78,7 +82,7 @@ public class AlertSenderImpl implements AlertSender {
             Transport.send(message);
         }
         catch(MessagingException mex){
-            //mex.printStackTrace();
+            mex.printStackTrace();
         }
     }
 }

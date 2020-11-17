@@ -25,7 +25,7 @@ public class User implements DataObject {
     private String bio;
     private String address;
     private String university;
-    private Boolean isAlert;
+    private boolean isAlert;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Department department;
@@ -201,11 +201,11 @@ public class User implements DataObject {
         }
     }
 
-    public Boolean getAlert() {
+    public boolean getAlert() {
         return isAlert;
     }
 
-    public void setAlert(Boolean alert) {
+    public void setAlert(boolean alert) {
         isAlert = alert;
     }
 

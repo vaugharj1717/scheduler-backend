@@ -168,7 +168,7 @@ public class UserServiceImpl implements UserService{
         //session.setDebug(true);
         try{
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("vaugharj1717@gmail.com"));
+            message.setFrom(new InternetAddress("uwecscheduler@gmail.com"));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             message.setSubject("Invitation to UWEC Scheduler");
             message.setText("You have been provisioned an account on the UWEC Scheduling System\n" +
