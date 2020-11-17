@@ -25,6 +25,7 @@ public class User implements DataObject {
     private String bio;
     private String address;
     private String university;
+    private Boolean isAlert;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Department department;
@@ -198,6 +199,14 @@ public class User implements DataObject {
             this.userFiles.remove(userFile);
             userFile.setUser(null);
         }
+    }
+
+    public Boolean getAlert() {
+        return isAlert;
+    }
+
+    public void setAlert(Boolean alert) {
+        isAlert = alert;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.Services;
 import com.DAOs.MeetingDAO;
 import com.Entities.Meeting;
 import com.Entities.Participation;
+import com.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -30,19 +31,25 @@ public class AlertSenderImpl implements AlertSender {
 
     @Scheduled(fixedRate = 1000)
     public void sendAlert() {
-        System.out.println("Send alert");
         Date now = new Date();
         Date soon = new Date();
         soon.setTime(new Date().getTime() + 900000);
 
         for(Meeting m : upcomingMeetings) {
             if(m.getStartTime().getTime() > now.getTime() && m.getStartTime().getTime() < soon.getTime() ) {
+                upcomingMeetings.remove(m);
                 for(Participation p : m.getParticipations()) {
-                    if(p.isAlert() == true) {
+                    if(p.isAlert()) {
                         String email = p.getParticipant().getEmail();
                         sendEmail(email, m);
                     }
                 }
+                User candidate = m.getSchedule().getCandidacy().getCandidate();
+                if(m.getSchedule().getCandidacy().getCandidate().getAlert()){
+                    String email = candidate.getEmail();
+                    sendEmail(email, m);
+                }
+
             }
         }
     }
