@@ -46,10 +46,7 @@ public class AlertSenderImpl implements AlertSender {
                     }
                 }
                 User candidate = m.getSchedule().getCandidacy().getCandidate();
-                if(candidate == null){
-                    System.out.println("NULL");
-                }
-                else if(candidate.getAlert()){
+                if(candidate.getAlert()){
                     String email = candidate.getEmail();
                     sendEmail(email, m);
                 }
