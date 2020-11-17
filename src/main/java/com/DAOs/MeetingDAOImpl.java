@@ -205,5 +205,23 @@ public class MeetingDAOImpl implements MeetingDAO{
         else return null;
     }
 
+    public List<Meeting> getAlertMeetings(Date startTime, Date endTime){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String startTimeString = sdf.format(startTime);
+        String endTimeString = sdf.format(endTime);
+        System.out.println(startTimeString);
+        System.out.println(endTimeString);
+        List<Meeting> conflictingMeetingList = em.createQuery(
+                "SELECT DISTINCT m from Meeting m JOIN m.participations p JOIN p.participant pt JOIN m.schedule s JOIN s.candidacy c " +
+                        "JOIN c.candidate u " +
+                        //meetings that begin somewhere between start and end of new meeting
+                        "WHERE ((m.startTime >= '" + startTimeString + "' AND m.startTime <= '" + endTimeString + "') "
+                , Meeting.class)
+                //.setParameter("startTime", startTime)
+                //.setParameter("endTime", endTime)
+                .getResultList();
+        return conflictingMeetingList;
 
+
+    }
 }
