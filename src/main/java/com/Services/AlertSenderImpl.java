@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
@@ -42,20 +43,27 @@ public class AlertSenderImpl implements AlertSender {
                 for(Participation p : m.getParticipations()) {
                     if(p.isAlert()) {
                         String email = p.getParticipant().getEmail();
-                        sendEmail(email, m);
+                        sendEmail(false, email, m, p.getParticipant().getName());
                     }
                 }
                 User candidate = m.getSchedule().getCandidacy().getCandidate();
                 if(candidate.getAlert()){
                     String email = candidate.getEmail();
-                    sendEmail(email, m);
+                    sendEmail(true, email, m, candidate.getName());
                 }
 
             }
         }
     }
 
-    private void sendEmail(String email, Meeting meeting) {
+    private void sendEmail(Boolean isCandidate, String email, Meeting meeting, String name) {
+        String meetingType = meeting.getMeetingType().toString().equals("MEET_FACULTY")? "meeting with faculty" : "presentation to students";
+        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");
+        String startTime = formatter.format(meeting.getStartTime());
+        String building = meeting.getLocation().getBuildingName();
+        String roomNumber = meeting.getLocation().getRoomNumber().toString();
+        String candidateName = meeting.getSchedule().getCandidacy().getCandidate().getName();
+
         //send email
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
@@ -75,7 +83,11 @@ public class AlertSenderImpl implements AlertSender {
             message.setFrom(new InternetAddress("uwecscheduler@gmail.com"));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             message.setSubject("You have an upcoming meeting");
-            message.setText("You have an upcoming meeting\n");
+            if(isCandidate) {
+                message.setText("You have a " + meetingType + " at " + startTime + " in building " + building + " in room " + roomNumber + "\n");
+            } else {
+                message.setText("You are a participant of " + candidateName + "'s " + meetingType + " at " + startTime + " in building " + building + " in room " + roomNumber + "\n");
+            }
             Transport.send(message);
         }
         catch(MessagingException mex){
