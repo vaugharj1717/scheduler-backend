@@ -69,13 +69,13 @@ public class MeetingServiceImpl implements MeetingService{
         User candidate = userDAO.getByScheduleId(scheduleId);
         List<Meeting> conflictingMeetingList = meetingDAO.getConflictingUserSchedules(candidate.getId(), participantList, startTime, endTime);
         if(conflictingMeetingList.size() != 0){
-            throw new ConflictingUserException();
+            throw new ConflictingUserException("A user has a meeting during this time");
         }
 
         //Check for conflict with location availability
         List<Meeting> conflictingMeetingList2 = meetingDAO.getConflictingLocations(locationId, startTime, endTime);
         if(conflictingMeetingList2.size() != 0){
-            throw new ConflictingLocationException();
+            throw new ConflictingLocationException("This location is not available at the specified time");
         }
 
         //object to save

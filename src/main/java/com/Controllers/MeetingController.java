@@ -134,11 +134,11 @@ public class MeetingController {
 
         //If server error
         catch(ConflictingLocationException cle){
-            return new ResponseEntity<ErrorResponse>(new ErrorResponse("This location is not available at the specified time"),
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(cle.getMessage()),
                     HttpStatus.BAD_REQUEST);
         }
         catch(ConflictingUserException cue){
-            return new ResponseEntity<ErrorResponse>(new ErrorResponse("A user has a meeting during this time"),
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(cue.getMessage()),
                     HttpStatus.BAD_REQUEST);
         }
         catch(IllegalStateException ise){
