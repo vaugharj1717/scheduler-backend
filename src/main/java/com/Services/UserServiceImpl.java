@@ -235,7 +235,7 @@ public class UserServiceImpl implements UserService{
     public void adminControlDeleteUser(Integer userId, String loggedUserEmail) throws Exception{
         User user = userDAO.getById(userId);
         if(user == null || user.getRole().equals(Role.SUPER_ADMIN) || user.getEmail().equals(loggedUserEmail)){
-            throw new InvalidUserDeletionException();
+            throw new InvalidUserDeletionException("Invalid user");
         }
         userDAO.remove(userId);
     }
