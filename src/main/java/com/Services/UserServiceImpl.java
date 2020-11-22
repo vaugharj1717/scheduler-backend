@@ -7,6 +7,9 @@ import com.DAOs.UserDAO;
 import com.Entities.*;
 import com.Entities.enumeration.Role;
 import com.Exceptions.InvalidUserDeletionException;
+import com.Exceptions.OldPasswordIncorrectException;
+import com.Exceptions.RepeatedPasswordIncorrectException;
+import com.Exceptions.UserNotAuthorizedException;
 import com.Security.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
@@ -337,16 +340,16 @@ public class UserServiceImpl implements UserService{
 
         User user = userDAO.findByEmail(logUser);
         if(!user.getId().equals(userId)) {
-            throw new Exception();
+            throw new UserNotAuthorizedException("User is not authorized");
         }
         if(!encoder.matches(oldPassword, user.getPassword())) {
             System.out.println(user.getPassword());
             System.out.println(oldPassword);
             System.out.println(encoder.encode(oldPassword));
-            throw new Exception();
+            throw new OldPasswordIncorrectException("Old password incorrect");
         }
         if (!newPassword.equals(newPassword2)) {
-            throw new Exception();
+            throw new RepeatedPasswordIncorrectException("Received invalid data");
         }
         user.setPassword(encoder.encode(newPassword));
         userDAO.saveOrUpdate(user);

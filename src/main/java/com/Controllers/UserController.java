@@ -5,10 +5,9 @@ import com.Entities.User;
 import com.Entities.UserFile;
 import com.Entities.UserMessage;
 import com.Entities.enumeration.Role;
-import com.Exceptions.InvalidUserDeletionException;
+import com.Exceptions.*;
 import com.Security.UserDetailsImpl;
 import com.Services.UserService;
-import com.Exceptions.ErrorResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +99,18 @@ public class UserController {
 
         }
         //error case
+        catch(UserNotAuthorizedException una){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(una.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+        }
+        catch(OldPasswordIncorrectException opi){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(opi.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+        }
+        catch(RepeatedPasswordIncorrectException rpi){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(rpi.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+        }
         catch(Exception e){
             e.printStackTrace();
             return new ResponseEntity<ErrorResponse>(new ErrorResponse("There was an error creating candidate"), HttpStatus.INTERNAL_SERVER_ERROR);
