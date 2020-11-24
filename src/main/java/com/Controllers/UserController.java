@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +38,7 @@ public class UserController {
 
     @RequestMapping("/participant")
     @PreAuthorize("hasAuthority('SCHEDULER')")
-    public ResponseEntity<List<User>> getAllParticipants(){
+    public ResponseEntity<List<User>> getAllParticipantsAndDeptAdmins(){
         try{
             List<User> participantList = userService.getAllParticipants();
 
@@ -138,7 +139,7 @@ public class UserController {
 
 
     @RequestMapping(path = "/{userId}", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('DEPARTMENT_ADMIN') or hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<?> adminControlDeleteUser(@PathVariable Integer userId, Principal loggedUser){
         try{
             String loggedUserEmail = loggedUser.getName();
@@ -157,15 +158,18 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
+    @PreAuthorize("hasAuthority('DEPARTMENT_ADMIN') or hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<?> adminControlsCreateUser(@RequestBody JsonNode body){
         try{
-            System.out.println("HERE!!!");
             String name = body.get("name").asText();
             String email = body.get("email").asText();
             String role = body.get("role").asText();
+            Integer departmentId = null;
+            if(!role.equals(Role.CANDIDATE.toString())){
+                departmentId = body.get("departmentId").asInt();
+            }
 
-            User newUser = userService.adminControlsCreateUser(name, email, role);
+            User newUser = userService.adminControlsCreateUser(name, email, role, departmentId);
             if(newUser == null){
                 System.out.println("ERROR RESPONSE!!!");
                 return new ResponseEntity<ErrorResponse>(new ErrorResponse("There was a problem creating user"), HttpStatus.BAD_REQUEST);
@@ -252,7 +256,6 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getAllUsers(Principal principal){
         try {
             String loggedUserEmail = principal.getName();
@@ -267,7 +270,7 @@ public class UserController {
 
 
     @RequestMapping(path = "/{userId}/changeRole", method = RequestMethod.PATCH)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<?> changeRole(@PathVariable Integer userId, @RequestBody JsonNode body ){
         try{
             Role role = Role.getFromName(body.get("role").asText());
@@ -282,8 +285,9 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "/getCandidatesAndParticipants")
-    @PreAuthorize("hasAuthority('CANDIDATE') or hasAuthority('PARTICIPANT')")
+    @GetMapping(path = "/getPossibleRecipients")
+    @PreAuthorize("hasAuthority('CANDIDATE') or hasAuthority('PARTICIPANT') " +
+            "or hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<?> getCandidatesAndParticipants(Principal principal){
         try {
             String loggedUserEmail = principal.getName();
@@ -296,7 +300,8 @@ public class UserController {
     }
 
     @GetMapping(path = "/{userId}/getMessages/{isViewing}")
-    @PreAuthorize("hasAuthority('CANDIDATE') or hasAuthority('PARTICIPANT')")
+    @PreAuthorize("hasAuthority('CANDIDATE') or hasAuthority('PARTICIPANT') " +
+            "or hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<?> getMessages(@PathVariable Integer userId, @PathVariable Boolean isViewing){
         try {
             List<UserMessage> messages = userService.getMessages(userId, isViewing);
@@ -308,7 +313,8 @@ public class UserController {
     }
 
     @PostMapping(path = "/{senderId}/sendMessage/{recipientId}")
-    @PreAuthorize("hasAuthority('CANDIDATE') or hasAuthority('PARTICIPANT')")
+    @PreAuthorize("hasAuthority('CANDIDATE') or hasAuthority('PARTICIPANT') " +
+            "or hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<?> sendMessage(@PathVariable Integer senderId, @PathVariable Integer recipientId,
                                          @RequestBody JsonNode body){
         try {
@@ -330,6 +336,20 @@ public class UserController {
         }
         catch(Exception e){
             return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not get users"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(path = "/{userId}/setAlerts", method = RequestMethod.PATCH)
+//    @PreAuthorize("hasAuthority('CANDIDATE')")
+    public ResponseEntity<?> setCandidateAlerts(@RequestBody JsonNode body, @PathVariable Integer userId){
+        try {
+            Boolean alert = Boolean.valueOf(body.get("value").asText());
+            userService.setCandidateAlert(userId, alert);
+            return new ResponseEntity<>(1, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(new ErrorResponse("Could not change alert for candidate"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

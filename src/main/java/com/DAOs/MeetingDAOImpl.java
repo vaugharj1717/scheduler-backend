@@ -45,6 +45,7 @@ public class MeetingDAOImpl implements MeetingDAO{
         List<Meeting> upcomingMeetingList = em.createQuery(
                 "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant pa " +
                         "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca " +
+                        "LEFT JOIN FETCH c.position po LEFT JOIN FETCH po.department d " +
                         "WHERE (m.startTime >= '" + nowString + "') " +
                         "AND (ca.id = :userId OR pa.id = :userId2)"
                 , Meeting.class)
@@ -83,6 +84,7 @@ public class MeetingDAOImpl implements MeetingDAO{
         List<Meeting> pastMeetingList = em.createQuery(
                 "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant pa " +
                         "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca " +
+                        "LEFT JOIN FETCH c.position po LEFT JOIN FETCH po.department d " +
                         "WHERE (m.endTime <= '" + nowString + "') " +
                         "AND (ca.id = :userId OR pa.id = :userId2)"
                 , Meeting.class)

@@ -21,7 +21,6 @@ public class LocationController {
     LocationService locationService;
 
     @RequestMapping(method= RequestMethod.GET)
-    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<Location>> getAllLocations() {
         try {
             List<Location> locationList = locationService.getAllLocations();
@@ -32,7 +31,7 @@ public class LocationController {
     }
 
     @RequestMapping(path = "/{locationId}", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<?> deleteLocation(@PathVariable Integer locationId) {
         try {
             locationService.deleteLocation(locationId);
@@ -44,7 +43,7 @@ public class LocationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<Location> createLocation( @RequestBody JsonNode body) {
         try {
             String buildingName = body.get("buildingName").asText();

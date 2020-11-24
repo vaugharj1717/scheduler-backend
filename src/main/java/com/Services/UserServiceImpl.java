@@ -2,6 +2,7 @@ package com.Services;
 
 import com.Configuration.FileStorageProperties;
 import com.DAOs.CandidacyDAO;
+import com.DAOs.DepartmentDAO;
 import com.DAOs.PositionDAO;
 import com.DAOs.UserDAO;
 import com.Entities.*;
@@ -47,15 +48,18 @@ public class UserServiceImpl implements UserService{
 //    @Autowired
     private PasswordEncoder encoder;
 
+    private DepartmentDAO departmentDAO;
+
     private Path fileStorageLocation;
 
     @Autowired
     public UserServiceImpl(UserDAO userDAO, PositionDAO positionDAO,
-                           CandidacyDAO candidacyDAO, PasswordEncoder encoder,
+                           CandidacyDAO candidacyDAO, PasswordEncoder encoder, DepartmentDAO departmentDAO,
                            FileStorageProperties fileStorageProperties) throws IOException {
         this.userDAO = userDAO;
         this.positionDAO = positionDAO;
         this.candidacyDAO = candidacyDAO;
+        this.departmentDAO = departmentDAO;
         this.encoder = encoder;
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
                 .toAbsolutePath().normalize();
@@ -145,11 +149,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
-    public User adminControlsCreateUser(String name, String email, String role) {
+    public User adminControlsCreateUser(String name, String email, String role, Integer departmentId) {
         User newUser = new User();
         String generatedPassword = PasswordGenerator.generatePassword();
         newUser.setName(name);
         newUser.setEmail(email);
+        if(!role.equals(Role.CANDIDATE.toString())){
+            newUser.setDepartment(departmentDAO.getById(departmentId));
+        }
         if(role.equals("SUPER_ADMIN")) return null;
         newUser.setRole(Role.getFromName(role));
         newUser.setPassword(encoder.encode(generatedPassword));
@@ -343,13 +350,10 @@ public class UserServiceImpl implements UserService{
             throw new UserNotAuthorizedException("User is not authorized");
         }
         if(!encoder.matches(oldPassword, user.getPassword())) {
-            System.out.println(user.getPassword());
-            System.out.println(oldPassword);
-            System.out.println(encoder.encode(oldPassword));
             throw new OldPasswordIncorrectException("Old password incorrect");
         }
         if (!newPassword.equals(newPassword2)) {
-            throw new RepeatedPasswordIncorrectException("Received invalid data");
+            throw new RepeatedPasswordIncorrectException("New passwords did not match");
         }
         user.setPassword(encoder.encode(newPassword));
         userDAO.saveOrUpdate(user);
@@ -361,6 +365,13 @@ public class UserServiceImpl implements UserService{
         User user = userDAO.getUserWithDepart(userId);
         return user;
     }
+
+    @Override
+    @Transactional
+    public void setCandidateAlert(Integer userId, Boolean alert){
+        userDAO.setCandidateAlert(userId, alert);
+    }
+
 
 
 }

@@ -30,7 +30,6 @@ public class MeetingController {
     MeetingService meetingService;
 
     @RequestMapping(path = "/{meetingId}", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
     public ResponseEntity<Meeting> getMeeting(@PathVariable Integer meetingId){
         try{
             Meeting meeting = meetingService.getMeeting(meetingId);
@@ -61,7 +60,6 @@ public class MeetingController {
     }
 
     @RequestMapping(path = "/{userId}/getUpcoming", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('PARTICIPANT') OR hasAuthority('CANDIDATE')")
     public ResponseEntity<?> getUpcomingMeetingsById(@PathVariable Integer userId){
         try{
             List<Meeting> meetings = meetingService.getUpcomingMeetingsById(userId);
@@ -87,7 +85,6 @@ public class MeetingController {
     }
 
     @RequestMapping(path = "/{userId}/getPast", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('PARTICIPANT') OR hasAuthority('CANDIDATE')")
     public ResponseEntity<?> getPastMeetingsById(@PathVariable Integer userId){
         try{
             List<Meeting> meetings = meetingService.getPastMeetingsById(userId);

@@ -54,8 +54,9 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 //        loadPositions();
 //        loadCandidacies();
 //        loadMeetings();
-        loadAccounts();
         loadData();
+        loadAccounts();
+
     }
 
     @Transactional
@@ -372,12 +373,21 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         admin = userDAO.saveOrUpdate(admin);
 
         User superAdmin = new User();
-        superAdmin.setPassword(encoder.encode("superAdmin"));
+        superAdmin.setPassword(encoder.encode("superadmin"));
         superAdmin.setRole(Role.SUPER_ADMIN);
         superAdmin.setName("SuperAdmin SuperAdmin");
         superAdmin.setEmail("superadmin@gmail.com");
         superAdmin.setPhone("SuperAdmin");
         superAdmin = userDAO.saveOrUpdate(superAdmin);
+
+        User deptAdmin = new User();
+        deptAdmin.setPassword(encoder.encode("departmentadmin"));
+        deptAdmin.setRole(Role.DEPARTMENT_ADMIN);
+        deptAdmin.setName("DeptAdmin");
+        deptAdmin.setEmail("departmentadmin@gmail.com");
+        deptAdmin.setPhone("DeptAdmin");
+        deptAdmin.setDepartment(departmentDAO.getAll().get(0));
+        deptAdmin = userDAO.saveOrUpdate(deptAdmin);
 
         em.flush();
 

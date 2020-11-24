@@ -27,7 +27,6 @@ public class DepartmentController {
     DepartmentService departmentService;
 
     @RequestMapping(method= RequestMethod.GET)
-    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('ADMIN')")
     public ResponseEntity<List<Department>> getAllDepartments(){
         try{
             List<Department> departmentList = departmentService.getAllDepartments();
@@ -43,7 +42,7 @@ public class DepartmentController {
     }
 
     @RequestMapping(path = "/{departmentId}", method= RequestMethod.DELETE)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<Integer> deleteDepartment(@PathVariable Integer departmentId){
         try{
             departmentService.deleteDepartment(departmentId);
@@ -60,7 +59,7 @@ public class DepartmentController {
     }
 
     @RequestMapping(method= RequestMethod.POST)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<Department> createDepartment(@RequestBody JsonNode body){
         try{
             String departmentName = body.get("departmentName").asText();

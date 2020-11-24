@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.Entities.Department;
 import com.Entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,17 +21,20 @@ public class UserDetailsImpl implements UserDetails {
 
     private String email;
 
+    private Department department;
+
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Integer id, String email, String password,
+    public UserDetailsImpl(Integer id, String email, String password, Department department,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.department = department;
     }
 
     public static UserDetailsImpl build(User user) {
@@ -42,6 +46,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getDepartment(),
                 authorities);
     }
 
@@ -86,6 +91,10 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Department getDepartment() {
+        return department;
     }
 
     @Override

@@ -23,4 +23,5 @@ public interface UserDAO extends DAO<User>{
     public UserMessage saveMessage(UserMessage message);
     public void removeFile(Integer id);
     public User getUserWithDepart(Integer userId);
+    public void setCandidateAlert(Integer userId, Boolean val);
 }

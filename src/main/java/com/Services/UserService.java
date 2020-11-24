@@ -17,7 +17,7 @@ public interface UserService {
     public List<User> getAllParticipants();
     public Candidacy createCandidate(Integer positionId, String name, String email);
     public void adminControlDeleteUser(Integer userId, String loggedUserEmail) throws Exception;
-    public User adminControlsCreateUser(String name, String email, String role);
+    public User adminControlsCreateUser(String name, String email, String role, Integer departmentId);
     public UserFile storeUserFile(MultipartFile file, Integer userId) throws IOException;
     public Resource loadUserFileAsResource(Integer fileId) throws IOException;
     public void deleteFile(Integer fileId) throws IOException;
@@ -30,4 +30,5 @@ public interface UserService {
     public void changePassword(String logUser, Integer userId, String oldPassword, String newPassword, String newPassword2) throws Exception;
     public User updateInfo(Integer userId, String address, String phone, String bio, String university);
     public User getUserWithDepart(Integer userId);
+    public void setCandidateAlert(Integer userId, Boolean alert);
 }

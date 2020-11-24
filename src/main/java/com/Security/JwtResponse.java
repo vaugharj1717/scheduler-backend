@@ -1,5 +1,7 @@
 package com.Security;
 
+import com.Entities.Department;
+
 import java.util.List;
 
 
@@ -11,12 +13,14 @@ public class JwtResponse {
     private Integer id;
     private String email;
     private String role;
+    private Department department;
 
-    public JwtResponse(String accessToken, Integer id, String email, String role) {
+    public JwtResponse(String accessToken, Integer id, String email, String role, Department department) {
         this.accessToken = accessToken;
         this.id = id;
         this.email = email;
         this.role = role;
+        this.department = department;
     }
 
     public String getAccessToken() {
@@ -53,5 +57,13 @@ public class JwtResponse {
 
     public String getRole() {
         return this.role;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

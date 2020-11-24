@@ -25,7 +25,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public List<User> getAllBesidesSuperAdminsAndSelf(String email){
-        List<User> userList = em.createQuery("SELECT u from User u WHERE u.role != :role and u.email != :email", User.class)
+        List<User> userList = em.createQuery("SELECT u from User u LEFT JOIN FETCH u.department WHERE u.role != :role and u.email != :email", User.class)
                 .setParameter("role", Role.SUPER_ADMIN)
                 .setParameter("email", email)
                 .getResultList();
@@ -39,12 +39,15 @@ public class UserDAOImpl implements UserDAO {
         return userList;
     }
 
+    //Actually gets anybody who isn't an admin or super-admin
     public List<User> getCandidatesAndParticipants(String userEmail){
-        List<User> userList = em.createQuery("SELECT u from User u WHERE (u.role = ?1 or u.role = ?2) " +
-                "AND u.email != ?3", User.class)
+        List<User> userList = em.createQuery("SELECT u from User u WHERE (u.role = ?1 or u.role = ?2 or u.role = ?3 or u.role = ?4) " +
+                "AND u.email != ?5", User.class)
                 .setParameter(1, Role.CANDIDATE)
                 .setParameter(2, Role.PARTICIPANT)
-                .setParameter(3, userEmail)
+                .setParameter(3, Role.DEPARTMENT_ADMIN)
+                .setParameter(4, Role.SCHEDULER)
+                .setParameter(5, userEmail)
                 .getResultList();
         return userList;
     }
@@ -86,7 +89,7 @@ public class UserDAOImpl implements UserDAO {
 
     public User findByEmail(String email){
         try {
-            return em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+            return em.createQuery("SELECT u FROM User u LEFT JOIN FETCH u.department WHERE u.email = :email", User.class)
                     .setParameter("email", email)
                     .getSingleResult();
         }
@@ -157,4 +160,11 @@ public class UserDAOImpl implements UserDAO {
         return user;
     }
 
+    @Override
+    public void setCandidateAlert(Integer userId, Boolean val){
+        em.createQuery("UPDATE User u SET u.isAlert = :val WHERE u.id = :userId")
+                .setParameter("userId", userId)
+                .setParameter("val", val)
+                .executeUpdate();
+    }
 }

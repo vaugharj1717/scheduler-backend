@@ -23,7 +23,7 @@ public class ParticipationController {
     ParticipationService participationService;
 
     @RequestMapping(path = "/setFeedback/{participationId}", method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('PARTICIPANT')")
+    @PreAuthorize("hasAuthority('PARTICIPANT') or hasAuthority('DEPARTMENT_ADMIN')")
     @Transactional
     public ResponseEntity<?> setFeedback(@PathVariable Integer participationId, @RequestBody JsonNode body){
         try {
@@ -38,7 +38,6 @@ public class ParticipationController {
     }
 
     @RequestMapping(path = "/getAllParticipation/{meetingId}", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('PARTICIPANT')")
     @Transactional
     public ResponseEntity<?> getAllParticipation(@PathVariable Integer meetingId){
         try {
@@ -52,7 +51,7 @@ public class ParticipationController {
     }
 
     @RequestMapping(path = "/patchParticipantAlert", method = RequestMethod.PATCH)
-    @PreAuthorize("hasAuthority('PARTICIPANT')")
+    @PreAuthorize("hasAuthority('PARTICIPANT') or hasAuthority('DEPARTMENT_ADMIN')")
     @Transactional
     public ResponseEntity<?> patchParticipantAlert(@RequestBody JsonNode body){
         try {
