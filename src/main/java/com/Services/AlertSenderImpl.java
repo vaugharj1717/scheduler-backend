@@ -64,6 +64,7 @@ public class AlertSenderImpl implements AlertSender {
     private void sendEmail(boolean isCandidate, String email, Meeting meeting, String name) {
         String meetingType = meeting.getMeetingType().toString().equals("MEET_FACULTY")? "meeting with faculty" : "presentation to students";
         SimpleDateFormat formatter = new SimpleDateFormat("hh:mm a");
+        formatter.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
         String startTime = formatter.format(meeting.getStartTime());
         String building = meeting.getLocation().getBuildingName();
         String roomNumber = meeting.getLocation().getRoomNumber().toString();
