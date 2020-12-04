@@ -97,7 +97,7 @@ public class MeetingController {
     }
 
     @RequestMapping(path="/{scheduleId}", method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<?> createMeeting(@RequestBody JsonNode body, @PathVariable Integer scheduleId){
         try{
             //pull data from request
@@ -150,7 +150,7 @@ public class MeetingController {
     }
 
     @RequestMapping(path="/{meetingId}", method = RequestMethod.PATCH)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<?> editMeeting(@RequestBody JsonNode body, @PathVariable Integer meetingId){
         try{
             //pull data from request
@@ -206,7 +206,7 @@ public class MeetingController {
 
 
     @RequestMapping(path = "/{meetingId}", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<Integer> deleteMeeting(@PathVariable Integer meetingId) {
         try {
             meetingService.deleteMeeting(meetingId);

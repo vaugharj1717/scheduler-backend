@@ -18,7 +18,7 @@ public class ScheduleController {
     ScheduleService scheduleService;
 
     @RequestMapping(path = "/{scheduleId}", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<Schedule> getSchedule(@PathVariable Integer scheduleId){
         try{
             Schedule schedule = scheduleService.getSchedule(scheduleId);
@@ -36,7 +36,7 @@ public class ScheduleController {
     }
 
     @RequestMapping(path = "/{scheduleId}", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<Schedule> deleteSchedule(@PathVariable Integer scheduleId){
         try{
             scheduleService.deleteSchedule(scheduleId);
@@ -49,7 +49,7 @@ public class ScheduleController {
     }
 
     @RequestMapping(path = "/{candidacyId}", method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<Schedule> createSchedule(@PathVariable Integer candidacyId){
         try{
             Schedule newSchedule = scheduleService.createSchedule(candidacyId);
@@ -62,7 +62,7 @@ public class ScheduleController {
     }
 
     @RequestMapping(path = "/deleteAllMeeting/{scheduleId}", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<Integer> deleteAllMeetingByScheduleId(@PathVariable Integer scheduleId){
         try{
             scheduleService.deleteAllMeetingByScheduleId(scheduleId);

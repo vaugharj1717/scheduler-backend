@@ -37,7 +37,7 @@ public class UserController {
 
 
     @RequestMapping("/participant")
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<List<User>> getAllParticipantsAndDeptAdmins(){
         try{
             List<User> participantList = userService.getAllParticipants();
@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/candidate", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<List<User>> getAllCandidates(){
         try{
             List<User> candidateList = userService.getAllCandidates();
@@ -69,7 +69,7 @@ public class UserController {
 
 
     @RequestMapping(path = "/candidate/{positionId}", method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<?> createCandidate(@PathVariable Integer positionId, @RequestBody JsonNode body){
         try{
           String name = body.get("name").asText();
@@ -122,11 +122,13 @@ public class UserController {
     public ResponseEntity<?> updateInfo(@PathVariable Integer userId, @RequestBody JsonNode body) {
         try{
 
+            String name = body.get("name").asText();
+            String email = body.get("email").asText();
             String address = body.get("address").asText();
             String phone = body.get("phone").asText();
             String bio = body.get("bio").asText();
             String university = body.get("university").asText();
-            User user = userService.updateInfo(userId, address, phone, bio, university);
+            User user = userService.updateInfo(userId, name, email, address, phone, bio, university);
             return new ResponseEntity<User>(user, HttpStatus.OK);
 
         }

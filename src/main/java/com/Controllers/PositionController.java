@@ -34,7 +34,7 @@ public class PositionController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<List<Position>> getAllPositions(){
         try {
             List<Position> positionList = positionService.getAllPositions();
@@ -46,7 +46,7 @@ public class PositionController {
     }
 
     @RequestMapping(value = "/{positionId}/candidate/{candidateId}", method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<Candidacy> assignCandidateToPosition(
             @PathVariable("positionId") Integer positionId,
             @PathVariable("candidateId") Integer candidateId){
@@ -60,7 +60,7 @@ public class PositionController {
     }
 
     @RequestMapping(value = "/candidacy/{candidacyId}", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<Integer> unassignCandidateFromPosition(
             @PathVariable("candidacyId") Integer candidacyId){
         try {
@@ -73,7 +73,7 @@ public class PositionController {
     }
 
     @RequestMapping(value = "/createPosition/{positionName}/{idDepartement}", method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<Position> createPositionToDepartment(@PathVariable("positionName") String positionName, @PathVariable("idDepartement") Integer idDepartement) {
         try {
             Position position = positionService.createPositionToDepartment(positionName, idDepartement);
@@ -87,7 +87,7 @@ public class PositionController {
     }
 
     @RequestMapping(value = "/{positionId}", method = RequestMethod.DELETE)
-    @PreAuthorize("hasAuthority('SCHEDULER')")
+    @PreAuthorize("hasAuthority('SCHEDULER') or hasAuthority('DEPARTMENT_ADMIN')")
     public ResponseEntity<Integer> removePosition(@PathVariable("positionId") Integer positionId){
         try {
             positionService.removePosition(positionId);

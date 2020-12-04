@@ -109,7 +109,7 @@ public class UserControllerTest {
         user.setId(1); user.setAddress("testAddress"); user.setPhone("testPhone");
         user.setBio("testBio"); user.setUniversity("testUniversity");
 
-        when(userService.updateInfo(1, "testAddress", "testPhone", "testBio", "testUniversity")).thenReturn(user);
+        when(userService.updateInfo(1, "testName", "testEmail", "testAddress", "testPhone", "testBio", "testUniversity")).thenReturn(user);
 
         //establish expected result
         ObjectWriter ow = new ObjectMapper().writer();

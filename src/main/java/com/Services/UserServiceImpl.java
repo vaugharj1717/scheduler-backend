@@ -331,8 +331,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public User updateInfo(Integer userId, String address, String phone, String bio, String university){
+    public User updateInfo(Integer userId, String name, String email, String address, String phone, String bio, String university){
        User user = userDAO.getById(userId);
+       user.setEmail(email);
+       user.setName(name);
        user.setAddress(address);
        user.setPhone(phone);
        user.setBio(bio);
