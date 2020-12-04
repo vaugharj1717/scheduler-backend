@@ -129,6 +129,35 @@ public class MeetingDAOImpl implements MeetingDAO{
 
 
     }
+
+    public List<Meeting> getConflictingUserSchedulesForEdit(Integer meetingId, Integer candidateId, List<Integer> participantList, Date startTime, Date endTime){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String startTimeString = sdf.format(startTime);
+        String endTimeString = sdf.format(endTime);
+        System.out.println(startTimeString);
+        System.out.println(endTimeString);
+        List<Meeting> conflictingMeetingList = em.createQuery(
+                "SELECT DISTINCT m from Meeting m JOIN m.participations p JOIN p.participant pt JOIN m.schedule s JOIN s.candidacy c " +
+                        "JOIN c.candidate u " +
+                        "WHERE ((pt.id IN :participantList OR u.id = :candidateId) " +
+                        //meetings that begin somewhere between start and end of new meeting
+                        "AND ((m.startTime >= '" + startTimeString + "' AND m.startTime <= '" + endTimeString + "') " +
+                        //and meetings that end somewhere between start and end of new meeting
+                        "OR (m.endTime >= '" + startTimeString + "' AND m.endTime <= '" + endTimeString + "') " +
+                        //and meetings that begin before the start of new meeting and end after start of new meeting
+                        "OR (m.startTime <= '" + startTimeString + "' AND m.endTime >= '" + endTimeString + "')) " +
+                        "AND m.id != :meetingId)"
+                , Meeting.class)
+                .setParameter("participantList", participantList)
+                .setParameter("candidateId", candidateId)
+                .setParameter("meetingId", meetingId)
+                //.setParameter("startTime", startTime)
+                //.setParameter("endTime", endTime)
+                .getResultList();
+        return conflictingMeetingList;
+
+
+    }
     public List<Meeting> getConflictingLocations(Integer locationId, Date startTime, Date endTime){
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -151,6 +180,37 @@ public class MeetingDAOImpl implements MeetingDAO{
                         "OR (m.startTime <= '" + startTimeString + "' AND m.endTime >= '" + endTimeString + "'))"
                 , Meeting.class)
                 .setParameter("locationId", locationId)
+                //.setParameter("startTime", startTime)
+                //.setParameter("endTime", endTime)
+                .getResultList();
+
+        return conflictingMeetingList;
+    }
+
+    public List<Meeting> getConflictingLocationsForEdit(Integer meetingId, Integer locationId, Date startTime, Date endTime){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String startTimeString = sdf.format(startTime);
+        String endTimeString = sdf.format(endTime);
+//        System.out.println(startTimeString);
+//        System.out.println(endTimeString);
+//        System.out.println(locationId);
+
+        //get all meetings for all users overlapping in time and in same location as new meeting
+        List<Meeting> conflictingMeetingList = em.createQuery(
+                "SELECT DISTINCT m from Meeting m JOIN m.location l JOIN m.participations p JOIN p.participant pt " +
+                        "JOIN m.schedule s JOIN s.candidacy c JOIN c.candidate u " +
+                        "WHERE ((l.id = :locationId) " +
+                        //meetings that begin somewhere between start and end of new meeting
+                        "AND ((m.startTime >= '" + startTimeString + "' AND m.startTime <= '" + endTimeString + "') " +
+                        //and meetings that end somewhere between start and end of new meeting
+                        "OR (m.endTime >= '" + startTimeString + "' AND m.endTime <= '" + endTimeString + "') " +
+                        //and meetings that begin before the start of new meeting and end after start of new meeting
+                        "OR (m.startTime <= '" + startTimeString + "' AND m.endTime >= '" + endTimeString + "')) " +
+                        "AND m.id != :meetingId)"
+                , Meeting.class)
+                .setParameter("locationId", locationId)
+                .setParameter("meetingId", meetingId)
                 //.setParameter("startTime", startTime)
                 //.setParameter("endTime", endTime)
                 .getResultList();

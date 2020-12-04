@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.*;
 
 @Service
@@ -27,6 +29,9 @@ public class MeetingServiceImpl implements MeetingService{
 
     @Autowired
     UserDAO userDAO;
+
+    @PersistenceContext
+    EntityManager em;
 
     @Transactional
     public Meeting getMeeting(Integer meetingId){
@@ -118,13 +123,13 @@ public class MeetingServiceImpl implements MeetingService{
         //Check for conflict with participant or candidate's schedules
         Meeting meeting = meetingDAO.getById(meetingId);
         User candidate = userDAO.getByScheduleId(meeting.getSchedule().getId());
-        List<Meeting> conflictingMeetingList = meetingDAO.getConflictingUserSchedules(candidate.getId(), participantList, startTime, endTime);
+        List<Meeting> conflictingMeetingList = meetingDAO.getConflictingUserSchedulesForEdit(meeting.getId(), candidate.getId(), participantList, startTime, endTime);
         if(conflictingMeetingList.size() != 0){
             throw new ConflictingUserException("A user has a meeting during this time");
         }
 
         //Check for conflict with location availability
-        List<Meeting> conflictingMeetingList2 = meetingDAO.getConflictingLocations(locationId, startTime, endTime);
+        List<Meeting> conflictingMeetingList2 = meetingDAO.getConflictingLocationsForEdit(meeting.getId(), locationId, startTime, endTime);
         if(conflictingMeetingList2.size() != 0){
             throw new ConflictingLocationException("This location is not available at the specified time");
         }
@@ -135,10 +140,11 @@ public class MeetingServiceImpl implements MeetingService{
 
         //retrieve each participant and create participation object for each
         //then attach participation to new meeting
+        Set<Participation> meetingParticipations = meeting.getParticipations();
+        meetingParticipations.clear();
+        em.flush();
         for (int i = 0; i < participantList.size(); i++) {
             User participant = userDAO.getById(participantList.get(i));
-            Set<Participation> meetingParticipations = meeting.getParticipations();
-            meetingParticipations.clear();
             if (participant == null) return null;
             Participation newParticipation = new Participation();
             newParticipation.setParticipant(participant);
