@@ -46,7 +46,7 @@ public class MeetingDAOImpl implements MeetingDAO{
                 "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.location l LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant pa " +
                         "LEFT JOIN FETCH m.schedule s LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca " +
                         "LEFT JOIN FETCH c.position po LEFT JOIN FETCH po.department d " +
-                        "WHERE (m.startTime >= '" + nowString + "') " +
+                        "WHERE (m.endTime >= '" + nowString + "') " +
                         "AND (ca.id = :userId OR pa.id = :userId2)"
                 , Meeting.class)
                 .setParameter("userId", userId)
@@ -215,7 +215,7 @@ public class MeetingDAOImpl implements MeetingDAO{
         System.out.println(endTimeString);
         List<Meeting> conflictingMeetingList = em.createQuery(
                 "SELECT DISTINCT m from Meeting m LEFT JOIN FETCH m.participations p LEFT JOIN FETCH p.participant pt LEFT JOIN FETCH m.schedule s " +
-                        "LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca " +
+                        "LEFT JOIN FETCH s.candidacy c LEFT JOIN FETCH c.candidate ca LEFT JOIN FETCH m.location " +
                         //meetings that begin somewhere between start and end of new meeting
                         "WHERE (m.startTime >= '" + startTimeString + "' AND m.startTime <= '" + endTimeString + "')"
                 , Meeting.class)

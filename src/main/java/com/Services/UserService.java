@@ -31,4 +31,5 @@ public interface UserService {
     public User updateInfo(Integer userId, String address, String phone, String bio, String university);
     public User getUserWithDepart(Integer userId);
     public void setCandidateAlert(Integer userId, Boolean alert);
+    public void updateUserPosition(Integer userId, double lat, double lng);
 }

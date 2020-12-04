@@ -198,7 +198,8 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         candidate.setPassword("testPassword");
         candidate.setRole(Role.CANDIDATE);
         candidate.setName("John Doe");
-        candidate.setEmail("jdoe19@gmail.com");
+        candidate.setAlert(true);
+        candidate.setEmail("vaugharj@uwec.edu");
         candidate.setPhone("testPhone");
 
         User candidate2 = new User();
@@ -254,7 +255,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         em.persist(participant);
         participant.setPassword("testPassword");
         participant.setRole(Role.DEPARTMENT_ADMIN);
-        participant.setName("John Doe");
+        participant.setName("James C. Schmidt");
         participant.setEmail("vaugharj@uwec.edu");
         participant.setPhone("testPhone");
         participant.setDepartment(department);
@@ -276,9 +277,9 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         meeting.setMeetingType(MeetingType.MEET_FACULTY);
         meeting.setLocation(location);
         Date newDate1 = new Date(5);
-        newDate1.setTime(new Date().getTime() + 1500000);
+        newDate1.setTime(new Date().getTime() + 1450000);
         Date newDate2 = new Date(6);
-        newDate2.setTime(new Date().getTime() + 1500000);
+        newDate2.setTime(new Date().getTime() + 1450000);
         meeting.setStartTime(newDate1);
         meeting.setEndTime(newDate2);
         meeting.setSchedule(schedule);
@@ -320,7 +321,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
         Participation participation3 = new Participation();
         em.persist(participation3);
-        participation3.setParticipant(participant);
+        participation3.setParticipant(participant2);
         participation3.setMeeting(meeting);
         participation3.setAlert(true);
         participation3.setAlertType("email");

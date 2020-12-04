@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MeetingServiceImpl implements MeetingService{
@@ -108,6 +106,56 @@ public class MeetingServiceImpl implements MeetingService{
 
         //save object and return
         Meeting savedMeeting = meetingDAO.saveOrUpdate(newMeeting);
+        return savedMeeting;
+    }
+
+    @Transactional
+    public Meeting editMeeting(Integer meetingId, Integer locationId, Date startTime, Date endTime, MeetingType meetingType,
+                                 List<Boolean> canViewFeedbackList, List<Boolean> canLeaveFeedbackList, List<Integer> participantList)
+            throws Exception{
+
+        //Check for scheduling conflicts
+        //Check for conflict with participant or candidate's schedules
+        Meeting meeting = meetingDAO.getById(meetingId);
+        User candidate = userDAO.getByScheduleId(meeting.getSchedule().getId());
+        List<Meeting> conflictingMeetingList = meetingDAO.getConflictingUserSchedules(candidate.getId(), participantList, startTime, endTime);
+        if(conflictingMeetingList.size() != 0){
+            throw new ConflictingUserException("A user has a meeting during this time");
+        }
+
+        //Check for conflict with location availability
+        List<Meeting> conflictingMeetingList2 = meetingDAO.getConflictingLocations(locationId, startTime, endTime);
+        if(conflictingMeetingList2.size() != 0){
+            throw new ConflictingLocationException("This location is not available at the specified time");
+        }
+
+        //retrieve location and check that values were returned, else return null (failure)
+        Location location = locationDAO.getById(locationId);
+        if(location == null) throw new IllegalStateException();
+
+        //retrieve each participant and create participation object for each
+        //then attach participation to new meeting
+        for (int i = 0; i < participantList.size(); i++) {
+            User participant = userDAO.getById(participantList.get(i));
+            Set<Participation> meetingParticipations = meeting.getParticipations();
+            meetingParticipations.clear();
+            if (participant == null) return null;
+            Participation newParticipation = new Participation();
+            newParticipation.setParticipant(participant);
+            newParticipation.setCanViewFeedback(canViewFeedbackList.get(i));
+            newParticipation.setCanLeaveFeedback(canLeaveFeedbackList.get(i));
+            newParticipation.setTransientId(i);
+            meetingParticipations.add(newParticipation);
+        }
+
+        //update Meeting object
+        meeting.setLocation(location);
+        meeting.setStartTime(startTime);
+        meeting.setEndTime(endTime);
+        meeting.setMeetingType(meetingType);
+
+        //save object and return
+        Meeting savedMeeting = meetingDAO.saveOrUpdate(meeting);
         return savedMeeting;
     }
 

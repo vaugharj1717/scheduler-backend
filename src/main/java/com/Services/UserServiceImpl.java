@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService{
         //session.setDebug(true);
         try{
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("vaugharj1717@gmail.com"));
+            message.setFrom(new InternetAddress("uwecscheduler@gmail.com"));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
             message.setSubject("Invitation to UWEC Scheduler");
             message.setText("You have been provisioned an account on the UWEC Scheduling System\n" +
@@ -372,6 +372,15 @@ public class UserServiceImpl implements UserService{
         userDAO.setCandidateAlert(userId, alert);
     }
 
-
+    @Override
+    @Transactional
+    public void updateUserPosition(Integer userId, double lat, double lng){
+        User user = userDAO.getById(userId);
+        user.setLat(lat);
+        user.setLng(lng);
+        user.setCoordsLastUpdate(new Date());
+        userDAO.saveOrUpdate(user);
+        System.out.println("UPDATING USER POSITION");
+    }
 
 }

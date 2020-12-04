@@ -26,6 +26,9 @@ public class User implements DataObject {
     private String address;
     private String university;
     private boolean isAlert;
+    private double lat;
+    private double lng;
+    private Date coordsLastUpdate;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Department department;
@@ -209,12 +212,40 @@ public class User implements DataObject {
         isAlert = alert;
     }
 
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(id, user.id);
+    }
+
+    public boolean isAlert() {
+        return isAlert;
+    }
+
+    public Date getCoordsLastUpdate() {
+        return coordsLastUpdate;
+    }
+
+    public void setCoordsLastUpdate(Date coordsLastUpdate) {
+        this.coordsLastUpdate = coordsLastUpdate;
     }
 
     @Override

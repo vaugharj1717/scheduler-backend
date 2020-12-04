@@ -149,6 +149,59 @@ public class MeetingController {
         }
     }
 
+    @RequestMapping(path="/{meetingId}", method = RequestMethod.PATCH)
+    @PreAuthorize("hasAuthority('SCHEDULER')")
+    public ResponseEntity<?> editMeeting(@RequestBody JsonNode body, @PathVariable Integer meetingId){
+        try{
+            //pull data from request
+            Integer locationId = body.get("locationId").asInt();
+            MeetingType meetingType = body.get("meetingType").asText()
+                    .equals("MEET_FACULTY") ? MeetingType.MEET_FACULTY : MeetingType.PRESENTATION;
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date startTime = formatter.parse(body.get("startTime").asText());
+            Date endTime = formatter.parse(body.get("endTime").asText());
+
+            //iterate through and pull participant data from request
+            ArrayList<Boolean> canLeaveFeedbackList = new ArrayList<>();
+            ArrayList<Boolean> canViewFeedbackList = new ArrayList<>();
+            ArrayList<Integer> participantList = new ArrayList<>();
+            ArrayNode getParticipants =  (ArrayNode) body.get("participations");
+            Iterator<JsonNode> itr = getParticipants.elements();
+            while(itr.hasNext()) {
+                JsonNode nextNode = itr.next();
+                canLeaveFeedbackList.add(nextNode.get("canLeaveFeedback").asBoolean());
+                canViewFeedbackList.add(nextNode.get("canViewFeedback").asBoolean());
+                participantList.add(nextNode.get("participantId").asInt());
+            }
+
+            //Call on meetingService to create meeting
+            Meeting updatedMeeting = meetingService.editMeeting(meetingId, locationId, startTime, endTime, meetingType,
+                    canViewFeedbackList, canLeaveFeedbackList, participantList);
+
+            return new ResponseEntity<Meeting>(updatedMeeting, HttpStatus.OK);
+
+        }
+
+        //If server error
+        catch(ConflictingLocationException cle){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(cle.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+        }
+        catch(ConflictingUserException cue){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse(cue.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+        }
+        catch(IllegalStateException ise){
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("Received invalid data"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("There was an error creating meeting"),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 

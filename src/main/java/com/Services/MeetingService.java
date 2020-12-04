@@ -16,4 +16,7 @@ public interface MeetingService {
                                  List<Boolean> canViewFeedbackList, List<Boolean> canLeaveFeedbackList, List<Integer> participantList)
                                  throws Exception;
     public void deleteMeeting(Integer id);
+    public Meeting editMeeting(Integer meetingId, Integer locationId, Date startTime, Date endTime, MeetingType meetingType,
+                               List<Boolean> canViewFeedbackList, List<Boolean> canLeaveFeedbackList, List<Integer> participantList)
+            throws Exception;
 }

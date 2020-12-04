@@ -201,6 +201,21 @@ public class UserController {
         }
     }
 
+    @PatchMapping("/{userId}/updatePosition")
+    public ResponseEntity<?> updateUserPosition(@PathVariable Integer userId, @RequestBody JsonNode body){
+        try {
+            double lat = body.get("lat").asDouble();
+            double lng = body.get("lng").asDouble();
+            userService.updateUserPosition(userId, lat, lng);
+            return new ResponseEntity<Integer>(1, HttpStatus.OK);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not update position"), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
     @PostMapping("/{userId}/uploadFile")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Integer userId) {
         try {
@@ -335,6 +350,7 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         catch(Exception e){
+            e.printStackTrace();
             return new ResponseEntity<ErrorResponse>(new ErrorResponse("Could not get users"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
