@@ -128,7 +128,8 @@ public class UserController {
             String phone = body.get("phone").asText();
             String bio = body.get("bio").asText();
             String university = body.get("university").asText();
-            User user = userService.updateInfo(userId, name, email, address, phone, bio, university);
+            Integer departmentId = body.get("departmentId") == null ? null : body.get("departmentId").asInt();
+            User user = userService.updateInfo(userId, name, email, address, phone, bio, university, departmentId);
             return new ResponseEntity<User>(user, HttpStatus.OK);
 
         }

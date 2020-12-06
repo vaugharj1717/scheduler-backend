@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@Component
+//@Component
 @Profile("!test")
 public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent>{
 
@@ -54,7 +54,7 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 //        loadPositions();
 //        loadCandidacies();
 //        loadMeetings();
-        loadData();
+//        loadData();
         loadAccounts();
 
     }
@@ -341,37 +341,37 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
     @Transactional
     public void loadAccounts(){
-        User scheduler = new User();
-        scheduler.setPassword(encoder.encode("scheduler"));
-        scheduler.setRole(Role.SCHEDULER);
-        scheduler.setName("Scheduler Scheduler");
-        scheduler.setEmail("scheduler@gmail.com");
-        scheduler.setPhone("715-123-4567");
-        scheduler = userDAO.saveOrUpdate(scheduler);
-
-        User participant = new User();
-        participant.setPassword(encoder.encode("participant"));
-        participant.setRole(Role.PARTICIPANT);
-        participant.setName("Participant");
-        participant.setEmail("participant@gmail.com");
-        participant.setPhone("715-123-4567");
-        participant = userDAO.saveOrUpdate(participant);
-
-        User candidate = new User();
-        candidate.setPassword(encoder.encode("candidate"));
-        candidate.setRole(Role.CANDIDATE);
-        candidate.setName("Candidate");
-        candidate.setEmail("candidate@gmail.com");
-        candidate.setPhone("715-123-4567");
-        candidate = userDAO.saveOrUpdate(candidate);
-
-        User admin = new User();
-        admin.setPassword(encoder.encode("admin"));
-        admin.setRole(Role.ADMIN);
-        admin.setName("Admin Admin");
-        admin.setEmail("admin@gmail.com");
-        admin.setPhone("Admin");
-        admin = userDAO.saveOrUpdate(admin);
+//        User scheduler = new User();
+//        scheduler.setPassword(encoder.encode("scheduler"));
+//        scheduler.setRole(Role.SCHEDULER);
+//        scheduler.setName("Scheduler Scheduler");
+//        scheduler.setEmail("scheduler@gmail.com");
+//        scheduler.setPhone("715-123-4567");
+//        scheduler = userDAO.saveOrUpdate(scheduler);
+//
+//        User participant = new User();
+//        participant.setPassword(encoder.encode("participant"));
+//        participant.setRole(Role.PARTICIPANT);
+//        participant.setName("Participant");
+//        participant.setEmail("participant@gmail.com");
+//        participant.setPhone("715-123-4567");
+//        participant = userDAO.saveOrUpdate(participant);
+//
+//        User candidate = new User();
+//        candidate.setPassword(encoder.encode("candidate"));
+//        candidate.setRole(Role.CANDIDATE);
+//        candidate.setName("Candidate");
+//        candidate.setEmail("candidate@gmail.com");
+//        candidate.setPhone("715-123-4567");
+//        candidate = userDAO.saveOrUpdate(candidate);
+//
+//        User admin = new User();
+//        admin.setPassword(encoder.encode("admin"));
+//        admin.setRole(Role.ADMIN);
+//        admin.setName("Admin Admin");
+//        admin.setEmail("admin@gmail.com");
+//        admin.setPhone("Admin");
+//        admin = userDAO.saveOrUpdate(admin);
 
         User superAdmin = new User();
         superAdmin.setPassword(encoder.encode("superadmin"));
@@ -380,25 +380,25 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
         superAdmin.setEmail("superadmin@gmail.com");
         superAdmin.setPhone("SuperAdmin");
         superAdmin = userDAO.saveOrUpdate(superAdmin);
-
-        User deptAdmin = new User();
-        deptAdmin.setPassword(encoder.encode("departmentadmin"));
-        deptAdmin.setRole(Role.DEPARTMENT_ADMIN);
-        deptAdmin.setName("DeptAdmin");
-        deptAdmin.setEmail("departmentadmin@gmail.com");
-        deptAdmin.setPhone("DeptAdmin");
-        deptAdmin.setDepartment(departmentDAO.getAll().get(0));
-        deptAdmin = userDAO.saveOrUpdate(deptAdmin);
-
-        em.flush();
-
-        UserMessage userMessage = new UserMessage();
-        userMessage.setMessage("Test message");
-        userMessage.setSeen(false);
-        userMessage.setSentTime(new Date());
-        userMessage.setSender(userDAO.findByEmail("candidate@gmail.com"));
-        userMessage.setReceiver(userDAO.findByEmail("participant@gmail.com"));
-        userMessage = userDAO.saveMessage(userMessage);
+//
+//        User deptAdmin = new User();
+//        deptAdmin.setPassword(encoder.encode("departmentadmin"));
+//        deptAdmin.setRole(Role.DEPARTMENT_ADMIN);
+//        deptAdmin.setName("DeptAdmin");
+//        deptAdmin.setEmail("departmentadmin@gmail.com");
+//        deptAdmin.setPhone("DeptAdmin");
+//        deptAdmin.setDepartment(departmentDAO.getAll().get(0));
+//        deptAdmin = userDAO.saveOrUpdate(deptAdmin);
+//
+//        em.flush();
+//
+//        UserMessage userMessage = new UserMessage();
+//        userMessage.setMessage("Test message");
+//        userMessage.setSeen(false);
+//        userMessage.setSentTime(new Date());
+//        userMessage.setSender(userDAO.findByEmail("candidate@gmail.com"));
+//        userMessage.setReceiver(userDAO.findByEmail("participant@gmail.com"));
+//        userMessage = userDAO.saveMessage(userMessage);
 
     }
 }

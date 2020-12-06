@@ -22,7 +22,7 @@ public class Position implements DataObject{
 
     @JsonIgnoreProperties("position")
     @JoinColumn(name="POSITION_ID")
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     Set<Candidacy> candidacies;
 
     String positionName;

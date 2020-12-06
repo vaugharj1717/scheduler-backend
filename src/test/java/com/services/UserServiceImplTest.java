@@ -116,7 +116,7 @@ public class UserServiceImplTest {
         when(userDAO.saveOrUpdate(user)).thenReturn(user2);
 
         //run test
-        User retUser = userService.updateInfo(1, "testName", "testEmail", "testAddress", "testPhone", "testBio", "testUniversity");
+        User retUser = userService.updateInfo(1, "testName", "testEmail", "testAddress", "testPhone", "testBio", "testUniversity", null);
         assert retUser.equals(user2);
         assert retUser.getAddress().equals(user2.getAddress());
         assert retUser.getPhone().equals(user2.getPhone());

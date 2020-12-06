@@ -24,10 +24,10 @@ public class AlertSenderImpl implements AlertSender {
     public void getAlertMeetings() {
         Date twentyMin = new Date();
         Date thirtyMin = new Date();
-//        twentyMin.setTime(new Date().getTime() + 1200000);
-//        thirtyMin.setTime(new Date().getTime() + 1800000);
-        twentyMin.setTime(new Date().getTime() + 1440000);
-        thirtyMin.setTime(new Date().getTime() + 1600000);
+        twentyMin.setTime(new Date().getTime() + 1200000);
+        thirtyMin.setTime(new Date().getTime() + 1800000);
+//        twentyMin.setTime(new Date().getTime() + 1440000);
+//        thirtyMin.setTime(new Date().getTime() + 1600000);
         List<Meeting> meetingList = meetingDAO.getAlertMeetings(twentyMin, thirtyMin);
         upcomingMeetings.addAll(meetingList);
         System.out.println(upcomingMeetings);
@@ -37,8 +37,8 @@ public class AlertSenderImpl implements AlertSender {
     public void sendAlert() {
         Date now = new Date();
         Date soon = new Date();
-//        soon.setTime(new Date().getTime() + 900000);
-        soon.setTime(new Date().getTime() + 1440000);
+        soon.setTime(new Date().getTime() + 900000);
+//        soon.setTime(new Date().getTime() + 1440000);
 
         for(Meeting m : upcomingMeetings) {
             if(m.getStartTime().getTime() > now.getTime() && m.getStartTime().getTime() < soon.getTime() ) {
