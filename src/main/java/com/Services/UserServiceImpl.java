@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserService{
         String generatedPassword = PasswordGenerator.generatePassword();
         newUser.setName(name);
         newUser.setEmail(email);
-        if(!role.equals(Role.CANDIDATE.toString())){
+        if(!role.equals(Role.CANDIDATE.toString()) && !role.equals(Role.ADMIN.toString())){
             newUser.setDepartment(departmentDAO.getById(departmentId));
         }
         if(role.equals("SUPER_ADMIN")) return null;
