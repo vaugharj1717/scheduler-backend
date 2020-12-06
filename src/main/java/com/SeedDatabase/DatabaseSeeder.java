@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-//@Component
+@Component
 @Profile("!test")
 public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent>{
 
@@ -341,54 +341,71 @@ public class DatabaseSeeder implements ApplicationListener<ContextRefreshedEvent
 
     @Transactional
     public void loadAccounts(){
-//        User scheduler = new User();
-//        scheduler.setPassword(encoder.encode("scheduler"));
-//        scheduler.setRole(Role.SCHEDULER);
-//        scheduler.setName("Scheduler Scheduler");
-//        scheduler.setEmail("scheduler@gmail.com");
-//        scheduler.setPhone("715-123-4567");
-//        scheduler = userDAO.saveOrUpdate(scheduler);
+            if(userDAO.findByEmail("scheduler@gmail.com") == null) {
+                User scheduler = new User();
+                scheduler.setPassword(encoder.encode("scheduler"));
+                scheduler.setRole(Role.SCHEDULER);
+                scheduler.setName("Scheduler McScheduler");
+                scheduler.setEmail("scheduler@gmail.com");
+                scheduler.setPhone("715-123-4567");
+                scheduler = userDAO.saveOrUpdate(scheduler);
+            }
 //
-//        User participant = new User();
-//        participant.setPassword(encoder.encode("participant"));
-//        participant.setRole(Role.PARTICIPANT);
-//        participant.setName("Participant");
-//        participant.setEmail("participant@gmail.com");
-//        participant.setPhone("715-123-4567");
-//        participant = userDAO.saveOrUpdate(participant);
-//
-//        User candidate = new User();
-//        candidate.setPassword(encoder.encode("candidate"));
-//        candidate.setRole(Role.CANDIDATE);
-//        candidate.setName("Candidate");
-//        candidate.setEmail("candidate@gmail.com");
-//        candidate.setPhone("715-123-4567");
-//        candidate = userDAO.saveOrUpdate(candidate);
-//
-//        User admin = new User();
-//        admin.setPassword(encoder.encode("admin"));
-//        admin.setRole(Role.ADMIN);
-//        admin.setName("Admin Admin");
-//        admin.setEmail("admin@gmail.com");
-//        admin.setPhone("Admin");
-//        admin = userDAO.saveOrUpdate(admin);
+        if(userDAO.findByEmail("participant@gmail.com") == null) {
+            User participant = new User();
+            participant.setPassword(encoder.encode("participant"));
+            participant.setRole(Role.PARTICIPANT);
+            participant.setName("Jack Tan");
+            participant.setEmail("participant@gmail.com");
+            participant.setPhone("715-123-4567");
+            participant = userDAO.saveOrUpdate(participant);
+        }
 
-        User superAdmin = new User();
-        superAdmin.setPassword(encoder.encode("superadmin"));
-        superAdmin.setRole(Role.SUPER_ADMIN);
-        superAdmin.setName("SuperAdmin SuperAdmin");
-        superAdmin.setEmail("superadmin@gmail.com");
-        superAdmin.setPhone("SuperAdmin");
-        superAdmin = userDAO.saveOrUpdate(superAdmin);
 //
-//        User deptAdmin = new User();
-//        deptAdmin.setPassword(encoder.encode("departmentadmin"));
-//        deptAdmin.setRole(Role.DEPARTMENT_ADMIN);
-//        deptAdmin.setName("DeptAdmin");
-//        deptAdmin.setEmail("departmentadmin@gmail.com");
-//        deptAdmin.setPhone("DeptAdmin");
-//        deptAdmin.setDepartment(departmentDAO.getAll().get(0));
-//        deptAdmin = userDAO.saveOrUpdate(deptAdmin);
+
+        if(userDAO.findByEmail("candidate@gmail.com") == null) {
+            User candidate = new User();
+            candidate.setPassword(encoder.encode("candidate"));
+            candidate.setRole(Role.CANDIDATE);
+            candidate.setName("Bob Dylan");
+            candidate.setEmail("candidate@gmail.com");
+            candidate.setPhone("715-123-4567");
+            candidate = userDAO.saveOrUpdate(candidate);
+        }
+
+
+//
+        if(userDAO.findByEmail("admin@gmail.com") == null) {
+            User admin = new User();
+            admin.setPassword(encoder.encode("admin"));
+            admin.setRole(Role.ADMIN);
+            admin.setName("Admin McAdmin");
+            admin.setEmail("admin@gmail.com");
+            admin.setPhone("Admin");
+            admin = userDAO.saveOrUpdate(admin);
+        }
+
+        if(userDAO.findByEmail("superadmin@gmail.com") == null) {
+            User superAdmin = new User();
+            superAdmin.setPassword(encoder.encode("superadmin"));
+            superAdmin.setRole(Role.SUPER_ADMIN);
+            superAdmin.setName("SuperAdmin SuperAdmin");
+            superAdmin.setEmail("superadmin@gmail.com");
+            superAdmin.setPhone("SuperAdmin");
+            superAdmin = userDAO.saveOrUpdate(superAdmin);
+        }
+
+//
+        if(userDAO.findByEmail("departmentadmin@gmail.com") == null) {
+            User deptAdmin = new User();
+            deptAdmin.setPassword(encoder.encode("departmentadmin"));
+            deptAdmin.setRole(Role.DEPARTMENT_ADMIN);
+            deptAdmin.setName("Eric Hendrickson");
+            deptAdmin.setEmail("departmentadmin@gmail.com");
+            deptAdmin.setPhone("DeptAdmin");
+            deptAdmin = userDAO.saveOrUpdate(deptAdmin);
+        }
+
 //
 //        em.flush();
 //
