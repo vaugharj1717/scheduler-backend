@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.scheduling.annotation.Schedules;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
@@ -22,6 +23,7 @@ public class User implements DataObject {
     private String phone;
     private String name;
     private Role role;
+    @Size(max = 1500)
     private String bio;
     private String address;
     private String university;

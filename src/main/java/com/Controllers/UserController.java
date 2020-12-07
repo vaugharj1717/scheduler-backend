@@ -136,7 +136,7 @@ public class UserController {
         //error case
         catch(Exception e){
             e.printStackTrace();
-            return new ResponseEntity<ErrorResponse>(new ErrorResponse("There was an error creating candidate"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<ErrorResponse>(new ErrorResponse("There was an error updating info"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

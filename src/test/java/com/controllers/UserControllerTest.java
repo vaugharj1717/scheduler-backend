@@ -117,10 +117,13 @@ public class UserControllerTest {
 
         //perform test
         JSONObject request = new JSONObject();
+        request.put("name", "testName");
+        request.put("email", "testEmail");
         request.put("address", "testAddress");
         request.put("phone", "testPhone");
         request.put("bio", "testBio");
         request.put("university", "testUniversity");
+        request.put("departmentId", null);
         String requestJson = request.toString();
 
         String response = mockMvc
