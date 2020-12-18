@@ -50,7 +50,7 @@ public class DepartmentDAOImpl implements DepartmentDAO{
         List<Position> positionList = q.getResultList();
         return positionList;
 
-    }
+    }//
 
     @Override
     public void removeDepartment(Integer id) {
