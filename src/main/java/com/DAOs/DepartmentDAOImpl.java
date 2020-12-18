@@ -51,7 +51,7 @@ public class DepartmentDAOImpl implements DepartmentDAO{
         return positionList;
 
     }
-//
+////
     @Override
     public void removeDepartment(Integer id) {
         em.createQuery("UPDATE User u SET u.department = null WHERE u.department.id = :id")
